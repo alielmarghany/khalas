@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خلّص | khalas: الأوردر يخلص نفسه</title>
+<meta name="description" content="خلّص بيحوّل شات واتساب لأوردرات منظمة بالـ AI، وبيرد على عملائك بالنيابة عنك. لأونلاين سيلرز مصر.">
+<meta name="theme-color" content="#0A0E1F">
+<meta property="og:title" content="khalas | خلّص">
+<meta property="og:description" content="Orders, done. AI that turns WhatsApp chats into organised orders for Egyptian online sellers.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='4' width='56' height='46' rx='14' fill='%232340FF'/%3E%3Cpath d='M12 46 L10 62 L28 50 Z' fill='%232340FF'/%3E%3Cpath d='M19 28 L29 38 L46 18' fill='none' stroke='%23FFC933' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ CONFIG lives in the <script> at the bottom ============ */
+:root{
+  --cobalt:#2340FF;
+  --cobalt-2:#4A62FF;
+  --cobalt-deep:#1426B8;
+  --ink:#0A0E1F;
+  --ink-2:#12182F;
+  --paper:#F5F6FA;
+  --mist:#DDE2F5;
+  --tick:#FFC933;
+  --muted:#4A5175;
+  --muted-on-dark:#AEB6D9;
+  --line-dark:rgba(255,255,255,.12);
+  --radius:18px;
+  --display:'Bricolage Grotesque','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --ar:'IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;
+  --en:'IBM Plex Sans','IBM Plex Sans Arabic',system-ui,sans-serif;
+  --body:var(--ar);
+  --head:var(--ar);
+  --lh:1.8;
+  --lh-head:1.4;
+  color-scheme:light;
+}
+html[lang="en"]{--body:var(--en);--head:var(--display);--lh:1.6;--lh-head:1.08}
+*,*::before,*::after{box-sizing:border-box}
+*{margin:0}
+html{background:var(--paper);scroll-behavior:smooth;scroll-padding-top:84px;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:var(--lh);font-size:17px;overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+button{font:inherit;cursor:pointer;color:inherit}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tick);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+h1,h2,h3{font-family:var(--head);font-weight:700;line-height:var(--lh-head);text-wrap:balance}
+html[lang="en"] h1,html[lang="en"] h2,html[lang="en"] h3{font-weight:800;letter-spacing:-.025em}
+/* Arabic glyphs have tall ascenders and dots: keep generous line-height and a little block padding so nothing clips */
+html[lang="ar"] h1,html[lang="ar"] h2,html[lang="ar"] h3{padding-block:.08em}
+.latin{font-family:var(--display);font-weight:800;letter-spacing:-.03em}
+
+/* ============ Buttons ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:14px 26px;font-weight:600;font-size:16px;text-decoration:none;line-height:1.3;transition:transform .2s,background .2s,box-shadow .2s,color .2s;white-space:nowrap}
+.btn-primary{background:var(--cobalt);color:#fff;box-shadow:0 10px 30px -10px rgba(35,64,255,.7)}
+.btn-primary:hover{background:var(--cobalt-2);transform:translateY(-2px);box-shadow:0 16px 36px -12px rgba(35,64,255,.85)}
+.btn-light{background:#fff;color:var(--ink)}
+.btn-light:hover{transform:translateY(-2px);background:var(--paper)}
+.btn-ghost{background:transparent;color:inherit;border:1px solid currentColor}
+.btn-ghost:hover{background:rgba(127,140,200,.12);transform:translateY(-2px)}
+.btn .arrow{transition:transform .2s}
+.btn:hover .arrow{transform:translateX(4px)}
+html[dir="rtl"] .btn .arrow{transform:scaleX(-1)}
+html[dir="rtl"] .btn:hover .arrow{transform:scaleX(-1) translateX(4px)}
+
+/* ============ Nav ============ */
+/* Floating pill: fixed above the page, blurred glass, logo centred in a 1fr/auto/1fr grid so it stays dead centre */
+.nav{position:fixed;top:14px;inset-inline:0;z-index:50;padding:0 16px;pointer-events:none;color:#fff}
+.nav-bar{pointer-events:auto;position:relative;max-width:1140px;margin:0 auto;height:62px;padding:0 8px 0 10px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;
+  background:rgba(14,19,42,.55);backdrop-filter:saturate(1.6) blur(18px);-webkit-backdrop-filter:saturate(1.6) blur(18px);
+  border:1px solid rgba(255,255,255,.14);border-radius:999px;
+  box-shadow:0 12px 40px -16px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.08);transition:background .3s,box-shadow .3s,height .3s}
+.nav.scrolled .nav-bar{background:rgba(10,14,31,.86);box-shadow:0 18px 50px -18px rgba(10,14,31,.75),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav-start{justify-self:start;display:flex;align-items:center;min-width:0}
+.nav-actions{justify-self:end}
+.nav .brand{justify-self:center}
+.menu-lang{display:none}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0}
+.brand .wm{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.03em;line-height:1;direction:ltr}
+.brand .wm-ar{font-family:var(--ar);font-weight:700;font-size:24px;line-height:1.3}
+html[lang="en"] .brand .wm-ar{display:none}
+html[lang="ar"] .brand .wm{display:none}
+.nav-links{display:flex;gap:2px;list-style:none;padding:0}
+.nav-links a{display:block;text-decoration:none;padding:8px 14px;border-radius:999px;font-size:15px;color:#D5DAF2;transition:background .2s,color .2s}
+.nav-links a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.lang{border:1px solid var(--line-dark);background:rgba(255,255,255,.04);border-radius:999px;padding:7px 12px;font-size:14px;font-weight:600;min-width:48px;transition:background .2s}
+.lang:hover{background:rgba(255,255,255,.12)}
+.lang .ltr{font-family:var(--en)}
+.nav .btn{padding:10px 18px;font-size:15px}
+.cta-short{display:none}
+.burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-dark);background:transparent;place-items:center}
+.burger span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;position:relative;transition:background .2s}
+.burger span::before,.burger span::after{content:"";position:absolute;inset-inline:0;height:2px;background:#fff;border-radius:2px;transition:transform .25s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.nav.open .burger span{background:transparent}
+.nav.open .burger span::before{transform:translateY(6px) rotate(45deg)}
+.nav.open .burger span::after{transform:translateY(-6px) rotate(-45deg)}
+
+/* ============ Hero ============ */
+.dark{background:var(--ink);color:#fff;position:relative;isolation:isolate;overflow:hidden}
+.dark::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 70% at 85% 10%,rgba(35,64,255,.45),transparent 70%),
+    radial-gradient(50% 60% at 5% 100%,rgba(35,64,255,.28),transparent 70%)}
+html[dir="rtl"] .dark::before{transform:scaleX(-1)}
+.grid-bg::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:48px 48px;-webkit-mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent);mask-image:radial-gradient(70% 60% at 50% 40%,#000,transparent)}
+.hero{padding:150px 0 96px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:500;color:#D5DAF2;border:1px solid var(--line-dark);background:rgba(255,255,255,.04);padding:6px 14px 6px 8px;border-radius:999px;margin-bottom:24px}
+html[dir="rtl"] .eyebrow{padding:6px 8px 6px 14px}
+.eyebrow .dot{width:22px;height:22px;border-radius:50%;background:rgba(255,201,51,.15);display:grid;place-items:center}
+.eyebrow .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--tick);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero h1{font-size:clamp(44px,7.4vw,92px);margin-bottom:22px}
+html[lang="ar"] .hero h1{line-height:1.35}
+.hero h1 .accent{color:transparent;background:linear-gradient(100deg,#fff 10%,#9AA9FF 90%);-webkit-background-clip:text;background-clip:text;padding-block:.12em;display:inline-block}
+.hero .lead{font-size:clamp(17px,1.6vw,20px);color:var(--muted-on-dark);max-width:52ch;margin-bottom:34px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero-note{margin-top:18px;font-size:14px;color:var(--muted-on-dark);display:flex;align-items:center;gap:8px}
+.hero-note b{color:#fff;font-weight:600}
+
+/* ============ Demo ============ */
+.demo{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--line-dark);border-radius:28px;padding:20px;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);min-width:0}
+.demo-tag{position:absolute;top:-14px;inset-inline-end:24px;background:var(--cobalt);color:#fff;font-size:13px;font-weight:600;padding:6px 14px;border-radius:999px;box-shadow:0 8px 20px -6px rgba(35,64,255,.8);white-space:nowrap}
+.chatbar{display:flex;align-items:center;gap:10px;padding:4px 4px 14px;border-bottom:1px solid var(--line-dark);margin-bottom:14px}
+.chatbar .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5468FF,#2340FF);display:grid;place-items:center;font-weight:700;font-size:15px}
+.chatbar b{display:block;font-size:15px;line-height:1.3}
+.chatbar small{font-size:12px;color:#7EE2A8}
+.thread{display:grid;gap:10px;min-height:150px;align-content:start}
+.bubble{max-width:88%;padding:10px 14px;border-radius:16px;font-size:15.5px;line-height:1.75;font-family:var(--ar)}
+html[lang="en"] .bubble{font-family:var(--en);line-height:1.55}
+.bubble.in{background:#fff;color:var(--ink);justify-self:start;border-start-start-radius:4px}
+.bubble.out{background:var(--cobalt);color:#fff;justify-self:end;border-start-end-radius:4px;animation:pop .35s ease both}
+.bubble .meta{display:block;font-size:11px;opacity:.55;margin-top:2px;text-align:end}
+.caret{display:inline-block;width:2px;height:1.05em;background:var(--cobalt);vertical-align:-.15em;margin-inline-start:2px;animation:blink .8s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.typing{justify-self:end;background:rgba(35,64,255,.35);border-radius:14px;padding:12px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#fff;animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.order{margin-top:16px;background:#fff;color:var(--ink);border-radius:20px;padding:18px 18px 14px;position:relative;overflow:hidden}
+.order::before{content:"";position:absolute;inset-inline:0;top:0;height:3px;background:linear-gradient(90deg,var(--cobalt),#7C8CFF,var(--cobalt));background-size:200% 100%;transform:scaleX(var(--p,0));transform-origin:inline-start;transition:transform .4s}
+html[dir="rtl"] .order::before{transform-origin:right}
+html[dir="ltr"] .order::before{transform-origin:left}
+.order-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.order-top b{font-size:16px}
+.order-top .num{font-family:var(--en);direction:ltr;unicode-bidi:isolate;color:var(--cobalt);font-weight:600}
+.ai-chip{font-size:12px;font-weight:600;color:var(--cobalt);background:#EEF0FF;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:2px 16px}
+.field{display:flex;flex-direction:column;padding:7px 0;border-bottom:1px dashed var(--mist);min-width:0}
+.field.wide{grid-column:1/-1}
+.field span{font-size:12px;color:#6A7298;line-height:1.5}
+.field em{font-style:normal;font-weight:600;font-size:15px;line-height:1.6;min-height:1.6em;overflow-wrap:anywhere}
+.field em:empty::after{content:"";display:inline-block;width:60%;height:10px;border-radius:6px;background:linear-gradient(90deg,#EEF0F8,#E2E6F5,#EEF0F8);background-size:200% 100%;animation:shimmer 1.2s infinite;vertical-align:middle}
+@keyframes shimmer{to{background-position:-200% 0}}
+.field.filled em{animation:fillin .35s ease both}
+@keyframes fillin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.pill{display:inline-flex;align-items:center;gap:7px;background:var(--ink);color:#fff;padding:3px 12px 3px 4px;border-radius:999px;font-size:13px;font-weight:600;line-height:1.6}
+html[dir="rtl"] .pill{padding:3px 4px 3px 12px}
+.pill .tk{width:20px;height:20px;border-radius:50%;background:var(--tick);display:grid;place-items:center}
+.pill.pop{animation:pillpop .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes pillpop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+
+/* ============ Sections ============ */
+section{padding:104px 0}
+.sec-head{max-width:720px;margin-bottom:56px}
+.sec-head.center{margin-inline:auto;text-align:center}
+.kicker{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--cobalt);margin-bottom:12px;text-transform:uppercase}
+.dark .kicker{color:#9AA9FF}
+.sec-head h2{font-size:clamp(32px,4.6vw,54px);margin-bottom:14px}
+.sec-head p{color:var(--muted);font-size:18px}
+.dark .sec-head p{color:var(--muted-on-dark)}
+
+/* Process */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s;position:relative}
+.step{background:#fff;border:1px solid var(--mist);border-radius:var(--radius);padding:26px 22px;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+.step:hover{transform:translateY(-4px);box-shadow:0 24px 40px -24px rgba(35,64,255,.35);border-color:#C3CBF0}
+.step .n{font-family:var(--display);font-weight:800;font-size:15px;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#EEF0FF;color:var(--cobalt);margin-bottom:20px;transition:background .25s,color .25s}
+.step:hover .n{background:var(--cobalt);color:#fff}
+.step:last-child .n{background:var(--ink);color:var(--tick)}
+.step h3{font-size:20px;margin-bottom:8px}
+.step p{color:var(--muted);font-size:15.5px}
+.step-ico{position:absolute;top:26px;inset-inline-end:22px;opacity:.9}
+
+/* Features */
+.feats{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.feat{border:1px solid var(--line-dark);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-radius:22px;padding:30px;position:relative;overflow:hidden;transition:border-color .25s,transform .25s}
+.feat::after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(35,64,255,.45),transparent 70%);top:-120px;inset-inline-end:-100px;opacity:.5;transition:opacity .3s,transform .4s;pointer-events:none}
+.feat:hover{border-color:rgba(154,169,255,.45);transform:translateY(-3px)}
+.feat:hover::after{opacity:1;transform:scale(1.15)}
+.feat .ico{width:52px;height:52px;border-radius:16px;background:rgba(35,64,255,.22);border:1px solid rgba(154,169,255,.3);display:grid;place-items:center;margin-bottom:22px}
+.feat h3{font-size:23px;margin-bottom:10px}
+.feat p{color:var(--muted-on-dark);max-width:46ch}
+.feat .sample{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.feat .sample span{font-size:13px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--line-dark);color:#D5DAF2;font-family:var(--ar)}
+.feat .sample span.lat{font-family:var(--en);direction:ltr}
+
+/* About / timeline */
+.about .wrap{display:grid;grid-template-columns:.85fr 1.15fr;gap:64px;align-items:start}
+.about .sticky{position:sticky;top:120px}
+.founder{display:flex;align-items:center;gap:14px;margin-top:28px;padding:16px;background:#fff;border:1px solid var(--mist);border-radius:var(--radius)}
+.founder .ph{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--cobalt),var(--ink));color:#fff;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:20px;flex-shrink:0}
+.founder b{display:block;line-height:1.4}
+.founder small{color:var(--muted);font-size:14px;line-height:1.5;display:block}
+.tl{position:relative;padding-inline-start:44px}
+.tl-track,.tl-fill{position:absolute;inset-inline-start:13px;top:8px;bottom:8px;width:3px;border-radius:3px}
+.tl-track{background:var(--mist)}
+.tl-fill{background:linear-gradient(180deg,var(--cobalt),#6B7DFF);transform-origin:top;transform:scaleY(var(--tp,0))}
+.tl-item{position:relative;padding-bottom:44px}
+.tl-item:last-child{padding-bottom:0}
+.tl-node{position:absolute;inset-inline-start:-44px;top:4px;width:29px;height:29px;border-radius:50%;background:var(--paper);border:3px solid var(--mist);display:grid;place-items:center;transition:border-color .35s,background .35s,box-shadow .35s,transform .35s}
+.tl-node::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--mist);transition:background .35s}
+.tl-item.lit .tl-node{border-color:var(--cobalt);background:#fff;box-shadow:0 0 0 6px rgba(35,64,255,.12);transform:scale(1.05)}
+.tl-item.lit .tl-node::after{background:var(--cobalt)}
+.tl-item.lit.last .tl-node{background:var(--ink);border-color:var(--ink)}
+.tl-item.lit.last .tl-node::after{background:var(--tick)}
+.tl-card{background:#fff;border:1px solid var(--mist);border-radius:var(--radius);padding:22px 24px;opacity:.55;transform:translateX(0);transition:opacity .45s,box-shadow .45s,border-color .45s}
+.tl-item.lit .tl-card{opacity:1;border-color:#C9D0F2;box-shadow:0 20px 40px -28px rgba(35,64,255,.45)}
+.tl-when{font-size:13px;font-weight:600;color:var(--cobalt);margin-bottom:4px;display:block}
+.tl-card h3{font-size:21px;margin-bottom:6px}
+.tl-card p{color:var(--muted);font-size:16px}
+
+/* Pricing */
+.pricing{background:#fff;border-block:1px solid var(--mist)}
+.founding{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;background:linear-gradient(100deg,#EEF0FF,#F7F8FF);border:1px solid #CFD6FA;border-radius:var(--radius);padding:18px 22px;margin-bottom:28px}
+.founding p{font-weight:500;display:flex;align-items:center;gap:12px}
+.founding p b{color:var(--cobalt)}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.plan{border:1px solid var(--mist);border-radius:22px;padding:28px 24px;display:flex;flex-direction:column;background:var(--paper);transition:transform .25s,box-shadow .25s}
+.plan:hover{transform:translateY(-4px);box-shadow:0 30px 50px -30px rgba(10,14,31,.35)}
+.plan .pname{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em;margin-bottom:4px;direction:ltr;text-align:start}
+.plan .orders{color:var(--muted);font-size:15px;margin-bottom:22px}
+.plan .price{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.plan .price b{font-family:var(--display);font-weight:800;font-size:44px;letter-spacing:-.03em;line-height:1.1;direction:ltr}
+.plan .price span{color:var(--muted);font-size:15px}
+.plan .per{font-size:13px;color:var(--muted);margin-bottom:24px}
+.plan .btn{margin-top:auto;width:100%}
+.plan.hot{background:var(--ink);color:#fff;border-color:var(--ink);position:relative;box-shadow:0 30px 60px -30px rgba(35,64,255,.7);background-image:radial-gradient(80% 60% at 100% 0%,rgba(35,64,255,.55),transparent 70%)}
+.plan.hot .orders,.plan.hot .price span,.plan.hot .per{color:var(--muted-on-dark)}
+.plan .badge{position:absolute;top:-13px;inset-inline-start:24px;background:var(--cobalt);color:#fff;font-size:12.5px;font-weight:600;padding:4px 12px;border-radius:999px}
+.plan.ent .price b{font-size:30px;padding-block:7px}
+.plans-note{margin-top:22px;text-align:center;color:var(--muted);font-size:15px}
+
+/* Seats */
+.seats{padding:96px 0}
+.seats-card{max-width:860px;margin:0 auto;text-align:center}
+.seats h2{font-size:clamp(30px,4.4vw,50px);margin-bottom:12px}
+.seats .sub{color:var(--muted-on-dark);margin-bottom:40px;font-size:18px}
+.counter{display:flex;align-items:baseline;justify-content:center;gap:12px;margin-bottom:22px;direction:ltr}
+.counter .big{font-family:var(--display);font-weight:800;font-size:clamp(64px,12vw,128px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.counter .of{font-family:var(--display);font-weight:600;font-size:clamp(22px,3vw,34px);color:var(--muted-on-dark)}
+.bar{height:16px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line-dark);overflow:hidden;position:relative}
+.bar i{position:absolute;inset-block:0;inset-inline-start:0;width:0;border-radius:999px;background:linear-gradient(90deg,var(--cobalt),#7C8CFF);box-shadow:0 0 24px rgba(35,64,255,.8);transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);background-size:50% 100%;background-repeat:no-repeat;animation:sheen 2.4s infinite}
+@keyframes sheen{from{background-position:-100% 0}to{background-position:200% 0}}
+.bar-legend{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:14px;color:var(--muted-on-dark)}
+.bar-legend b{color:#fff}
+.seats .btn{margin-top:40px}
+
+/* Footer */
+footer{background:var(--ink);color:#C9CFEA;padding:56px 0 32px;border-top:1px solid var(--line-dark)}
+.foot{display:flex;flex-wrap:wrap;gap:28px 48px;justify-content:space-between;align-items:flex-start}
+.foot .tag{margin-top:12px;color:var(--muted-on-dark)}
+.foot h4{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#7F89B5;margin-bottom:10px;font-weight:600}
+.foot ul{list-style:none;padding:0;display:grid;gap:6px}
+.foot a,.foot button.linkish{text-decoration:none;color:#E5E8F6;background:none;border:0;padding:0;font-size:16px}
+.foot a:hover,.foot button.linkish:hover{color:#fff;text-decoration:underline}
+.copy{margin-top:40px;padding-top:22px;border-top:1px solid var(--line-dark);font-size:14px;color:#7F89B5;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between}
+
+/* Modal */
+dialog.modal{margin:auto;border:0;padding:0;border-radius:24px;width:min(640px,calc(100vw - 24px));max-height:calc(100dvh - 24px);background:#fff;color:var(--ink);box-shadow:0 40px 100px -20px rgba(0,0,0,.6);overflow:hidden}
+dialog.modal::backdrop{background:rgba(10,14,31,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+dialog.modal[open]{display:flex;flex-direction:column;animation:modalin .3s ease both}
+@keyframes modalin{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px 16px 22px;border-bottom:1px solid var(--mist);background:var(--paper)}
+html[dir="rtl"] .modal-head{padding:16px 22px 16px 18px}
+.modal-head h3{font-size:19px;line-height:1.45}
+.modal-head p{font-size:14px;color:var(--muted);line-height:1.5}
+.xbtn{width:40px;height:40px;border-radius:12px;border:1px solid var(--mist);background:#fff;font-size:18px;line-height:1;flex-shrink:0;transition:background .2s}
+.xbtn:hover{background:var(--mist)}
+.modal iframe{border:0;width:100%;height:min(680px,calc(100dvh - 170px));display:block;background:#fff}
+.modal-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 22px;border-top:1px solid var(--mist);font-size:14px;color:var(--muted);background:var(--paper)}
+.modal-foot .btn{padding:10px 18px;font-size:14px}
+
+/* ============ Reveal: content is visible at rest; animation only plays as an element enters ============ */
+.rv.in{animation:rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* ============ Responsive ============ */
+@media (max-width:1040px){
+  .hero .wrap{grid-template-columns:1fr;gap:56px}
+  .hero .copy-col{text-align:center}
+  .hero .lead{margin-inline:auto}
+  .hero-ctas,.hero-note{justify-content:center}
+  .demo{max-width:560px;margin-inline:auto;width:100%}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .plans{grid-template-columns:repeat(2,1fr)}
+  .about .wrap{grid-template-columns:1fr;gap:40px}
+  .about .sticky{position:static}
+}
+@media (max-width:980px){
+  .burger{display:grid}
+  .nav-links{position:absolute;top:calc(100% + 10px);inset-inline:0;flex-direction:column;gap:2px;margin:0;padding:10px;
+    background:linear-gradient(180deg,#141B3A,#0A0E1F);
+    border:1px solid rgba(255,255,255,.14);border-radius:24px;box-shadow:0 24px 50px -20px rgba(0,0,0,.7);display:none}
+  .nav.open .nav-links{display:flex;animation:menuin .25s ease both}
+  .nav-links a{padding:13px 16px;font-size:17px;border-radius:14px}
+}
+@keyframes menuin{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (max-width:560px){
+  .bar-lang{display:none}
+  .menu-lang{display:block;padding:8px 8px 4px;border-top:1px solid var(--line-dark);margin-top:6px}
+  .menu-lang .lang{width:100%;padding:11px;font-size:15px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  section{padding:76px 0}
+  .wrap{padding:0 16px}
+  .hero{padding:116px 0 72px}
+  .steps,.feats,.plans{grid-template-columns:1fr}
+  .fields{grid-template-columns:1fr 1fr}
+  .feat{padding:24px}
+  .sec-head{margin-bottom:40px}
+  .demo{padding:16px;border-radius:24px}
+  .hero-ctas .btn{width:100%}
+  .founding{flex-direction:column;align-items:stretch;text-align:start}
+  .founding .btn{width:100%}
+  .bar-legend{flex-direction:column;align-items:center;gap:4px}
+}
+@media (max-width:420px){
+  .nav{top:10px;padding:0 10px}
+  .nav-bar{height:58px;gap:6px;padding:0 6px}
+  .nav .btn{padding:9px 16px;font-size:14px}
+  .cta-full{display:none}.cta-short{display:inline}
+  .brand .wm,.brand .wm-ar{font-size:21px}
+  .brand svg{width:30px;height:30px}
+  .lang{padding:7px 10px;min-width:0}
+  .burger{width:40px;height:40px}
+  .fields{grid-template-columns:1fr}
+  .field.wide{grid-column:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="4" y="4" width="56" height="46" rx="14" fill="#2340FF"/>
+    <path d="M12 46 L10 62 L28 50 Z" fill="#2340FF"/>
+    <path d="M19 28 L29 38 L46 18" fill="none" stroke="#FFC933" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<!-- ================= NAV ================= -->
+<header class="nav" id="nav">
+  <div class="nav-bar">
+    <div class="nav-start">
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="navlinks" aria-label="القائمة"><span></span></button>
+      <ul class="nav-links" id="navlinks">
+        <li><a href="#process" data-i18n="nav.how">إزاي بيشتغل</a></li>
+        <li><a href="#about" data-i18n="nav.about">عننا</a></li>
+        <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
+        <li><a href="#pricing" data-i18n="nav.pricing">الأسعار</a></li>
+        <li class="menu-lang"><button class="lang js-lang" type="button"><span class="ltr">EN</span></button></li>
+      </ul>
+    </div>
+    <a class="brand" href="#top" aria-label="khalas">
+      <svg width="34" height="34" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wm">khalas</span><span class="wm-ar">خلّص</span>
+    </a>
+    <div class="nav-actions">
+      <button class="lang js-lang bar-lang" id="langBtn" type="button" aria-label="Switch to English"><span class="ltr">EN</span></button>
+      <button class="btn btn-primary" type="button" data-open-waitlist><span class="cta-full" data-i18n="nav.cta">احجز مكانك</span><span class="cta-short" data-i18n="nav.ctaShort">احجز</span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero dark grid-bg">
+  <div class="wrap">
+    <div class="copy-col">
+      <div class="eyebrow rv"><span class="dot"></span><span data-i18n="hero.eyebrow">قريب لأونلاين سيلرز مصر</span></div>
+      <h1 class="rv" style="--d:.05s"><span class="accent" data-i18n="hero.h1">الأوردر يخلص نفسه.</span></h1>
+      <p class="lead rv" style="--d:.12s" data-i18n="hero.lead">خلّص بيحوّل شات واتساب لأوردرات منظمة بالـ AI، وبيرد على عملائك بالنيابة عنك. انت ركّز في البيزنس، والأوردرات علينا.</p>
+      <div class="hero-ctas rv" style="--d:.18s">
+        <button class="btn btn-primary" type="button" data-open-waitlist><span data-i18n="hero.cta">احجز مكانك بـ 99 جنيه</span><svg class="arrow" width="18" height="18" aria-hidden="true"><use href="#arrow"/></svg></button>
+        <a class="btn btn-ghost" href="#process" data-i18n="hero.cta2">شوف بيشتغل إزاي</a>
+      </div>
+      <p class="hero-note rv" style="--d:.24s"><span data-i18n="hero.note1">400 مكان للمؤسسين بس.</span> <b><span data-seat-left>400</span> <span data-i18n="hero.note2">متبقي</span></b></p>
+    </div>
+
+    <div class="demo rv" style="--d:.1s" aria-label="Live demo" role="img" id="demo">
+      <span class="demo-tag">✦ <span data-i18n="demo.tag">خلّص AI</span></span>
+      <div class="chatbar">
+        <div class="av" aria-hidden="true" data-i18n="demo.initial">م</div>
+        <div><b data-i18n="demo.name">منة · عميلة</b><small data-i18n="demo.online">أونلاين على واتساب</small></div>
+      </div>
+      <div class="thread" id="thread"></div>
+      <div class="order" id="order">
+        <div class="order-top">
+          <b><span data-i18n="demo.neworder">أوردر جديد</span> <span class="num">#KHL-1043</span></b>
+          <span class="ai-chip">✦ <span data-i18n="demo.tag">خلّص AI</span></span>
+        </div>
+        <div class="fields" id="fields"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker rv" data-i18n="proc.kicker">إزاي بيشتغل</span>
+      <h2 class="rv" data-i18n="proc.h">من رسالة لأوردر جاهز للشحن، في 4 خطوات.</h2>
+      <p class="rv" data-i18n="proc.p">انت مش محتاج تغيّر طريقة شغلك. العميل بيكلمك على واتساب زي ما هو، وخلّص بيعمل الباقي.</p>
+    </div>
+    <ol class="steps" style="list-style:none;padding:0">
+      <li class="step rv"><div class="n">01</div><h3 data-i18n="s1.h">العميل بيبعت رسالة</h3><p data-i18n="s1.p">بالعربي، بالفرانكو، على كذا رسالة. زي ما بيكتب بالظبط.</p></li>
+      <li class="step rv" style="--d:.08s"><div class="n">02</div><h3 data-i18n="s2.h">الشات بيسأل عن الناقص</h3><p data-i18n="s2.p">العنوان ناقص؟ المقاس مش واضح؟ خلّص بيسأل العميل لوحده.</p></li>
+      <li class="step rv" style="--d:.16s"><div class="n">03</div><h3 data-i18n="s3.h">الـ AI بيبني الأوردر</h3><p data-i18n="s3.p">المنتج، الكمية، اللون، العنوان والإجمالي. كله في كارت واحد منظم.</p></li>
+      <li class="step rv" style="--d:.24s"><div class="n">04</div><h3 data-i18n="s4.h">الدفع والشحن</h3><p data-i18n="s4.p">الأوردر بيتنقل لمرحلة الدفع والشحن، وانت بتتابع من الداشبورد.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ================= FEATURES ================= -->
+<section id="features" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="kicker rv" data-i18n="feat.kicker">المميزات</span>
+      <h2 class="rv" data-i18n="feat.h">كل اللي بيضيّع وقتك في الشات، خلّص بيعمله.</h2>
+      <p class="rv" data-i18n="feat.p">مبني مخصوص لطريقة البيع في مصر: واتساب، كاش عند الاستلام، وعملاء بيكتبوا على راحتهم.</p>
+    </div>
+    <div class="feats">
+      <article class="feat rv">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/><path d="M8 9h8M8 12h5"/></svg></div>
+        <h3 data-i18n="f1.h">بيطلّع الأوردر من أي شات</h3>
+        <p data-i18n="f1.p">رسايل مقطّعة، عربي وفرانكو وإيموجي. الـ AI بيفهمها ويطلّع منها أوردر كامل من غير ما تكتب حرف.</p>
+        <div class="sample" aria-hidden="true"><span>عايزة 2 أسود L</span><span class="lat">3ayez wa7ed azra2</span><span>العنوان المعادي 🙏</span></div>
+      </article>
+      <article class="feat rv" style="--d:.08s">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3 data-i18n="f2.h">بيرد على عملائك على واتساب</h3>
+        <p data-i18n="f2.p">بيرد بأسلوبك وباللهجة المصرية، على الأسعار والمقاسات والشحن. حتى وانت نايم.</p>
+      </article>
+      <article class="feat rv">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg></div>
+        <h3 data-i18n="f3.h">بيسأل عن البيانات الناقصة</h3>
+        <p data-i18n="f3.p">لو العنوان أو المقاس أو رقم الموبايل ناقص، بيسأل العميل قبل ما الأوردر يتسجل. مفيش أوردر بيضيع.</p>
+      </article>
+      <article class="feat rv" style="--d:.08s">
+        <div class="ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg></div>
+        <h3 data-i18n="f4.h">داشبورد لكل الأوردرات</h3>
+        <p data-i18n="f4.p">جديد، مستني دفع، اتشحن، خلص. كل أوردر في مكانه، وكل حاجة واضحة من أول نظرة.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" class="about">
+  <div class="wrap">
+    <div class="sticky">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="kicker rv" data-i18n="about.kicker">عننا</span>
+        <h2 class="rv" data-i18n="about.h">اتبنى من جوه السوق المصري.</h2>
+        <p class="rv" data-i18n="about.p">خلّص جزء من Elmarghany Enterprises. اتعمل علشان مشكلة شفناها بعينينا كل يوم مع البراندات اللي بنشتغل معاها.</p>
+      </div>
+      <div class="founder rv">
+        <div class="ph" aria-hidden="true">AE</div>
+        <div><b data-i18n="about.fname">علي المرغني</b><small data-i18n="about.frole">المؤسس · صاحب وكالة سوشيال ميديا ماركتنج</small></div>
+      </div>
+    </div>
+
+    <div class="tl" id="timeline">
+      <div class="tl-track"></div><div class="tl-fill" id="tlfill"></div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-card">
+        <span class="tl-when" data-i18n="t1.w">البداية</span>
+        <h3 data-i18n="t1.h">وكالة سوشيال ميديا ماركتنج</h3>
+        <p data-i18n="t1.p">علي المرغني بيدير وكالة بتشتغل مع براندات أونلاين في مصر، من الإعلانات لحد المبيعات.</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-card">
+        <span class="tl-when" data-i18n="t2.w">المشكلة</span>
+        <h3 data-i18n="t2.h">الأوردرات بتضيع في الشات</h3>
+        <p data-i18n="t2.p">الإعلانات بتجيب رسايل كتير، بس الأوردرات بتتكتب بإيد في نوتس وشيتات، وأوردرات كتير بتقع.</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-card">
+        <span class="tl-when" data-i18n="t3.w">الفكرة</span>
+        <h3 data-i18n="t3.h">شركات SaaS لحلول التجارة الإلكترونية</h3>
+        <p data-i18n="t3.p">الوكالة بقت تبني شركات SaaS بتدوّر على حلول للتجارة الإلكترونية في مصر، تحت Elmarghany Enterprises.</p>
+      </div></div>
+      <div class="tl-item"><div class="tl-node"></div><div class="tl-card">
+        <span class="tl-when" data-i18n="t4.w">2026</span>
+        <h3 data-i18n="t4.h">من وصلة لخلّص</h3>
+        <p data-i18n="t4.p">المنتج بدأ باسم وصلة، وكبر لـ AI بيفهم الشات ويبني الأوردر ويرد على العميل. فبقى اسمه خلّص.</p>
+      </div></div>
+      <div class="tl-item last"><div class="tl-node"></div><div class="tl-card">
+        <span class="tl-when" data-i18n="t5.w">دلوقتي</span>
+        <h3 data-i18n="t5.h">400 بائع مؤسس</h3>
+        <p data-i18n="t5.p">بنفتح الإطلاق لأول 400 سيلر. احجز مكانك بـ 99 جنيه وكون من أول ناس تخلّص أوردراتها بالـ AI.</p>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section id="pricing" class="pricing">
+  <div class="wrap">
+    <div class="sec-head center">
+      <span class="kicker rv" data-i18n="price.kicker">الأسعار</span>
+      <h2 class="rv" data-i18n="price.h">ادفع على قد أوردراتك.</h2>
+      <p class="rv" data-i18n="price.p">باقات شهرية بالجنيه المصري. كل الباقات فيها كل المميزات، الفرق في عدد الأوردرات بس.</p>
+    </div>
+    <div class="founding rv">
+      <p><svg width="28" height="28" aria-hidden="true"><use href="#mark"/></svg><span><span data-i18n="price.found1">أماكن المؤسسين:</span> <b data-i18n="price.found2">احجز مكانك بـ 99 جنيه بس.</b></span></p>
+      <button class="btn btn-primary" type="button" data-open-waitlist data-i18n="nav.cta">احجز مكانك</button>
+    </div>
+    <div class="plans">
+      <div class="plan rv">
+        <div class="pname">Starter</div>
+        <div class="orders" data-i18n="p1.o">150 أوردر في الشهر</div>
+        <div class="price"><b>599</b><span data-i18n="p.egp">جنيه / شهر</span></div>
+        <div class="per" data-i18n="p1.per">حوالي 4 جنيه للأوردر</div>
+        <button class="btn btn-ghost" type="button" data-open-waitlist data-i18n="nav.cta">احجز مكانك</button>
+      </div>
+      <div class="plan hot rv" style="--d:.06s">
+        <span class="badge" data-i18n="p.hot">الأكثر طلبًا</span>
+        <div class="pname">Growth</div>
+        <div class="orders" data-i18n="p2.o">400 أوردر في الشهر</div>
+        <div class="price"><b>999</b><span data-i18n="p.egp">جنيه / شهر</span></div>
+        <div class="per" data-i18n="p2.per">حوالي 2.5 جنيه للأوردر</div>
+        <button class="btn btn-primary" type="button" data-open-waitlist data-i18n="nav.cta">احجز مكانك</button>
+      </div>
+      <div class="plan rv" style="--d:.12s">
+        <div class="pname">Scale</div>
+        <div class="orders" data-i18n="p3.o">1,000 أوردر في الشهر</div>
+        <div class="price"><b>1,799</b><span data-i18n="p.egp">جنيه / شهر</span></div>
+        <div class="per" data-i18n="p3.per">أقل من 2 جنيه للأوردر</div>
+        <button class="btn btn-ghost" type="button" data-open-waitlist data-i18n="nav.cta">احجز مكانك</button>
+      </div>
+      <div class="plan ent rv" style="--d:.18s">
+        <div class="pname">Enterprise</div>
+        <div class="orders" data-i18n="p4.o">أكتر من 1,000 أوردر</div>
+        <div class="price"><b data-i18n="p4.price" style="font-family:var(--head)">حسب احتياجك</b></div>
+        <div class="per" data-i18n="p4.per">لأكتر من براند أو فريق كبير</div>
+        <button class="btn btn-ghost" type="button" id="bookCall" data-i18n="p4.cta">احجز مكالمة</button>
+      </div>
+    </div>
+    <p class="plans-note rv" data-i18n="price.note">الأسعار شهرية ومن غير عقود. تقدر تغيّر باقتك في أي وقت.</p>
+  </div>
+</section>
+
+<!-- ================= SEATS ================= -->
+<section id="seats" class="seats dark grid-bg">
+  <div class="wrap">
+    <div class="seats-card">
+      <span class="kicker rv" data-i18n="seats.kicker">أماكن المؤسسين</span>
+      <h2 class="rv" data-i18n="seats.h">الأماكن بتخلص.</h2>
+      <p class="sub rv" data-i18n="seats.p">400 مكان بس للسيلرز المؤسسين. كل مكان اتحجز بيتحسب هنا أول بأول.</p>
+      <div class="counter rv" aria-live="polite"><span class="big" id="seatNum">0</span><span class="of">/ 400</span></div>
+      <div class="bar rv" role="progressbar" aria-valuemin="0" aria-valuemax="400" aria-valuenow="0" id="seatBar"><i id="seatFill"></i></div>
+      <div class="bar-legend rv"><span><b id="seatTaken">0</b> <span data-i18n="seats.of">من 400 اتحجزوا</span></span><span><b data-seat-left>400</b> <span data-i18n="seats.left">مكان متبقي</span></span></div>
+      <button class="btn btn-light rv" type="button" data-open-waitlist><span data-i18n="hero.cta">احجز مكانك بـ 99 جنيه</span><svg class="arrow" width="18" height="18" aria-hidden="true"><use href="#arrow"/></svg></button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top" aria-label="khalas"><svg width="34" height="34" aria-hidden="true"><use href="#mark"/></svg><span class="wm" style="color:#fff">khalas</span><span class="wm-ar" style="color:#fff">خلّص</span></a>
+        <p class="tag" data-i18n="hero.h1">الأوردر يخلص نفسه.</p>
+      </div>
+      <div>
+        <h4 data-i18n="foot.links">روابط</h4>
+        <ul>
+          <li><a href="#process" data-i18n="nav.how">إزاي بيشتغل</a></li>
+          <li><a href="#features" data-i18n="nav.features">المميزات</a></li>
+          <li><a href="#pricing" data-i18n="nav.pricing">الأسعار</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-i18n="foot.contact">تواصل معانا</h4>
+        <ul id="contactList">
+          <li><button class="linkish" type="button" data-open-waitlist data-i18n="nav.cta">احجز مكانك</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>© <span id="yr">2026</span> Elmarghany Enterprises</span><span data-i18n="foot.made">معمول لسيلرز مصر.</span></div>
+  </div>
+</footer>
+
+<!-- ================= WAITLIST MODAL ================= -->
+<dialog class="modal" id="waitlist" aria-labelledby="wlTitle">
+  <div class="modal-head">
+    <div><h3 id="wlTitle" data-i18n="modal.h">احجز مكانك في خلّص</h3><p data-i18n="modal.p">املا الفورم واحجز مكانك كسيلر مؤسس بـ 99 جنيه.</p></div>
+    <button class="xbtn" type="button" id="wlClose" aria-label="اقفل">✕</button>
+  </div>
+  <iframe id="wlFrame" title="Waitlist form" loading="lazy"></iframe>
+  <div class="modal-foot"><span data-i18n="modal.trouble">الفورم بيطلب تسجيل دخول جوجل؟</span> <a class="btn btn-primary" id="wlNewTab" href="#" target="_blank" rel="noopener" data-i18n="modal.newtab">افتح الفورم في تاب جديدة</a></div>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= CONFIG ================= */
+  var FORM_URL  = "https://docs.google.com/forms/d/e/1FAIpQLSdJXZqwfJOg6l4epLtpjJDd_RZk_UFiGGery0Fzs_PRsQZPmA/viewform?embedded=true";
+  // "Wasla Waitlist (Responses)" sheet, response tab. Every data row = one reserved seat.
+  // Count-only query: visitors receive the non-empty counts of columns A-D, never names/emails/phones.
+  // The highest of the four counts = rows (one manually added row has no timestamp).
+  var SHEET_CSV = "https://docs.google.com/spreadsheets/d/1AoLholizTpuR-QGaNOWQmfwa0hEuYTWEJrM_xDB-c0c/gviz/tq?tqx=out:csv&gid=1085262494&tq=" + encodeURIComponent("select count(A),count(B),count(C),count(D)");
+  var TOTAL_SEATS = 400;
+  var BOOKING_URL = "";   // e.g. a Calendly link for "Book a call". Empty = opens the waitlist form.
+  var CONTACT_EMAIL = ""; // e.g. hello@yourdomain.com. Empty = hidden.
+  var CONTACT_WHATSAPP = ""; // digits only, e.g. 2010xxxxxxxx. Empty = hidden.
+
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function(s,r){return (r||document).querySelector(s)};
+  var $$ = function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+
+  /* ================= i18n ================= */
+  var EN = {
+    "nav.how":"How it works","nav.about":"About","nav.features":"Features","nav.pricing":"Pricing","nav.cta":"Reserve your spot","nav.ctaShort":"Reserve",
+    "hero.eyebrow":"Coming soon for Egypt's online sellers",
+    "hero.h1":"Orders, done.",
+    "hero.lead":"khalas turns WhatsApp chats into organised orders with AI, and replies to your customers for you. You run the business. We'll handle the orders.",
+    "hero.cta":"Reserve for 99 EGP","hero.cta2":"See how it works",
+    "hero.note1":"Only 400 founding spots.","hero.note2":"left",
+    "demo.tag":"khalas AI","demo.initial":"M","demo.name":"Menna · customer","demo.online":"online on WhatsApp","demo.neworder":"New order",
+    "proc.kicker":"How it works","proc.h":"From a message to an order ready to ship, in 4 steps.",
+    "proc.p":"You don't change how you work. Customers message you on WhatsApp like they always do, and khalas does the rest.",
+    "s1.h":"The customer sends a message","s1.p":"In Arabic, in Franco, across several messages. Exactly how they type.",
+    "s2.h":"The chat asks for what's missing","s2.p":"No address? Size unclear? khalas asks the customer on its own.",
+    "s3.h":"The AI builds the order","s3.p":"Product, quantity, colour, address and total. All in one tidy card.",
+    "s4.h":"Payment and shipping","s4.p":"The order moves on to payment and shipping, and you follow it from the dashboard.",
+    "feat.kicker":"Features","feat.h":"Everything that eats your time in the chat, khalas does.",
+    "feat.p":"Built for how Egypt sells: WhatsApp, cash on delivery, and customers who type however they like.",
+    "f1.h":"Pulls the order out of any chat","f1.p":"Broken-up messages, Arabic, Franco and emoji. The AI reads it and builds a complete order without you typing a thing.",
+    "f2.h":"Replies to your customers on WhatsApp","f2.p":"Answers on prices, sizes and shipping in your tone and in Egyptian Arabic. Even while you sleep.",
+    "f3.h":"Follows up on missing details","f3.p":"Missing address, size or phone number? It asks the customer before the order is saved. No order slips through.",
+    "f4.h":"A dashboard for every order","f4.p":"New, awaiting payment, shipped, done. Every order in its place, clear at a glance.",
+    "about.kicker":"About","about.h":"Built from inside the Egyptian market.",
+    "about.p":"khalas is part of Elmarghany Enterprises. It exists because of a problem we saw every day with the brands we work with.",
+    "about.fname":"Ali Elmarghany","about.frole":"Founder · owner of a social media marketing agency",
+    "t1.w":"The start","t1.h":"A social media marketing agency","t1.p":"Ali Elmarghany runs an agency that works with online brands in Egypt, from ads all the way to sales.",
+    "t2.w":"The problem","t2.h":"Orders get lost in the chat","t2.p":"Ads bring in loads of messages, but orders get typed by hand into notes and sheets, and many fall through.",
+    "t3.w":"The idea","t3.h":"SaaS companies for e-commerce","t3.p":"The agency started building SaaS companies that find e-commerce solutions in Egypt, under Elmarghany Enterprises.",
+    "t4.w":"2026","t4.h":"From Wasla to khalas","t4.p":"The product started as Wasla and grew into AI that reads the chat, builds the order and replies to the customer. So it became khalas.",
+    "t5.w":"Now","t5.h":"400 founding sellers","t5.p":"We're opening launch to the first 400 sellers. Reserve your spot for 99 EGP and be among the first to finish orders with AI.",
+    "price.kicker":"Pricing","price.h":"Pay for the orders you get.",
+    "price.p":"Monthly plans in Egyptian pounds. Every plan has every feature. The only difference is the number of orders.",
+    "price.found1":"Founding spots:","price.found2":"reserve yours for just 99 EGP.",
+    "p.egp":"EGP / month","p.hot":"Most popular",
+    "p1.o":"150 orders a month","p1.per":"About 4 EGP per order",
+    "p2.o":"400 orders a month","p2.per":"About 2.5 EGP per order",
+    "p3.o":"1,000 orders a month","p3.per":"Under 2 EGP per order",
+    "p4.o":"More than 1,000 orders","p4.price":"Custom","p4.per":"For multiple brands or large teams","p4.cta":"Book a call",
+    "price.note":"Monthly, no contracts. Change your plan any time.",
+    "seats.kicker":"Founding spots","seats.h":"Spots are running out.",
+    "seats.p":"Only 400 spots for founding sellers. Every reserved spot is counted here as it happens.",
+    "seats.of":"of 400 reserved","seats.left":"spots left",
+    "foot.links":"Links","foot.contact":"Contact","foot.made":"Made for Egypt's sellers.",
+    "modal.h":"Reserve your spot in khalas","modal.p":"Fill in the form to reserve a founding seller spot for 99 EGP.",
+    "modal.trouble":"Form asking for a Google sign-in?","modal.newtab":"Open the form in a new tab"
+  };
+  var AR = {};
+  $$("[data-i18n]").forEach(function(el){ var k=el.getAttribute("data-i18n"); if(!(k in AR)) AR[k]=el.textContent; });
+
+  var DEMO = {
+    ar:{
+      msg:"عايزة 2 تيشيرت قطن أسود مقاس L 🙏 التوصيل المعادي شارع 9 عمارة 4، اسمي منة وهدفع كاش",
+      reply:"تمام يا منة ✓ أوردرك اتسجل، الإجمالي 700 جنيه شامل الشحن. هيوصلك خلال يومين",
+      fields:[["المنتج","تيشيرت قطن"],["الكمية","2"],["اللون","أسود · L"],["العميل","منة"],["العنوان","المعادي، شارع 9، عمارة 4",1],["الإجمالي","700 ج.م"],["الدفع","كاش عند الاستلام"],["الحالة",null]],
+      done:"خلص", time:"10:42 م"
+    },
+    en:{
+      msg:"I want 2 black cotton t-shirts, size L 🙏 deliver to Maadi, street 9, building 4. I'm Menna, paying cash",
+      reply:"Done, Menna ✓ your order is in. Total is 700 EGP including shipping. Arrives within 2 days",
+      fields:[["Product","Cotton t-shirt"],["Quantity","2"],["Colour","Black · L"],["Customer","Menna"],["Address","Maadi, street 9, building 4",1],["Total","700 EGP"],["Payment","Cash on delivery"],["Status",null]],
+      done:"Done", time:"10:42 PM"
+    }
+  };
+  var SEAT_TXT = { ar:{bar:"مكان محجوز من 400"}, en:{bar:"spots reserved of 400"} };
+
+  var lang = "ar";
+  try{ var saved=localStorage.getItem("khalas-lang"); if(saved==="en"||saved==="ar") lang=saved; }catch(e){}
+
+  function applyLang(l){
+    lang=l;
+    var d = l==="ar" ? AR : EN;
+    var root=document.documentElement;
+    root.lang=l; root.dir = l==="ar" ? "rtl" : "ltr";
+    $$("[data-i18n]").forEach(function(el){ var k=el.getAttribute("data-i18n"); if(d[k]!=null) el.textContent=d[k]; });
+    document.title = l==="ar" ? "خلّص | khalas: الأوردر يخلص نفسه" : "khalas | Orders, done.";
+    $$(".js-lang").forEach(function(lb){
+      lb.innerHTML = l==="ar" ? '<span class="ltr">EN</span>' : '<span>عربي</span>';
+      lb.setAttribute("aria-label", l==="ar" ? "Switch to English" : "التحويل للعربي");
+    });
+    $("#burger").setAttribute("aria-label", l==="ar" ? "القائمة" : "Menu");
+    $("#wlClose").setAttribute("aria-label", l==="ar" ? "اقفل" : "Close");
+    $("#demo").setAttribute("aria-label", l==="ar" ? "ديمو: رسالة واتساب بتتحول لأوردر" : "Demo: a WhatsApp message becoming an order");
+    try{ localStorage.setItem("khalas-lang",l); }catch(e){}
+    renderSeats(false);
+    startDemo();
+  }
+  $$(".js-lang").forEach(function(b){ b.addEventListener("click",function(){ applyLang(lang==="ar"?"en":"ar"); }); });
+
+  /* ================= Mobile nav ================= */
+  var nav=$("#nav"), burger=$("#burger");
+  burger.addEventListener("click",function(){ var o=nav.classList.toggle("open"); burger.setAttribute("aria-expanded",o); });
+  function closeMenu(){ nav.classList.remove("open"); burger.setAttribute("aria-expanded","false"); }
+  $$("#navlinks a").forEach(function(a){ a.addEventListener("click",closeMenu); });
+  document.addEventListener("click",function(e){ if(nav.classList.contains("open") && !nav.contains(e.target)) closeMenu(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeMenu(); });
+  function navScroll(){ nav.classList.toggle("scrolled", window.scrollY>24); }
+  window.addEventListener("scroll",navScroll,{passive:true}); navScroll();
+
+  /* ================= Demo ================= */
+  var demoToken=0;
+  function wait(ms,tok){ return new Promise(function(res,rej){ setTimeout(function(){ tok===demoToken?res():rej("x"); },ms); }); }
+  function pillHTML(txt,pop){ return '<span class="pill'+(pop?' pop':'')+'"><span class="tk"><svg width="12" height="12" style="color:#0A0E1F"><use href="#tick"/></svg></span>'+txt+'</span>'; }
+  function buildFields(D){
+    var f=$("#fields"); f.innerHTML="";
+    D.fields.forEach(function(x){
+      var div=document.createElement("div"); div.className="field"+(x[2]?" wide":"");
+      var s=document.createElement("span"); s.textContent=x[0];
+      var em=document.createElement("em");
+      div.appendChild(s); div.appendChild(em); f.appendChild(div);
+    });
+    return $$(".field",f);
+  }
+  function renderFinal(D){
+    var th=$("#thread"); th.innerHTML="";
+    var b=document.createElement("div"); b.className="bubble in"; b.textContent=D.msg; th.appendChild(b);
+    var r=document.createElement("div"); r.className="bubble out"; r.textContent=D.reply; th.appendChild(r);
+    var els=buildFields(D);
+    els.forEach(function(el,i){ var v=D.fields[i][1]; var em=$("em",el); if(v===null) em.innerHTML=pillHTML(D.done,false); else em.textContent=v; el.classList.add("filled"); });
+    $("#order").style.setProperty("--p",1);
+  }
+  function startDemo(){
+    var tok=++demoToken, D=DEMO[lang];
+    if(reduce){ renderFinal(D); return; }
+    run().catch(function(){});
+    function run(){
+      var th=$("#thread"), order=$("#order");
+      th.innerHTML=""; order.style.setProperty("--p",0);
+      var els=buildFields(D);
+      var b=document.createElement("div"); b.className="bubble in";
+      var t=document.createElement("span"); var c=document.createElement("span"); c.className="caret";
+      b.appendChild(t); b.appendChild(c); th.appendChild(b);
+      var chars=Array.from(D.msg), i=0;
+      function typeNext(){
+        if(i>=chars.length) return wait(350,tok);
+        t.textContent+=chars[i++];
+        return wait(chars[i-1]===" "?45:26,tok).then(typeNext);
+      }
+      return wait(500,tok).then(typeNext).then(function(){
+        c.remove();
+        var meta=document.createElement("span"); meta.className="meta"; meta.textContent=D.time; b.appendChild(meta);
+        var k=0;
+        function fillNext(){
+          if(k>=els.length) return Promise.resolve();
+          var el=els[k], v=D.fields[k][1], em=$("em",el);
+          k++;
+          order.style.setProperty("--p",k/els.length);
+          if(v===null) em.innerHTML=pillHTML(D.done,true); else em.textContent=v;
+          el.classList.add("filled");
+          return wait(v===null?0:420,tok).then(fillNext);
+        }
+        return wait(300,tok).then(fillNext);
+      }).then(function(){
+        var ty=document.createElement("div"); ty.className="typing"; ty.innerHTML="<i></i><i></i><i></i>"; th.appendChild(ty);
+        return wait(1100,tok).then(function(){
+          ty.remove();
+          var r=document.createElement("div"); r.className="bubble out"; r.textContent=D.reply; th.appendChild(r);
+        });
+      }).then(function(){ return wait(5200,tok); }).then(function(){ if(tok===demoToken) startDemo(); });
+    }
+  }
+
+  /* ================= Reveal (visible at rest) ================= */
+  if(!reduce && "IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+    },{rootMargin:"0px 0px -8% 0px",threshold:0.01});
+    $$(".rv").forEach(function(el){ io.observe(el); });
+  }
+
+  /* ================= Timeline (scroll-driven) ================= */
+  var tl=$("#timeline"), fill=$("#tlfill"), items=$$(".tl-item",tl), ticking=false;
+  function tlUpdate(){
+    ticking=false;
+    var r=tl.getBoundingClientRect(), vh=window.innerHeight;
+    var anchor=vh*0.6;
+    var p = reduce ? 1 : Math.max(0,Math.min(1,(anchor-r.top)/r.height));
+    fill.style.setProperty("--tp",p);
+    var lineY=r.top+p*r.height;
+    items.forEach(function(it){
+      var n=$(".tl-node",it).getBoundingClientRect();
+      it.classList.toggle("lit", reduce || lineY >= n.top+n.height/2 - 2);
+    });
+  }
+  function onScroll(){ if(!ticking){ ticking=true; requestAnimationFrame(tlUpdate); } }
+  window.addEventListener("scroll",onScroll,{passive:true});
+  window.addEventListener("resize",onScroll);
+  tlUpdate();
+
+  /* ================= Seats ================= */
+  var seatCount=0, seatShown=0;
+  function renderSeats(animate){
+    var n=Math.min(seatCount,TOTAL_SEATS), left=TOTAL_SEATS-n;
+    $("#seatTaken").textContent=n;
+    $$("[data-seat-left]").forEach(function(el){ el.textContent=left; });
+    $("#seatFill").style.width=(n/TOTAL_SEATS*100)+"%";
+    var bar=$("#seatBar"); bar.setAttribute("aria-valuenow",n); bar.setAttribute("aria-label", n+" "+SEAT_TXT[lang].bar);
+    var big=$("#seatNum");
+    if(!animate||reduce){ big.textContent=n; seatShown=n; return; }
+    var start=performance.now(), from=seatShown, dur=1400;
+    (function step(now){
+      var t=Math.min(1,(now-start)/dur), e=1-Math.pow(1-t,3);
+      big.textContent=Math.round(from+(n-from)*e);
+      if(t<1) requestAnimationFrame(step); else seatShown=n;
+    })(start);
+  }
+  function loadSeats(){
+    if(!window.fetch){ return; }
+    fetch(SHEET_CSV+"&_="+Date.now(),{cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
+      .then(function(t){
+        var rows=t.trim().split(/\r?\n/);
+        var nums=(rows[1]||"").split(",").map(function(c){ return parseInt(c.replace(/"/g,""),10)||0; });
+        seatCount=Math.max.apply(null,nums.concat([0]));
+      })
+      .catch(function(){ seatCount=0; })
+      .then(function(){ whenVisible($("#seats"),function(){ renderSeats(true); }); renderHeroLeft(); });
+  }
+  function renderHeroLeft(){ $$("[data-seat-left]").forEach(function(el){ el.textContent=TOTAL_SEATS-Math.min(seatCount,TOTAL_SEATS); }); }
+  function whenVisible(el,cb){
+    if(!("IntersectionObserver" in window)){ cb(); return; }
+    var o=new IntersectionObserver(function(es){ if(es[0].isIntersecting){ o.disconnect(); cb(); } },{threshold:0.2});
+    o.observe(el);
+  }
+
+  /* ================= Waitlist modal ================= */
+  var dlg=$("#waitlist"), frame=$("#wlFrame"), lastFocus=null;
+  $("#wlNewTab").href=FORM_URL.replace("?embedded=true","");
+  function openWaitlist(){
+    if(!frame.getAttribute("src")) frame.setAttribute("src",FORM_URL);
+    lastFocus=document.activeElement;
+    nav.classList.remove("open");
+    if(dlg.showModal){ dlg.showModal(); } else { dlg.setAttribute("open",""); }
+    document.body.style.overflow="hidden";
+    $("#wlClose").focus();
+  }
+  function closeWaitlist(){ if(dlg.open){ if(dlg.close) dlg.close(); else dlg.removeAttribute("open"); } }
+  dlg.addEventListener("close",function(){ document.body.style.overflow=""; if(lastFocus&&lastFocus.focus) lastFocus.focus(); });
+  $("#wlClose").addEventListener("click",closeWaitlist);
+  dlg.addEventListener("click",function(e){ if(e.target===dlg) closeWaitlist(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&dlg.open) closeWaitlist(); });
+  $$("[data-open-waitlist]").forEach(function(b){ b.addEventListener("click",openWaitlist); });
+  $("#bookCall").addEventListener("click",function(){ if(BOOKING_URL) window.open(BOOKING_URL,"_blank","noopener"); else openWaitlist(); });
+
+  /* ================= Contact ================= */
+  var cl=$("#contactList");
+  if(CONTACT_EMAIL){ var li=document.createElement("li"); var a=document.createElement("a"); a.href="mailto:"+CONTACT_EMAIL; a.textContent=CONTACT_EMAIL; a.dir="ltr"; li.appendChild(a); cl.insertBefore(li,cl.firstChild); }
+  if(CONTACT_WHATSAPP){ var li2=document.createElement("li"); var a2=document.createElement("a"); a2.href="https://wa.me/"+CONTACT_WHATSAPP; a2.target="_blank"; a2.rel="noopener"; a2.textContent="WhatsApp"; li2.appendChild(a2); cl.insertBefore(li2,cl.firstChild); }
+  $("#yr").textContent=new Date().getFullYear();
+
+  /* ================= Boot ================= */
+  applyLang(lang);
+  loadSeats();
+})();
+</script>
+</body>
+</html>
