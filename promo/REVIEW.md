@@ -1,8 +1,22 @@
 # Khalas promo, vertical: review notes
 
-1080×1920 · 30 fps · 45 s · English voiceover, music and sound effects · rendered to `../renders/khalas-promo-vertical.mp4`
+1080×1920 · 30 fps · 45.5 s · English voiceover, music and sound effects · rendered to `../renders/khalas-promo-vertical.mp4`
 
 ## Current version
+
+**Intro (0–10.5 s, `compositions/intro.html`).** It replaces the old WhatsApp-flood hook and the "Copy. Paste. Mistake." scene, and borrows the storytelling mechanics of the person's reference clip:
+1. A card says "37 orders".
+2. "WRONG." slams in and shatters the card into shards ("it's lying to you").
+3. An iris opens onto paper.
+4. A yellow order-blob drops in at 37.
+5. Three critters bite it, each bite landing on the spoken number:
+   - Missed replies −7
+   - Typos −5
+   - Lost addresses −3
+6. The blob melts on "You actually shipped 22".
+7. Everything after the intro moved back by 0.5 s.
+
+**Intro sounds.** `glass-shatter.mp3` and `cartoon-bite.mp3` are CC0 from Freesound; see `assets/sfx/CREDITS.md`.
 
 **Language.** Everything on screen is English-first:
 - English lines are big, in Bricolage Grotesque 800.
@@ -25,7 +39,7 @@
 ## Measured
 
 - `check`: 0 errors.
-- Delivery file: −15 LUFS, true peak −1.3 dBTP, no clipping.
+- Delivery file: −15.5 LUFS, true peak −1.3 dBTP, no clipping.
 - The mix was normalised with ffmpeg `loudnorm` after rendering, because the raw render was −18 LUFS.
 - The sound was measured, not listened to.
 

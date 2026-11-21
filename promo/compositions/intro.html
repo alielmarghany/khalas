@@ -1,0 +1,250 @@
+<template>
+  <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 700; src: url("assets/fonts/bricolage-grotesque-latin-700-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 500; src: url("assets/fonts/bricolage-grotesque-latin-500-normal.woff2") format("woff2"); }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+
+    #root { position: absolute; inset: 0; overflow: hidden; background: radial-gradient(circle at 50% 42%, rgba(35, 64, 255, 0.32), rgba(35, 64, 255, 0) 60%), #0b0f1a; }
+    .in-ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 36px; line-height: 1.3; }
+
+    #in-h { position: absolute; left: 160px; width: 760px; top: 320px; text-align: center; }
+    #in-h .t { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 72px; letter-spacing: -0.02em; line-height: 1.05; color: #fff; }
+    #in-h .in-ar { color: rgba(255, 255, 255, 0.6); }
+
+    #in-cardwrap { position: absolute; left: 230px; top: 480px; width: 620px; height: 400px; }
+    #in-card { position: absolute; inset: 0; background: #fff; border-radius: 36px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); padding: 30px 36px; }
+    #in-card .top { display: flex; align-items: center; justify-content: space-between; }
+    #in-card .lab { display: flex; align-items: center; gap: 14px; font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 32px; color: #6b7080; }
+    #in-card .lab i { width: 22px; height: 22px; border-radius: 11px; background: #25d366; display: block; }
+    #in-card .up { font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 30px; color: #12a150; background: rgba(37, 211, 102, 0.14); padding: 4px 16px; border-radius: 18px; }
+    #in-card .num { display: flex; align-items: baseline; gap: 18px; margin-top: 6px; font-family: "Bricolage Grotesque", sans-serif; color: #0b0f1a; }
+    #in-card .num b { font-weight: 800; font-size: 170px; letter-spacing: -0.04em; line-height: 1; }
+    #in-card .num span { font-weight: 700; font-size: 50px; }
+    #in-chart { position: absolute; left: 36px; bottom: 26px; width: 548px; height: 100px; }
+    .in-sh { position: absolute; left: 0; top: 0; width: 620px; height: 400px; background: linear-gradient(135deg, #ffffff, #e9ecf5); opacity: 0; }
+    #in-chats .p { position: absolute; padding: 12px 22px; border-radius: 24px; background: rgba(255, 255, 255, 0.92); direction: rtl;
+      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 28px; color: #0b0f1a; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35); white-space: nowrap; }
+
+    #in-wrong { position: absolute; left: 110px; width: 860px; top: 560px; text-align: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 190px; letter-spacing: -0.04em; line-height: 1; color: #ff3b3b; z-index: 6; }
+    #in-lie { position: absolute; left: 160px; width: 760px; top: 770px; text-align: center; z-index: 6; }
+    #in-lie .s { font-family: "Instrument Serif", serif; font-style: italic; font-size: 76px; color: #fff; line-height: 1.1; }
+    #in-lie .in-ar { color: rgba(255, 255, 255, 0.6); }
+
+    #in-paper { position: absolute; inset: 0; background: #f6f4ee; z-index: 8; }
+    #in-stage { position: absolute; inset: 0; z-index: 9; }
+    .in-lab { position: absolute; left: 160px; width: 760px; top: 330px; text-align: center; }
+    .in-lab .t { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 68px; letter-spacing: -0.02em; line-height: 1.05; color: #0b0f1a; }
+    .in-lab .t em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; color: #2340ff; letter-spacing: 0; }
+    .in-lab .in-ar { color: rgba(11, 15, 26, 0.55); }
+
+    #in-puddle { position: absolute; left: 330px; top: 870px; width: 420px; height: 46px; border-radius: 50%; background: #ffd400; }
+    #in-blob { position: absolute; left: 360px; top: 540px; width: 360px; height: 360px; }
+    #in-bites { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+    #in-blob .in-bite { position: absolute; }
+    #in-blobbody { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 36% 30%, #fff3a6 0%, #ffd400 38%, #f2c200 100%); box-shadow: 0 30px 60px rgba(242, 194, 0, 0.35); }
+    #in-count { position: absolute; left: 0; right: 0; top: 92px; height: 150px; }
+    #in-count b { position: absolute; inset: 0; text-align: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 150px; line-height: 150px; letter-spacing: -0.04em; color: #0b0f1a; opacity: 0; }
+    #in-blob .u { position: absolute; left: 0; right: 0; top: 240px; text-align: center; font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 36px; color: #0b0f1a; }
+    .in-drip { position: absolute; width: 34px; height: 60px; border-radius: 17px; background: #f2c200; }
+    .in-bite { position: absolute; width: 120px; height: 120px; border-radius: 50%; background: #f6f4ee; }
+    .in-cr { position: absolute; width: 150px; height: 150px; overflow: visible; }
+    #in-c1 { left: 110px; top: 500px; } #in-c2 { left: 810px; top: 520px; } #in-c3 { left: 150px; top: 790px; }
+
+    #in-rc { position: absolute; left: 230px; top: 960px; width: 620px; padding: 14px 30px; background: #fff; border-radius: 30px; box-shadow: 0 20px 50px rgba(11, 15, 26, 0.12); }
+    #in-rc .r { display: flex; align-items: center; height: 72px; gap: 16px; font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 38px; color: #0b0f1a; }
+    #in-rc .r + .r { border-top: 2px solid #efece5; }
+    #in-rc .r i { width: 26px; height: 26px; border-radius: 13px; display: block; flex: none; }
+    #in-rc .r span { flex: 1; }
+    #in-rc .r b { font-weight: 800; color: #ff3b3b; }
+  </style>
+  <div id="root" data-composition-id="intro" data-width="1080" data-height="1920">
+    <div id="in-chats" data-layout-ignore>
+      <div class="p" id="in-p1" style="left: 70px; top: 905px">عايزة ٢ لو سمحت</div>
+      <div class="p" id="in-p2" style="left: 770px; top: 915px">بكام ده؟</div>
+      <div class="p" id="in-p3" style="left: 150px; top: 1010px">العنوان؟</div>
+      <div class="p" id="in-p4" style="left: 690px; top: 1030px">لسه متاح؟</div>
+      <div class="p" id="in-p5" style="left: 420px; top: 1100px">تمام هحوّل</div>
+    </div>
+
+    <div id="in-h">
+      <div class="t">WhatsApp says</div>
+      <div class="in-ar">الواتساب بيقول</div>
+    </div>
+
+    <div id="in-cardwrap" data-layout-allow-overflow>
+      <div id="in-card">
+        <div class="top"><span class="lab"><i></i>Orders today</span><span class="up">+12 ↑</span></div>
+        <div class="num"><b>37</b><span>orders</span></div>
+        <svg id="in-chart" viewBox="0 0 548 100" aria-hidden="true">
+          <polyline id="in-line" points="0,88 70,80 140,84 210,62 280,66 350,44 420,40 490,18 548,8" fill="none" stroke="#25d366" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="620" stroke-dashoffset="620" />
+        </svg>
+      </div>
+      <div class="in-sh" id="in-sh0" style="clip-path: polygon(300px 190px, 0px 0px, 150px 0px)"></div>
+      <div class="in-sh" id="in-sh1" style="clip-path: polygon(300px 190px, 150px 0px, 330px 0px)"></div>
+      <div class="in-sh" id="in-sh2" style="clip-path: polygon(300px 190px, 330px 0px, 470px 0px)"></div>
+      <div class="in-sh" id="in-sh3" style="clip-path: polygon(300px 190px, 470px 0px, 620px 0px)"></div>
+      <div class="in-sh" id="in-sh4" style="clip-path: polygon(300px 190px, 620px 0px, 620px 130px)"></div>
+      <div class="in-sh" id="in-sh5" style="clip-path: polygon(300px 190px, 620px 130px, 620px 270px)"></div>
+      <div class="in-sh" id="in-sh6" style="clip-path: polygon(300px 190px, 620px 270px, 620px 400px)"></div>
+      <div class="in-sh" id="in-sh7" style="clip-path: polygon(300px 190px, 620px 400px, 450px 400px)"></div>
+      <div class="in-sh" id="in-sh8" style="clip-path: polygon(300px 190px, 450px 400px, 280px 400px)"></div>
+      <div class="in-sh" id="in-sh9" style="clip-path: polygon(300px 190px, 280px 400px, 120px 400px)"></div>
+      <div class="in-sh" id="in-sh10" style="clip-path: polygon(300px 190px, 120px 400px, 0px 400px)"></div>
+      <div class="in-sh" id="in-sh11" style="clip-path: polygon(300px 190px, 0px 400px, 0px 260px)"></div>
+      <div class="in-sh" id="in-sh12" style="clip-path: polygon(300px 190px, 0px 260px, 0px 120px)"></div>
+      <div class="in-sh" id="in-sh13" style="clip-path: polygon(300px 190px, 0px 120px, 0px 0px)"></div>
+    </div>
+
+    <div id="in-wrong">WRONG.</div>
+    <div id="in-lie">
+      <div class="s">it's lying to you.</div>
+      <div class="in-ar">بيكدب عليك.</div>
+    </div>
+
+    <div id="in-paper"></div>
+    <div id="in-stage">
+      <div class="in-lab" id="in-lab1"><div class="t">It says you got</div><div class="in-ar">مكتوب إنك جالك</div></div>
+      <div class="in-lab" id="in-lab2"><div class="t">You <em>actually</em> shipped</div><div class="in-ar">اللي اتشحن فعلاً</div></div>
+
+      <div id="in-puddle"></div>
+      <div class="in-drip" id="in-d1" style="left: 470px; top: 840px"></div>
+      <div class="in-drip" id="in-d2" style="left: 590px; top: 850px"></div>
+      <div id="in-blob">
+        <div id="in-blobbody"></div>
+        <div id="in-bites">
+          <div class="in-bite" id="in-b1" style="left: -50px; top: 20px"></div>
+          <div class="in-bite" id="in-b2" style="left: 295px; top: 50px"></div>
+          <div class="in-bite" id="in-b3" style="left: 10px; top: 260px"></div>
+        </div>
+        <div id="in-count"><b>37</b><b>30</b><b>25</b><b>22</b></div>
+        <div class="u">orders</div>
+      </div>
+      <svg class="in-cr" id="in-c1" viewBox="0 0 150 150" aria-hidden="true">
+        <ellipse cx="75" cy="82" rx="62" ry="58" fill="#0b0f1a" />
+        <circle cx="54" cy="70" r="17" fill="#fff" /><circle cx="96" cy="70" r="17" fill="#fff" />
+        <circle cx="58" cy="73" r="8" fill="#0b0f1a" /><circle cx="92" cy="73" r="8" fill="#0b0f1a" />
+        <rect x="35" y="50" width="80" height="22" fill="#0b0f1a" /><text x="112" y="34" font-family="Bricolage Grotesque" font-weight="800" font-size="30" fill="#2340ff">z</text><text x="126" y="18" font-family="Bricolage Grotesque" font-weight="800" font-size="28" fill="#2340ff">z</text>
+        <ellipse class="mouth" id="in-c1-m" cx="75" cy="110" rx="24" ry="14" fill="#0b0f1a" />
+        <path d="M60 99 L66 108 L72 99 Z M78 99 L84 108 L90 99 Z" fill="#fff" />
+      </svg>
+      <svg class="in-cr" id="in-c2" viewBox="0 0 150 150" aria-hidden="true">
+        <ellipse cx="75" cy="82" rx="62" ry="58" fill="#ff3b3b" />
+        <circle cx="54" cy="70" r="17" fill="#fff" /><circle cx="96" cy="70" r="17" fill="#fff" />
+        <circle cx="58" cy="73" r="8" fill="#0b0f1a" /><circle cx="92" cy="73" r="8" fill="#0b0f1a" />
+        <path d="M36 46 L70 56 M114 46 L80 56" stroke="#0b0f1a" stroke-width="7" stroke-linecap="round" />
+        <ellipse class="mouth" id="in-c2-m" cx="75" cy="110" rx="24" ry="14" fill="#0b0f1a" />
+        <path d="M60 99 L66 108 L72 99 Z M78 99 L84 108 L90 99 Z" fill="#fff" />
+      </svg>
+      <svg class="in-cr" id="in-c3" viewBox="0 0 150 150" aria-hidden="true">
+        <ellipse cx="75" cy="82" rx="62" ry="58" fill="#8a8576" />
+        <circle cx="54" cy="70" r="17" fill="#fff" /><circle cx="96" cy="70" r="17" fill="#fff" />
+        <circle cx="58" cy="73" r="8" fill="#0b0f1a" /><circle cx="92" cy="73" r="8" fill="#0b0f1a" />
+        <text x="62" y="36" font-family="Bricolage Grotesque" font-weight="800" font-size="40" fill="#ffd400">?</text>
+        <ellipse class="mouth" id="in-c3-m" cx="75" cy="110" rx="24" ry="14" fill="#0b0f1a" />
+        <path d="M60 99 L66 108 L72 99 Z M78 99 L84 108 L90 99 Z" fill="#fff" />
+      </svg>
+      <div id="in-rc">
+        <div class="r" id="in-r1"><i style="background: #0b0f1a"></i><span>Missed replies</span><b>−7</b></div>
+        <div class="r" id="in-r2"><i style="background: #ff3b3b"></i><span>Typos</span><b>−5</b></div>
+        <div class="r" id="in-r3"><i style="background: #8a8576"></i><span>Lost addresses</span><b>−3</b></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const SH = [
+        [-290, -245, -70],
+        [-130, -413, -23],
+        [226, -430, 24],
+        [426, -330, -69],
+        [551, -215, -22],
+        [385, 12, 25],
+        [399, 181, -68],
+        [366, 327, -21],
+        [161, 520, 26],
+        [-257, 539, -67],
+        [-294, 257, -20],
+        [-401, 187, 27],
+        [-496, 0, -66],
+        [-504, -218, -19]
+      ];
+
+      // ── 1. the card is the thumbnail: on screen at frame 0
+      tl.fromTo("#in-line", { strokeDashoffset: 330 }, { strokeDashoffset: 0, duration: 1.2, ease: "power2.inOut" }, 0.05);
+      ["#in-p1", "#in-p2", "#in-p3", "#in-p4", "#in-p5"].forEach((id, i) => {
+        tl.fromTo(id, { y: 0, rotation: (i % 2 ? 4 : -4) }, { y: -40 - i * 6, rotation: (i % 2 ? -2 : 2), duration: 2.6, ease: "sine.inOut" }, 0);
+      });
+      tl.fromTo("#in-card .num b", { scale: 1 }, { scale: 1.1, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out", transformOrigin: "0% 80%" }, 1.3);
+
+      // ── 2. WRONG. slams in and the card shatters (2.62)
+      const T = 2.62;
+      tl.fromTo("#in-wrong", { opacity: 0, scale: 2.6, textShadow: "-26px 0 #00e5ff, 26px 0 #ffd400" },
+        { opacity: 1, scale: 1, textShadow: "0px 0 rgba(0,229,255,0), 0px 0 rgba(255,212,0,0)", duration: 0.24, ease: "expo.out" }, T);
+      tl.fromTo("#in-wrong", { x: 0, skewX: 0 }, { x: 14, skewX: -8, duration: 0.04, repeat: 5, yoyo: true, ease: "none" }, T + 0.2);
+      tl.set("#in-card", { opacity: 0 }, T + 0.04);
+      tl.set(".in-sh", { opacity: 1 }, T + 0.04);
+      SH.forEach(([dx, dy, rot], i) => {
+        tl.fromTo("#in-sh" + i, { x: 0, y: 0, rotation: 0, filter: "blur(0px)" },
+          { x: dx, y: dy, rotation: rot, filter: "blur(3px)", duration: 0.75, ease: "power3.out" }, T + 0.04);
+        tl.to("#in-sh" + i, { opacity: 0, duration: 0.3 }, T + 0.45);
+      });
+      tl.to(["#in-h", "#in-chats"], { opacity: 0, duration: 0.2 }, T);
+      tl.fromTo("#in-lie .s", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, T + 0.12);
+      tl.fromTo("#in-lie .in-ar", { opacity: 0 }, { opacity: 1, duration: 0.3 }, T + 0.25);
+
+      // ── 3. iris onto paper (3.55)
+      tl.to("#in-wrong", { skewX: 20, opacity: 0, filter: "blur(10px)", duration: 0.16, ease: "power2.in" }, 3.58);
+      tl.to("#in-lie", { opacity: 0, duration: 0.12 }, 3.58);
+      tl.fromTo("#in-paper", { clipPath: "circle(0% at 50% 38%)" }, { clipPath: "circle(120% at 50% 38%)", duration: 0.36, ease: "power2.in" }, 3.58);
+      tl.fromTo("#in-stage", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 3.62);
+
+      // ── 4. the order blob drops in with 37
+      tl.set("#in-count b:nth-child(1)", { opacity: 1 }, 0);
+      tl.fromTo("#in-blob", { y: -900 }, { y: 0, duration: 0.35, ease: "power3.in" }, 3.62);
+      tl.fromTo("#in-blob", { scaleX: 1, scaleY: 1, transformOrigin: "50% 100%" },
+        { keyframes: [{ scaleX: 1.22, scaleY: 0.8, duration: 0.09 }, { scaleX: 0.94, scaleY: 1.07, duration: 0.14 }, { scaleX: 1, scaleY: 1, duration: 0.2 }], ease: "sine.out", immediateRender: false }, 3.97);
+      tl.fromTo("#in-lab1 .t", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, 3.75);
+      tl.fromTo("#in-lab1 .in-ar", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.9);
+      tl.fromTo("#in-rc", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 4.1);
+      tl.set(["#in-r1", "#in-r2", "#in-r3"], { opacity: 0.18 }, 0);
+
+      // ── 5. three critters take bites (bites land on the spoken numbers)
+      const crit = [
+        { id: "#in-c1", from: { x: -320, y: 0 }, lunge: { x: 110, y: 50 }, enter: 4.1, bite: 5.5, bitemark: "#in-b1", row: "#in-r1", n: 2 },
+        { id: "#in-c2", from: { x: 340, y: 0 }, lunge: { x: -120, y: 40 }, enter: 6.0, bite: 7.0, bitemark: "#in-b2", row: "#in-r2", n: 3 },
+        { id: "#in-c3", from: { x: -320, y: 120 }, lunge: { x: 120, y: 0 }, enter: 7.1, bite: 8.15, bitemark: "#in-b3", row: "#in-r3", n: 4 },
+      ];
+      crit.forEach((c, i) => {
+        tl.fromTo(c.id, { x: c.from.x, y: c.from.y, rotation: 0 }, { x: 0, y: 0, duration: 0.45, ease: "back.out(1.6)" }, c.enter);
+        tl.to(c.id, { x: c.lunge.x, y: c.lunge.y, rotation: (i === 1 ? -10 : 10), duration: 0.16, ease: "power3.in" }, c.bite - 0.16);
+        tl.to(c.id, { x: 0, y: 0, rotation: 0, duration: 0.35, ease: "power2.out" }, c.bite + 0.05);
+        tl.fromTo(c.id + "-m", { attr: { ry: 14 } }, { attr: { ry: 26 }, duration: 0.1, ease: "power2.out" }, c.bite - 0.2);
+        tl.to(c.id + "-m", { attr: { ry: 6 }, duration: 0.06, ease: "power2.in" }, c.bite);
+        tl.to(c.id + "-m", { attr: { ry: 14 }, duration: 0.2 }, c.bite + 0.2);
+        tl.fromTo(c.bitemark, { scale: 0 }, { scale: 1, duration: 0.12, ease: "back.out(2)" }, c.bite);
+        tl.fromTo("#in-blob", { x: 0 }, { x: (i === 1 ? -14 : 14), duration: 0.05, yoyo: true, repeat: 3, ease: "none", immediateRender: false }, c.bite);
+        tl.set(`#in-count b:nth-child(${c.n - 1})`, { opacity: 0 }, c.bite);
+        tl.set(`#in-count b:nth-child(${c.n})`, { opacity: 1 }, c.bite);
+        tl.fromTo(c.row, { opacity: 0.18, x: 0 }, { opacity: 1, x: 0, duration: 0.2, ease: "power2.out", immediateRender: false }, c.bite);
+        tl.fromTo(c.row + " b", { scale: 1.6 }, { scale: 1, duration: 0.35, ease: "back.out(3)", immediateRender: false }, c.bite);
+      });
+
+      // ── 6. the critters leave, the blob melts: you actually shipped 22
+      tl.to(["#in-c1", "#in-c3"], { x: -360, duration: 0.35, ease: "power3.in" }, 8.6);
+      tl.to("#in-c2", { x: 360, duration: 0.35, ease: "power3.in" }, 8.6);
+      tl.to("#in-lab1", { opacity: 0, filter: "blur(8px)", duration: 0.16 }, 8.55);
+      tl.fromTo("#in-lab2 .t", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 8.65);
+      tl.fromTo("#in-lab2 .in-ar", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 8.85);
+      tl.fromTo("#in-puddle", { scaleX: 0, scaleY: 0.4 }, { scaleX: 1, scaleY: 1, duration: 0.9, ease: "power2.out" }, 8.7);
+      tl.fromTo("#in-blob", { scaleY: 1, scaleX: 1 }, { scaleY: 0.9, scaleX: 1.04, y: 18, duration: 0.9, ease: "power2.out", immediateRender: false }, 8.7);
+      tl.fromTo(["#in-d1", "#in-d2"], { scaleY: 0.2, y: -20, opacity: 0, transformOrigin: "50% 0%" }, { scaleY: 1, y: 10, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power2.in" }, 8.75);
+      tl.fromTo("#in-count b:nth-child(4)", { scale: 1 }, { scale: 1.14, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 9.75);
+
+      window.__timelines["intro"] = tl;
+    })();
+  </script>
+</template>
