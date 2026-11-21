@@ -1,0 +1,70 @@
+<template>
+  <style>
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+
+    #root { position: absolute; inset: 0; overflow: hidden; background: #2340ff; }
+    #tn-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 44% 33%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 45%);
+    }
+    #tn-mark { position: absolute; left: 320px; top: 400px; width: 320px; height: 320px; }
+    #tn-mark .ring {
+      position: absolute; left: 10px; top: 10px; width: 300px; height: 300px; border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.7);
+    }
+    #tn-logo { position: absolute; inset: 0; width: 320px; height: 320px; filter: drop-shadow(0 24px 40px rgba(0, 10, 90, 0.35)); }
+    #tn-word { position: absolute; left: 270px; top: 790px; width: 420px; height: 111px; }
+    #tn-line { position: absolute; left: 150px; width: 660px; top: 960px; text-align: center; }
+    #tn-line .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 84px; line-height: 1.15; color: #fff; }
+    #tn-line .ar span { display: inline-block; }
+    #tn-line .ar .y { color: #ffd400; }
+    #tn-line .en { direction: ltr; margin-top: 12px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 50px; color: rgba(255, 255, 255, 0.75); }
+    #tn-flash { position: absolute; inset: 0; background: #ffffff; z-index: 10; }
+    #tn-wipe { position: absolute; inset: 0; background: #f6f4ee; z-index: 20; }
+  </style>
+  <div id="root" data-composition-id="turn" data-width="1080" data-height="1920">
+    <div id="tn-glow"></div>
+    <div id="tn-mark" data-layout-allow-overflow>
+      <div class="ring" id="tn-r1"></div>
+      <div class="ring" id="tn-r2"></div>
+      <div class="ring" id="tn-r3"></div>
+      <svg id="tn-logo" viewBox="0 0 200 200" aria-label="Khalas">
+        <path d="M100 18C150 18 186 52 186 96C186 140 150 174 100 174C88 174 77 172 67 168L28 184L39 149C23 134 14 116 14 96C14 52 50 18 100 18Z" fill="#ffffff" />
+        <path id="tn-tick" d="M62 98L89 124L140 70" fill="none" stroke="#ffd400" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="112" stroke-dashoffset="112" />
+      </svg>
+    </div>
+    <img id="tn-word" src="assets/brand/khalas-wordmark-white.png" alt="khalas" />
+    <div id="tn-line">
+      <div class="ar"><span>الأوردر</span> <span class="y">يخلّص</span> <span>نفسه.</span></div>
+      <div class="en" id="tn-en">Orders, done.</div>
+    </div>
+    <div id="tn-flash"></div>
+    <div id="tn-wipe"></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#tn-flash", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0);
+
+      tl.fromTo("#tn-logo", { scale: 0, rotation: -12, transformOrigin: "50% 50%" },
+        { scale: 1, rotation: 0, duration: 0.6, ease: "back.out(2.2)" }, 0.12);
+      ["#tn-r1", "#tn-r2", "#tn-r3"].forEach((id, i) => {
+        tl.fromTo(id, { scale: 0.8, opacity: 0.8 }, { scale: 2.8, opacity: 0, duration: 1.1, ease: "power2.out" }, 0.3 + i * 0.18);
+      });
+      tl.fromTo("#tn-tick", { strokeDashoffset: 112 }, { strokeDashoffset: 0, duration: 0.42, ease: "power2.inOut" }, 0.62);
+      tl.fromTo("#tn-logo", { scale: 1 }, { scale: 1.08, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.04);
+
+      tl.fromTo("#tn-word", { opacity: 0, y: 24, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 1.1);
+      tl.fromTo("#tn-line .ar span", { opacity: 0, filter: "blur(8px)" },
+        { opacity: 1, filter: "blur(0px)", duration: 0.18, stagger: 0.09, ease: "power3.out" }, 1.45);
+      tl.fromTo("#tn-en", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.75);
+
+      tl.fromTo("#tn-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 2.65);
+
+      window.__timelines["turn"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,91 @@
+<template>
+  <style>
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+
+    #root { position: absolute; inset: 0; overflow: hidden; background: #2340ff; }
+    #ct-glow { position: absolute; inset: 0; background: radial-gradient(circle at 44% 25%, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0) 40%); }
+    #ct-logo { position: absolute; left: 395px; top: 290px; width: 170px; height: 170px; filter: drop-shadow(0 18px 30px rgba(0, 10, 90, 0.35)); }
+    #ct-word { position: absolute; left: 320px; top: 478px; width: 320px; height: 85px; }
+
+    #ct-num {
+      position: absolute; left: 280px; top: 580px; width: 400px; height: 170px; direction: rtl;
+      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 150px; line-height: 170px; color: #ffd400;
+    }
+    #ct-num b { position: absolute; inset: 0; text-align: center; opacity: 0; font-weight: 700; }
+    #ct-seats { position: absolute; left: 150px; width: 660px; top: 752px; text-align: center; }
+    #ct-seats .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 54px; line-height: 1.2; color: #fff; }
+    #ct-seats .en { direction: ltr; font-family: "Instrument Serif", serif; font-style: italic; font-size: 40px; line-height: 1.2; color: rgba(255, 255, 255, 0.78); }
+
+    #ct-btn {
+      position: absolute; left: 210px; top: 915px; width: 540px; height: 116px; border-radius: 58px; overflow: hidden;
+      background: #ffd400; box-shadow: 0 20px 50px rgba(0, 10, 90, 0.4);
+      display: flex; align-items: center; justify-content: center; direction: rtl;
+      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 56px; color: #0b0f1a;
+    }
+    #ct-sheen { position: absolute; top: -20px; left: 0; width: 90px; height: 160px; background: rgba(255, 255, 255, 0.55); }
+    #ct-btnen { direction: ltr; position: absolute; left: 150px; width: 660px; top: 1040px; text-align: center; font-family: "Instrument Serif", serif; font-style: italic; font-size: 38px; color: rgba(255, 255, 255, 0.78); }
+
+    #ct-foot { position: absolute; left: 150px; width: 660px; top: 1110px; text-align: center; }
+    #ct-foot .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 44px; line-height: 1.25; color: #fff; }
+    #ct-foot .en { direction: ltr; font-family: "Instrument Serif", serif; font-style: italic; font-size: 36px; line-height: 1.25; color: rgba(255, 255, 255, 0.7); }
+    #ct-wipe { position: absolute; inset: 0; background: #0b0f1a; z-index: 20; }
+  </style>
+  <div id="root" data-composition-id="cta" data-width="1080" data-height="1920">
+    <div id="ct-glow"></div>
+    <svg id="ct-logo" viewBox="0 0 200 200" aria-label="Khalas">
+      <path d="M100 18C150 18 186 52 186 96C186 140 150 174 100 174C88 174 77 172 67 168L28 184L39 149C23 134 14 116 14 96C14 52 50 18 100 18Z" fill="#ffffff" />
+      <path id="ct-tick" d="M62 98L89 124L140 70" fill="none" stroke="#ffd400" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="112" stroke-dashoffset="112" />
+    </svg>
+    <img id="ct-word" src="assets/brand/khalas-wordmark-white.png" alt="khalas" />
+
+    <div id="ct-num"><b>٠</b><b>٣٥</b><b>٩٠</b><b>١٦٠</b><b>٢٤٠</b><b>٣٠٥</b><b>٣٥٠</b><b>٣٨٠</b><b>٣٩٥</b><b>٤٠٠</b></div>
+    <div id="ct-seats">
+      <div class="ar" id="ct-sar">مكان للمؤسسين بس</div>
+      <div class="en" id="ct-sen">founding spots, that's it.</div>
+    </div>
+
+    <div id="ct-btn"><span>احجز مكانك</span><span id="ct-sheen"></span></div>
+    <div id="ct-btnen">Reserve your spot.</div>
+
+    <div id="ct-foot">
+      <div class="ar" id="ct-far">الرابط في البايو · قريباً</div>
+      <div class="en" id="ct-fen">Link in bio · coming soon</div>
+    </div>
+    <div id="ct-wipe"></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#ct-wipe", { xPercent: 0 }, { xPercent: -100, duration: 0.32, ease: "power3.out" }, 0);
+
+      tl.fromTo("#ct-logo", { scale: 0, rotation: -12, transformOrigin: "50% 50%" }, { scale: 1, rotation: 0, duration: 0.55, ease: "back.out(2.2)" }, 0.2);
+      tl.fromTo("#ct-tick", { strokeDashoffset: 112 }, { strokeDashoffset: 0, duration: 0.35, ease: "power2.inOut" }, 0.55);
+      tl.fromTo("#ct-word", { opacity: 0, y: 20, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.85);
+
+      // 400 counts up
+      const digits = document.querySelectorAll("#ct-num b");
+      const steps = [1.25, 1.37, 1.49, 1.61, 1.74, 1.88, 2.03, 2.19, 2.36, 2.55];
+      steps.forEach((at, i) => {
+        if (i > 0) tl.set(digits[i - 1], { opacity: 0 }, at);
+        tl.set(digits[i], { opacity: 1 }, at);
+      });
+      tl.fromTo("#ct-num", { scale: 1.2 }, { scale: 1, duration: 0.45, ease: "back.out(3)", immediateRender: false }, 2.55);
+      tl.fromTo("#ct-sar", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 2.35);
+      tl.fromTo("#ct-sen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.6);
+
+      tl.fromTo("#ct-btn", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2.2)" }, 3.05);
+      tl.fromTo("#ct-btnen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.35);
+      tl.fromTo("#ct-sheen", { x: -140, rotation: 20 }, { x: 640, rotation: 20, duration: 0.6, ease: "power2.inOut" }, 3.7);
+
+      tl.fromTo("#ct-far", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 3.95);
+      tl.fromTo("#ct-fen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.2);
+
+      window.__timelines["cta"] = tl;
+    })();
+  </script>
+</template>

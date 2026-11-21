@@ -1,0 +1,109 @@
+<template>
+  <style>
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 700; src: url("assets/fonts/bricolage-grotesque-latin-700-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
+
+    #root {
+      position: absolute; inset: 0; overflow: hidden;
+      background: radial-gradient(circle at 50% 50%, rgba(35, 64, 255, 0.28), rgba(35, 64, 255, 0) 60%), #0b0f1a;
+    }
+    #nb-stars i { position: absolute; width: 6px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.5); }
+    #nb-head { position: absolute; left: 150px; width: 660px; top: 330px; text-align: center; }
+    #nb-head .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 74px; line-height: 1.15; color: #fff; }
+    #nb-head .ar span { display: inline-block; }
+    #nb-head .en { direction: ltr; margin-top: 6px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 46px; color: rgba(255, 255, 255, 0.6); }
+
+    #nb-clock {
+      position: absolute; left: 340px; top: 492px; height: 70px; padding: 0 28px 0 20px; border-radius: 35px;
+      background: rgba(255, 255, 255, 0.09); border: 2px solid rgba(255, 255, 255, 0.14);
+      display: flex; align-items: center; gap: 14px; direction: ltr;
+      font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 36px; color: #fff;
+    }
+    #nb-clock .moon { width: 34px; height: 34px; border-radius: 50%; box-shadow: inset -10px -4px 0 0 #ffd400; transform: rotate(-20deg); }
+
+    .nb-b {
+      position: absolute; padding: 20px 30px; border-radius: 32px; direction: rtl; max-width: 520px;
+      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 36px; line-height: 1.4;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+    }
+    .nb-c { right: 270px; background: #e9e4da; color: #0b0f1a; border-bottom-right-radius: 8px; }
+    .nb-k { left: 170px; background: #2340ff; color: #fff; border-bottom-left-radius: 8px; }
+    #nb-c1 { top: 600px; }
+    #nb-dots { top: 715px; display: flex; gap: 12px; padding: 30px 32px; }
+    #nb-dots i { width: 16px; height: 16px; border-radius: 8px; background: rgba(255, 255, 255, 0.9); display: block; }
+    #nb-k1 { top: 715px; }
+    #nb-c2 { top: 855px; }
+    #nb-k2 { top: 970px; display: flex; align-items: center; gap: 14px; font-weight: 700; }
+    #nb-k2 svg { width: 44px; height: 44px; flex: none; }
+    .nb-k .tag { display: block; font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: 28px; color: rgba(255, 255, 255, 0.7); direction: ltr; text-align: left; line-height: 1.2; }
+
+    #nb-line { position: absolute; left: 150px; width: 660px; top: 1090px; text-align: center; }
+    #nb-line .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 80px; line-height: 1.15; color: #fff; }
+    #nb-line .ar .y { color: #ffd400; }
+    #nb-line .en { direction: ltr; margin-top: 4px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 46px; color: rgba(255, 255, 255, 0.62); }
+    #nb-wipe { position: absolute; inset: 0; background: #f6f4ee; z-index: 20; }
+  </style>
+  <div id="root" data-composition-id="nightbot" data-width="1080" data-height="1920">
+    <div id="nb-stars" data-layout-ignore>
+      <i style="left: 120px; top: 240px"></i><i style="left: 860px; top: 200px"></i><i style="left: 960px; top: 520px"></i>
+      <i style="left: 70px; top: 760px"></i><i style="left: 930px; top: 980px"></i><i style="left: 110px; top: 1360px"></i>
+      <i style="left: 820px; top: 1420px"></i><i style="left: 500px; top: 170px"></i>
+    </div>
+    <div id="nb-head">
+      <div class="ar"><span>والبوت</span> <span>بيرد</span> <span>عنك</span></div>
+      <div class="en" id="nb-en">The bot replies for you.</div>
+    </div>
+    <div id="nb-clock"><span class="moon"></span><span>3:12 AM</span></div>
+
+    <div class="nb-b nb-c" id="nb-c1">بكام الهودي الأسود؟</div>
+    <div class="nb-b nb-k" id="nb-dots"><i id="nb-d1"></i><i id="nb-d2"></i><i id="nb-d3"></i></div>
+    <div class="nb-b nb-k" id="nb-k1"><span class="tag">khalas bot</span>بـ ٤٥٠ جنيه. أسجّلهولك؟</div>
+    <div class="nb-b nb-c" id="nb-c2">أيوه، مقاس M</div>
+    <div class="nb-b nb-k" id="nb-k2">
+      <svg viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="26" fill="#ffffff" />
+        <path id="nb-tick" d="M15 27L23 35L38 18" fill="none" stroke="#ffd400" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="36" stroke-dashoffset="36" /></svg>
+      <span>اتسجّل أوردر #١٠٢٥</span>
+    </div>
+
+    <div id="nb-line">
+      <div class="ar" id="nb-l">وانت <span class="y">نايم.</span></div>
+      <div class="en" id="nb-len">while you sleep.</div>
+    </div>
+    <div id="nb-wipe"></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+
+      tl.fromTo("#nb-head .ar span", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, stagger: 0.09, ease: "power3.out" }, 0.1);
+      tl.fromTo("#nb-en", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.4);
+      tl.fromTo("#nb-clock", { opacity: 0, y: -20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 0.45);
+
+      const pop = (id, at, origin) =>
+        tl.fromTo(id, { opacity: 0, scale: 0.6, y: 30, transformOrigin: origin },
+          { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(1.8)" }, at);
+
+      pop("#nb-c1", 0.9, "100% 100%");
+      pop("#nb-dots", 1.4, "0% 100%");
+      ["#nb-d1", "#nb-d2", "#nb-d3"].forEach((d, i) => {
+        tl.fromTo(d, { y: 0, opacity: 0.45 }, { y: -10, opacity: 1, duration: 0.18, yoyo: true, repeat: 3, ease: "sine.inOut" }, 1.55 + i * 0.1);
+      });
+      tl.to("#nb-dots", { opacity: 0, scale: 0.8, duration: 0.12 }, 2.25);
+      pop("#nb-k1", 2.3, "0% 100%");
+      pop("#nb-c2", 3.0, "100% 100%");
+      pop("#nb-k2", 3.6, "0% 100%");
+      tl.fromTo("#nb-tick", { strokeDashoffset: 36 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 3.85);
+
+      tl.fromTo("#nb-l", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 4.45);
+      tl.fromTo("#nb-len", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.75);
+
+      tl.fromTo("#nb-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 6.65);
+
+      window.__timelines["nightbot"] = tl;
+    })();
+  </script>
+</template>
