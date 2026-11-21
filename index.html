@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>خلّص | khalas: الأوردر يخلص نفسه</title>
-<meta name="description" content="خلّص بيحوّل شات واتساب لأوردرات منظمة بالـ AI، وبيرد على عملائك بالنيابة عنك. لأونلاين سيلرز مصر.">
+<title>khalas | Orders, done.</title>
+<script>try{if(localStorage.getItem("khalas-lang")==="ar"){document.documentElement.lang="ar";document.documentElement.dir="rtl";}}catch(e){}</script>
+<meta name="description" content="khalas turns WhatsApp chats into organised orders with AI and replies to your customers for you. For Egypt's online sellers.">
 <meta name="theme-color" content="#0A0E1F">
 <meta property="og:title" content="khalas | خلّص">
 <meta property="og:description" content="Orders, done. AI that turns WhatsApp chats into organised orders for Egyptian online sellers.">
@@ -703,7 +704,7 @@ html[dir="rtl"] .modal-head{padding:16px 22px 16px 18px}
   };
   var SEAT_TXT = { ar:{bar:"مكان محجوز من 400"}, en:{bar:"spots reserved of 400"} };
 
-  var lang = "ar";
+  var lang = "en";
   try{ var saved=localStorage.getItem("khalas-lang"); if(saved==="en"||saved==="ar") lang=saved; }catch(e){}
 
   function applyLang(l){
@@ -712,7 +713,7 @@ html[dir="rtl"] .modal-head{padding:16px 22px 16px 18px}
     var root=document.documentElement;
     root.lang=l; root.dir = l==="ar" ? "rtl" : "ltr";
     $$("[data-i18n]").forEach(function(el){ var k=el.getAttribute("data-i18n"); if(d[k]!=null) el.textContent=d[k]; });
-    document.title = l==="ar" ? "خلّص | khalas: الأوردر يخلص نفسه" : "khalas | Orders, done.";
+    document.title = l==="ar" ? "خلّص | الأوردر يخلص نفسه" : "khalas | Orders, done.";
     $$(".js-lang").forEach(function(lb){
       lb.innerHTML = l==="ar" ? '<span class="ltr">EN</span>' : '<span>عربي</span>';
       lb.setAttribute("aria-label", l==="ar" ? "Switch to English" : "التحويل للعربي");
