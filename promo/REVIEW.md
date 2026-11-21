@@ -14,6 +14,15 @@
    - Typos −5
    - Lost addresses −3
 6. The blob melts on "You actually shipped 22".
+
+**Opening motion blur.** The root has `data-motion-blur="on"` with shutter 360; every scene after the intro has `data-motion-blur="off"`. The render reported 12 movers on the filter tier, with no failed frames.
+- 0–0.34 s: the card whips up into frame.
+- From 0.08 s: the chat bubbles fly in from both sides.
+- 0.2–1.15 s: the count spins up to 37 like a slot machine.
+- 1.15 s: the camera punches in on the card.
+- 2.4 s: the camera pulls back.
+- 2.62 s: the screen shakes as "WRONG." lands.
+- 3.5 s: "WRONG." and its subline whip off sideways.
 7. Everything after the intro moved back by 0.5 s.
 
 **Intro sounds.** `glass-shatter.mp3` and `cartoon-bite.mp3` are CC0 from Freesound; see `assets/sfx/CREDITS.md`.
