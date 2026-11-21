@@ -9,9 +9,9 @@
 - Each has a small Egyptian Arabic line underneath, in IBM Plex Sans Arabic.
 - The customer chats, spreadsheet, order card and board labels stay in Egyptian Arabic, so the story still reads as Egyptian sellers.
 
-**Voice.** ElevenLabs "Liam" (a free built-in voice), model `eleven_v3`, one file per line in `assets/voice/vo01–vo09.mp3`:
+**Voice.** ElevenLabs "Jessica" (a free built-in female voice), model `eleven_v3`, one file per line in `assets/voice/vo01–vo09.mp3`:
 - The text animations are re-timed to land on the spoken words.
-- `vo02` has its long pause before "Mistake" trimmed to 0.3 s.
+- Long pauses inside each line are capped at 0.2–0.35 s, and `vo07` is sped up 4%, so each line fits its scene.
 - No Egyptian voices: ElevenLabs' free plan doesn't allow them through the API.
 
 **Music.** `assets/bgm/khalas-bed.mp3`:
@@ -25,7 +25,7 @@
 ## Measured
 
 - `check`: 0 errors.
-- Delivery file: −14.8 LUFS, true peak −0.7 dBTP, no clipping.
+- Delivery file: −15 LUFS, true peak −1.3 dBTP, no clipping.
 - The mix was normalised with ffmpeg `loudnorm` after rendering, because the raw render was −18 LUFS.
 - The sound was measured, not listened to.
 

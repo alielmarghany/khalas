@@ -129,10 +129,10 @@
 
       // line 1 on screen at frame 0, leaves; line 2 per word
       tl.set("#hk-l1", { opacity: 1 }, 0);
-      tl.to("#hk-l1 .ar span, #hk-l1 .en", { opacity: 0, filter: "blur(10px)", duration: 0.18, stagger: 0.03, ease: "power2.in" }, 2.05);
+      tl.to("#hk-l1 .ar span, #hk-l1 .en", { opacity: 0, filter: "blur(10px)", duration: 0.18, stagger: 0.03, ease: "power2.in" }, 2.3);
       tl.fromTo("#hk-l2 .ar span", { opacity: 0, filter: "blur(10px)", scale: 1.15 },
-        { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.24, stagger: 0.1, ease: "expo.out" }, 2.3);
-      tl.fromTo("#hk-l2 .en", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 2.6);
+        { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.24, stagger: 0.1, ease: "expo.out" }, 2.5);
+      tl.fromTo("#hk-l2 .en", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 2.8);
 
       // red wipe into the problem scene (right to left)
       tl.fromTo("#hk-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 3.65);
