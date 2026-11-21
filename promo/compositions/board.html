@@ -123,8 +123,8 @@
       moves.forEach(([at, i, c]) => { col[i] = c; layout(at, 0.45); });
 
       tl.fromTo("#bd-line .ar span:nth-child(-n+2)", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.2, ease: "expo.out" }, 4.4);
-      tl.fromTo("#bd-line .ar span:nth-child(n+3)", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.2, ease: "expo.out" }, 5.35);
-      tl.fromTo("#bd-len", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.6);
+      tl.fromTo("#bd-line .ar span:nth-child(n+3)", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.2, ease: "expo.out" }, 5.5);
+      tl.fromTo("#bd-len", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.75);
 
       tl.fromTo("#bd-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 6.65);
 

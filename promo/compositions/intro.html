@@ -214,9 +214,9 @@
 
       // ── 5. three critters take bites (bites land on the spoken numbers)
       const crit = [
-        { id: "#in-c1", from: { x: -320, y: 0 }, lunge: { x: 110, y: 50 }, enter: 4.1, bite: 5.5, bitemark: "#in-b1", row: "#in-r1", n: 2 },
-        { id: "#in-c2", from: { x: 340, y: 0 }, lunge: { x: -120, y: 40 }, enter: 6.0, bite: 7.0, bitemark: "#in-b2", row: "#in-r2", n: 3 },
-        { id: "#in-c3", from: { x: -320, y: 120 }, lunge: { x: 120, y: 0 }, enter: 7.1, bite: 8.15, bitemark: "#in-b3", row: "#in-r3", n: 4 },
+        { id: "#in-c1", from: { x: -320, y: 0 }, lunge: { x: 110, y: 50 }, enter: 4.1, bite: 5.25, bitemark: "#in-b1", row: "#in-r1", n: 2 },
+        { id: "#in-c2", from: { x: 340, y: 0 }, lunge: { x: -120, y: 40 }, enter: 5.75, bite: 6.63, bitemark: "#in-b2", row: "#in-r2", n: 3 },
+        { id: "#in-c3", from: { x: -320, y: 120 }, lunge: { x: 120, y: 0 }, enter: 7.25, bite: 8.42, bitemark: "#in-b3", row: "#in-r3", n: 4 },
       ];
       crit.forEach((c, i) => {
         tl.fromTo(c.id, { x: c.from.x, y: c.from.y, rotation: 0 }, { x: 0, y: 0, duration: 0.45, ease: "back.out(1.6)" }, c.enter);
@@ -234,15 +234,15 @@
       });
 
       // ── 6. the critters leave, the blob melts: you actually shipped 22
-      tl.to(["#in-c1", "#in-c3"], { x: -360, duration: 0.35, ease: "power3.in" }, 8.6);
-      tl.to("#in-c2", { x: 360, duration: 0.35, ease: "power3.in" }, 8.6);
-      tl.to("#in-lab1", { opacity: 0, filter: "blur(8px)", duration: 0.16 }, 8.55);
-      tl.fromTo("#in-lab2 .t", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 8.65);
-      tl.fromTo("#in-lab2 .in-ar", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 8.85);
-      tl.fromTo("#in-puddle", { scaleX: 0, scaleY: 0.4 }, { scaleX: 1, scaleY: 1, duration: 0.9, ease: "power2.out" }, 8.7);
-      tl.fromTo("#in-blob", { scaleY: 1, scaleX: 1 }, { scaleY: 0.9, scaleX: 1.04, y: 18, duration: 0.9, ease: "power2.out", immediateRender: false }, 8.7);
-      tl.fromTo(["#in-d1", "#in-d2"], { scaleY: 0.2, y: -20, opacity: 0, transformOrigin: "50% 0%" }, { scaleY: 1, y: 10, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power2.in" }, 8.75);
-      tl.fromTo("#in-count b:nth-child(4)", { scale: 1 }, { scale: 1.14, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 9.75);
+      tl.to(["#in-c1", "#in-c3"], { x: -360, duration: 0.35, ease: "power3.in" }, 8.95);
+      tl.to("#in-c2", { x: 360, duration: 0.35, ease: "power3.in" }, 8.95);
+      tl.to("#in-lab1", { opacity: 0, filter: "blur(8px)", duration: 0.16 }, 8.9);
+      tl.fromTo("#in-lab2 .t", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 9.0);
+      tl.fromTo("#in-lab2 .in-ar", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 9.2);
+      tl.fromTo("#in-puddle", { scaleX: 0, scaleY: 0.4 }, { scaleX: 1, scaleY: 1, duration: 0.9, ease: "power2.out" }, 9.05);
+      tl.fromTo("#in-blob", { scaleY: 1, scaleX: 1 }, { scaleY: 0.9, scaleX: 1.04, y: 18, duration: 0.9, ease: "power2.out", immediateRender: false }, 9.05);
+      tl.fromTo(["#in-d1", "#in-d2"], { scaleY: 0.2, y: -20, opacity: 0, transformOrigin: "50% 0%" }, { scaleY: 1, y: 10, opacity: 1, duration: 0.7, stagger: 0.15, ease: "power2.in" }, 9.1);
+      tl.fromTo("#in-count b:nth-child(4)", { scale: 1 }, { scale: 1.14, duration: 0.14, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 10.1);
 
       window.__timelines["intro"] = tl;
     })();

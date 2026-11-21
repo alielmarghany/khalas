@@ -23,10 +23,10 @@
 - Each has a small Egyptian Arabic line underneath, in IBM Plex Sans Arabic.
 - The customer chats, spreadsheet, order card and board labels stay in Egyptian Arabic, so the story still reads as Egyptian sellers.
 
-**Voice.** ElevenLabs "Jessica" (a free built-in female voice), model `eleven_v3`, one file per line in `assets/voice/vo01–vo09.mp3`:
-- The text animations are re-timed to land on the spoken words.
-- Long pauses inside each line are capped at 0.2–0.35 s, and `vo07` is sped up 4%, so each line fits its scene.
-- No Egyptian voices: ElevenLabs' free plan doesn't allow them through the API.
+**Voice.** ElevenLabs "Laura" (a free built-in, energetic social-media voice), model `eleven_v3`, with the `[excited]` tag and stability 0:
+- 26 short phrase clips (`assets/voice/v01–v26.mp3`), each placed on its animation beat.
+- Pauses inside each clip are capped at 0.12 s, and a few clips are sped up 10–30% to fit their slots.
+- Earlier Jessica takes are not kept in the project.
 
 **Music.** `assets/bgm/khalas-bed.mp3`:
 - Cut from HeyGen music-library track 7ffd6fe7, starting 4.5 s in.

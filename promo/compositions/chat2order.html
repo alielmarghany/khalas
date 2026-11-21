@@ -92,17 +92,17 @@
 
       // each part of the message is marked, then lands in the card
       for (let i = 1; i <= 3; i++) {
-        const at = [2.04, 2.69, 3.54][i - 1];
+        const at = [2.04, 2.8, 3.8][i - 1];
         tl.fromTo("#c2-hl" + i, { backgroundSize: "0% 46%" }, { backgroundSize: "100% 46%", duration: 0.32, ease: "power2.inOut" }, at);
         tl.to("#c2-ph" + i, { opacity: 0, duration: 0.15 }, at + 0.3);
         tl.fromTo("#c2-v" + i, { opacity: 0, x: 40, filter: "blur(6px)" },
           { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, at + 0.32);
       }
 
-      tl.fromTo("#c2-done", { opacity: 0, scale: 0.3, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2.4)" }, 4.4);
-      tl.fromTo("#c2-tick", { strokeDashoffset: 36 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 4.65);
+      tl.fromTo("#c2-done", { opacity: 0, scale: 0.3, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2.4)" }, 4.5);
+      tl.fromTo("#c2-tick", { strokeDashoffset: 36 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 4.75);
       tl.fromTo("#c2-card", { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 0px rgba(35,64,255,0)" },
-        { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 5px rgba(35,64,255,1)", duration: 0.3, ease: "power2.out" }, 4.45);
+        { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 5px rgba(35,64,255,1)", duration: 0.3, ease: "power2.out" }, 4.55);
 
       tl.fromTo("#c2-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 6.65);
 
