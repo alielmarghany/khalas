@@ -1,5 +1,6 @@
 <template>
   <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-latin-700-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
     @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
@@ -17,10 +18,10 @@
     #tn-logo { position: absolute; inset: 0; width: 320px; height: 320px; filter: drop-shadow(0 24px 40px rgba(0, 10, 90, 0.35)); }
     #tn-word { position: absolute; left: 330px; top: 790px; width: 420px; height: 111px; }
     #tn-line { position: absolute; left: 210px; width: 660px; top: 960px; text-align: center; }
-    #tn-line .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 84px; line-height: 1.15; color: #fff; }
+    #tn-line .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 77px; line-height: 1.15; color: #fff; }
     #tn-line .ar span { display: inline-block; }
     #tn-line .ar .y { color: #ffd400; }
-    #tn-line .en { direction: ltr; margin-top: 12px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 50px; color: rgba(255, 255, 255, 0.75); }
+    #tn-line .en { direction: rtl; margin-top: 12px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 43px; color: rgba(255, 255, 255, 0.75); }
     #tn-flash { position: absolute; inset: 0; background: #ffffff; z-index: 10; }
     #tn-wipe { position: absolute; inset: 0; background: #f6f4ee; z-index: 20; }
   </style>
@@ -37,8 +38,8 @@
     </div>
     <img id="tn-word" src="assets/brand/khalas-wordmark-white.png" alt="khalas" />
     <div id="tn-line">
-      <div class="ar"><span>الأوردر</span> <span class="y">يخلّص</span> <span>نفسه.</span></div>
-      <div class="en" id="tn-en">Orders, done.</div>
+      <div class="ar"><span>Orders,</span> <span class="y">done.</span></div>
+      <div class="en" id="tn-en">الأوردر يخلّص نفسه.</div>
     </div>
     <div id="tn-flash"></div>
     <div id="tn-wipe"></div>
@@ -57,10 +58,10 @@
       tl.fromTo("#tn-tick", { strokeDashoffset: 112 }, { strokeDashoffset: 0, duration: 0.42, ease: "power2.inOut" }, 0.62);
       tl.fromTo("#tn-logo", { scale: 1 }, { scale: 1.08, duration: 0.12, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.04);
 
-      tl.fromTo("#tn-word", { opacity: 0, y: 24, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 1.1);
+      tl.fromTo("#tn-word", { opacity: 0, y: 24, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.4);
       tl.fromTo("#tn-line .ar span", { opacity: 0, filter: "blur(8px)" },
-        { opacity: 1, filter: "blur(0px)", duration: 0.18, stagger: 0.09, ease: "power3.out" }, 1.45);
-      tl.fromTo("#tn-en", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.75);
+        { opacity: 1, filter: "blur(0px)", duration: 0.2, stagger: 0.55, ease: "power3.out" }, 0.85);
+      tl.fromTo("#tn-en", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.6);
 
       tl.fromTo("#tn-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 2.65);
 

@@ -1,5 +1,6 @@
 <template>
   <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
@@ -8,14 +9,14 @@
     @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
 
     #root { position: absolute; inset: 0; overflow: hidden; background: #f6f4ee; }
-    #c2-head { position: absolute; left: 210px; width: 660px; top: 330px; text-align: center; }
-    #c2-head .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 74px; line-height: 1.15; color: #0b0f1a; }
+    #c2-head { position: absolute; left: 210px; width: 660px; top: 310px; text-align: center; }
+    #c2-head .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 66px; line-height: 1.02; color: #0b0f1a; }
     #c2-head .ar span { display: inline-block; }
     #c2-head .ar .k { color: #2340ff; }
-    #c2-head .en { direction: ltr; margin-top: 6px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 46px; color: rgba(11, 15, 26, 0.55); }
+    #c2-head .en { direction: rtl; margin-top: 6px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 40px; color: rgba(11, 15, 26, 0.55); }
 
     #c2-msg {
-      position: absolute; right: 210px; top: 500px; width: 640px; padding: 26px 32px 28px;
+      position: absolute; right: 210px; top: 545px; width: 640px; padding: 26px 32px 28px;
       background: #ffffff; border-radius: 34px; border-bottom-right-radius: 10px;
       box-shadow: 0 18px 50px rgba(11, 15, 26, 0.12); direction: rtl;
       font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 34px; line-height: 1.7; color: #0b0f1a;
@@ -27,7 +28,7 @@
     }
 
     #c2-card {
-      position: absolute; left: 230px; top: 840px; width: 620px; padding: 26px 34px 40px;
+      position: absolute; left: 230px; top: 865px; width: 620px; padding: 26px 34px 40px;
       background: #ffffff; border-radius: 34px; box-shadow: 0 24px 60px rgba(11, 15, 26, 0.14); direction: rtl;
     }
     #c2-card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -36,13 +37,13 @@
       font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 28px; color: #2340ff;
       background: rgba(35, 64, 255, 0.1); padding: 4px 18px; border-radius: 20px;
     }
-    #c2-card .row { display: flex; align-items: center; height: 78px; border-top: 2px solid #efece5; position: relative; }
+    #c2-card .row { display: flex; align-items: center; height: 70px; border-top: 2px solid #efece5; position: relative; }
     #c2-card .lab { width: 170px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 28px; color: #8a8576; }
     #c2-card .val { font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 32px; color: #0b0f1a; }
-    #c2-card .ph { position: absolute; right: 170px; top: 26px; width: 300px; height: 26px; border-radius: 13px; background: #efece5; }
+    #c2-card .ph { position: absolute; right: 170px; top: 22px; width: 300px; height: 26px; border-radius: 13px; background: #efece5; }
 
     #c2-done {
-      position: absolute; left: 440px; top: 1170px; height: 84px; padding: 0 34px 0 22px; border-radius: 42px;
+      position: absolute; left: 440px; top: 1165px; height: 84px; padding: 0 34px 0 22px; border-radius: 42px;
       background: #2340ff; display: flex; align-items: center; gap: 14px; direction: ltr;
       box-shadow: 0 16px 40px rgba(35, 64, 255, 0.35);
       font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 40px; color: #fff;
@@ -52,8 +53,8 @@
   </style>
   <div id="root" data-composition-id="chat2order" data-width="1080" data-height="1920">
     <div id="c2-head">
-      <div class="ar"><span>الشات</span> <span>بيتحوّل</span> <span class="k">لأوردر</span></div>
-      <div class="en" id="c2-en">Chats become orders.</div>
+      <div class="ar"><span>Chats</span> <span>become</span> <span class="k">orders.</span></div>
+      <div class="en" id="c2-en">الشات بيتحوّل لأوردر</div>
     </div>
 
     <div id="c2-msg">
@@ -91,17 +92,17 @@
 
       // each part of the message is marked, then lands in the card
       for (let i = 1; i <= 3; i++) {
-        const at = 1.35 + (i - 1) * 0.75;
+        const at = [2.05, 2.69, 3.54][i - 1];
         tl.fromTo("#c2-hl" + i, { backgroundSize: "0% 46%" }, { backgroundSize: "100% 46%", duration: 0.32, ease: "power2.inOut" }, at);
         tl.to("#c2-ph" + i, { opacity: 0, duration: 0.15 }, at + 0.3);
         tl.fromTo("#c2-v" + i, { opacity: 0, x: 40, filter: "blur(6px)" },
           { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, at + 0.32);
       }
 
-      tl.fromTo("#c2-done", { opacity: 0, scale: 0.3, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2.4)" }, 3.85);
-      tl.fromTo("#c2-tick", { strokeDashoffset: 36 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 4.1);
+      tl.fromTo("#c2-done", { opacity: 0, scale: 0.3, y: 30 }, { opacity: 1, scale: 1, y: 0, duration: 0.5, ease: "back.out(2.4)" }, 4.55);
+      tl.fromTo("#c2-tick", { strokeDashoffset: 36 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 4.8);
       tl.fromTo("#c2-card", { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 0px rgba(35,64,255,0)" },
-        { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 5px rgba(35,64,255,1)", duration: 0.3, ease: "power2.out" }, 3.9);
+        { boxShadow: "0 24px 60px rgba(11,15,26,0.14), 0 0 0 5px rgba(35,64,255,1)", duration: 0.3, ease: "power2.out" }, 4.6);
 
       tl.fromTo("#c2-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 6.65);
 

@@ -1,5 +1,6 @@
 <template>
   <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
@@ -7,14 +8,14 @@
     @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); }
 
     #root { position: absolute; inset: 0; overflow: hidden; background: #f6f4ee; }
-    #bd-head { position: absolute; left: 210px; width: 660px; top: 330px; text-align: center; }
-    #bd-head .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 74px; line-height: 1.15; color: #0b0f1a; }
+    #bd-head { position: absolute; left: 210px; width: 660px; top: 310px; text-align: center; }
+    #bd-head .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 66px; line-height: 1.02; color: #0b0f1a; }
     #bd-head .ar span { display: inline-block; }
     #bd-head .ar .k { color: #2340ff; }
-    #bd-head .en { direction: ltr; margin-top: 6px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 46px; color: rgba(11, 15, 26, 0.55); }
+    #bd-head .en { direction: rtl; margin-top: 6px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 40px; color: rgba(11, 15, 26, 0.55); }
 
-    #bd-board { position: absolute; left: 230px; top: 505px; width: 620px; height: 580px; }
-    .bd-col { position: absolute; top: 0; width: 196px; height: 580px; border-radius: 26px; background: rgba(11, 15, 26, 0.05); }
+    #bd-board { position: absolute; left: 230px; top: 560px; width: 620px; height: 515px; }
+    .bd-col { position: absolute; top: 0; width: 196px; height: 515px; border-radius: 26px; background: rgba(11, 15, 26, 0.05); }
     #bd-col0 { left: 424px; } #bd-col1 { left: 212px; } #bd-col2 { left: 0; }
     .bd-col .hd {
       position: absolute; left: 10px; right: 10px; top: 10px; height: 64px; border-radius: 20px; direction: rtl;
@@ -28,23 +29,23 @@
     .bd-cnt b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; opacity: 0; }
 
     .bd-card {
-      position: absolute; width: 176px; height: 88px; border-radius: 18px; background: #ffffff; direction: rtl;
-      box-shadow: 0 10px 24px rgba(11, 15, 26, 0.1); padding: 8px 16px;
-      font-family: "IBM Plex Sans Arabic", sans-serif; line-height: 1.3;
+      position: absolute; width: 176px; height: 78px; border-radius: 18px; background: #ffffff; direction: rtl;
+      box-shadow: 0 10px 24px rgba(11, 15, 26, 0.1); padding: 4px 16px;
+      font-family: "IBM Plex Sans Arabic", sans-serif; line-height: 1.25;
     }
     .bd-card .n { font-weight: 700; font-size: 28px; color: #0b0f1a; display: block; }
     .bd-card .t { font-weight: 500; font-size: 28px; color: #8a8576; display: block; }
 
-    #bd-line { position: absolute; left: 210px; width: 660px; top: 1105px; text-align: center; }
-    #bd-line .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 66px; line-height: 1.2; color: #0b0f1a; }
+    #bd-line { position: absolute; left: 160px; width: 760px; top: 1095px; text-align: center; }
+    #bd-line .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 50px; line-height: 1.2; color: #0b0f1a; }
     #bd-line .ar span { display: inline-block; }
-    #bd-line .en { direction: ltr; margin-top: 2px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 44px; color: rgba(11, 15, 26, 0.55); }
+    #bd-line .en { direction: rtl; margin-top: 2px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 38px; color: rgba(11, 15, 26, 0.55); }
     #bd-wipe { position: absolute; inset: 0; background: #2340ff; z-index: 20; }
   </style>
   <div id="root" data-composition-id="board" data-width="1080" data-height="1920">
     <div id="bd-head">
-      <div class="ar"><span>وكل</span> <span>أوردر</span> <span>في</span> <span class="k">مكانه</span></div>
-      <div class="en" id="bd-en">Every order in its place.</div>
+      <div class="ar"><span>Every</span> <span>order</span> <span>in</span> <span>its</span> <span class="k">place.</span></div>
+      <div class="en" id="bd-en">وكل أوردر في مكانه</div>
     </div>
 
     <div id="bd-board" data-layout-allow-overlap>
@@ -52,16 +53,16 @@
       <div class="bd-col" id="bd-col1"><div class="hd"><span>اتأكد</span><span class="bd-cnt" id="bd-k1"><b>٠</b><b>١</b><b>٢</b><b>٣</b><b>٤</b><b>٥</b></span></div></div>
       <div class="bd-col" id="bd-col2"><div class="hd"><span>اتشحن</span><span class="bd-cnt" id="bd-k2"><b>٠</b><b>١</b><b>٢</b><b>٣</b><b>٤</b><b>٥</b></span></div></div>
 
-      <div class="bd-card" id="bd-o0" style="left: 434px; top: 90px"><span class="n">#١٠٢٤</span><span class="t">تيشيرت ×٢</span></div>
-      <div class="bd-card" id="bd-o1" style="left: 434px; top: 188px"><span class="n">#١٠٢٥</span><span class="t">هودي M</span></div>
-      <div class="bd-card" id="bd-o2" style="left: 434px; top: 286px"><span class="n">#١٠٢٦</span><span class="t">شنطة جلد</span></div>
-      <div class="bd-card" id="bd-o3" style="left: 434px; top: 384px"><span class="n">#١٠٢٧</span><span class="t">فستان</span></div>
-      <div class="bd-card" id="bd-o4" style="left: 434px; top: 482px"><span class="n">#١٠٢٨</span><span class="t">كاب أسود</span></div>
+      <div class="bd-card" id="bd-o0" style="left: 434px; top: 86px"><span class="n">#١٠٢٤</span><span class="t">تيشيرت ×٢</span></div>
+      <div class="bd-card" id="bd-o1" style="left: 434px; top: 170px"><span class="n">#١٠٢٥</span><span class="t">هودي M</span></div>
+      <div class="bd-card" id="bd-o2" style="left: 434px; top: 254px"><span class="n">#١٠٢٦</span><span class="t">شنطة جلد</span></div>
+      <div class="bd-card" id="bd-o3" style="left: 434px; top: 338px"><span class="n">#١٠٢٧</span><span class="t">فستان</span></div>
+      <div class="bd-card" id="bd-o4" style="left: 434px; top: 422px"><span class="n">#١٠٢٨</span><span class="t">كاب أسود</span></div>
     </div>
 
     <div id="bd-line">
-      <div class="ar"><span>ولا</span> <span>ورقة.</span> <span>ولا</span> <span>إكسل.</span></div>
-      <div class="en" id="bd-len">No paper. No spreadsheets.</div>
+      <div class="ar"><span>No</span> <span>paper.</span> <span>No</span> <span>spreadsheets.</span></div>
+      <div class="en" id="bd-len">ولا ورقة. ولا إكسل.</div>
     </div>
     <div id="bd-wipe"></div>
   </div>
@@ -69,7 +70,7 @@
     (function () {
       const tl = gsap.timeline({ paused: true });
       const COLX = [434, 222, 10];
-      const SLOTY = [90, 188, 286, 384, 482];
+      const SLOTY = [86, 170, 254, 338, 422];
 
       tl.fromTo("#bd-head .ar span", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, stagger: 0.08, ease: "power3.out" }, 0.1);
       tl.fromTo("#bd-en", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.45);
@@ -121,8 +122,8 @@
       ];
       moves.forEach(([at, i, c]) => { col[i] = c; layout(at, 0.45); });
 
-      tl.fromTo("#bd-line .ar span", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.12, ease: "expo.out" }, 5.0);
-      tl.fromTo("#bd-len", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.5);
+      tl.fromTo("#bd-line .ar span", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.25, ease: "expo.out" }, 4.25);
+      tl.fromTo("#bd-len", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.0);
 
       tl.fromTo("#bd-wipe", { xPercent: 100 }, { xPercent: 0, duration: 0.3, ease: "power3.in" }, 6.65);
 

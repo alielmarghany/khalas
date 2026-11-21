@@ -1,5 +1,6 @@
 <template>
   <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
@@ -12,26 +13,26 @@
     #ct-word { position: absolute; left: 380px; top: 478px; width: 320px; height: 85px; }
 
     #ct-num {
-      position: absolute; left: 340px; top: 580px; width: 400px; height: 170px; direction: rtl;
-      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 150px; line-height: 170px; color: #ffd400;
+      position: absolute; left: 340px; top: 580px; width: 400px; height: 170px; direction: ltr;
+      font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 160px; line-height: 170px; letter-spacing: -0.03em; color: #ffd400;
     }
-    #ct-num b { position: absolute; inset: 0; text-align: center; opacity: 0; font-weight: 700; }
+    #ct-num b { position: absolute; inset: 0; text-align: center; opacity: 0; font-weight: 800; }
     #ct-seats { position: absolute; left: 210px; width: 660px; top: 752px; text-align: center; }
-    #ct-seats .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 54px; line-height: 1.2; color: #fff; }
-    #ct-seats .en { direction: ltr; font-family: "Instrument Serif", serif; font-style: italic; font-size: 40px; line-height: 1.2; color: rgba(255, 255, 255, 0.78); }
+    #ct-seats .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 50px; line-height: 1.2; color: #fff; }
+    #ct-seats .en { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 34px; line-height: 1.2; color: rgba(255, 255, 255, 0.78); }
 
     #ct-btn {
       position: absolute; left: 270px; top: 915px; width: 540px; height: 116px; border-radius: 58px; overflow: hidden;
       background: #ffd400; box-shadow: 0 20px 50px rgba(0, 10, 90, 0.4);
-      display: flex; align-items: center; justify-content: center; direction: rtl;
-      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 56px; color: #0b0f1a;
+      display: flex; align-items: center; justify-content: center; direction: ltr;
+      font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 50px; letter-spacing: -0.02em; color: #0b0f1a;
     }
     #ct-sheen { position: absolute; top: -20px; left: 0; width: 90px; height: 160px; background: rgba(255, 255, 255, 0.55); }
-    #ct-btnen { direction: ltr; position: absolute; left: 210px; width: 660px; top: 1040px; text-align: center; font-family: "Instrument Serif", serif; font-style: italic; font-size: 38px; color: rgba(255, 255, 255, 0.78); }
+    #ct-btnen { direction: rtl; position: absolute; left: 210px; width: 660px; top: 1040px; text-align: center; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 34px; color: rgba(255, 255, 255, 0.78); }
 
     #ct-foot { position: absolute; left: 210px; width: 660px; top: 1110px; text-align: center; }
-    #ct-foot .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 44px; line-height: 1.25; color: #fff; }
-    #ct-foot .en { direction: ltr; font-family: "Instrument Serif", serif; font-style: italic; font-size: 36px; line-height: 1.25; color: rgba(255, 255, 255, 0.7); }
+    #ct-foot .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.01em; font-size: 42px; line-height: 1.25; color: #fff; }
+    #ct-foot .en { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 31px; line-height: 1.25; color: rgba(255, 255, 255, 0.7); }
     #ct-wipe { position: absolute; inset: 0; background: #0b0f1a; z-index: 20; }
   </style>
   <div id="root" data-composition-id="cta" data-width="1080" data-height="1920">
@@ -42,18 +43,18 @@
     </svg>
     <img id="ct-word" src="assets/brand/khalas-wordmark-white.png" alt="khalas" />
 
-    <div id="ct-num"><b>٠</b><b>٣٥</b><b>٩٠</b><b>١٦٠</b><b>٢٤٠</b><b>٣٠٥</b><b>٣٥٠</b><b>٣٨٠</b><b>٣٩٥</b><b>٤٠٠</b></div>
+    <div id="ct-num"><b>0</b><b>35</b><b>90</b><b>160</b><b>240</b><b>305</b><b>350</b><b>380</b><b>395</b><b>400</b></div>
     <div id="ct-seats">
-      <div class="ar" id="ct-sar">مكان للمؤسسين بس</div>
-      <div class="en" id="ct-sen">founding spots, that's it.</div>
+      <div class="ar" id="ct-sar">founding spots. That's it.</div>
+      <div class="en" id="ct-sen">مكان للمؤسسين بس</div>
     </div>
 
-    <div id="ct-btn"><span>احجز مكانك</span><span id="ct-sheen"></span></div>
-    <div id="ct-btnen">Reserve your spot.</div>
+    <div id="ct-btn"><span>Reserve your spot</span><span id="ct-sheen"></span></div>
+    <div id="ct-btnen">احجز مكانك</div>
 
     <div id="ct-foot">
-      <div class="ar" id="ct-far">الرابط في البايو · قريباً</div>
-      <div class="en" id="ct-fen">Link in bio · coming soon</div>
+      <div class="ar" id="ct-far">Link in bio · Coming soon</div>
+      <div class="en" id="ct-fen">الرابط في البايو · قريباً</div>
     </div>
     <div id="ct-wipe"></div>
   </div>
@@ -78,12 +79,12 @@
       tl.fromTo("#ct-sar", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 2.35);
       tl.fromTo("#ct-sen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 2.6);
 
-      tl.fromTo("#ct-btn", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2.2)" }, 3.05);
-      tl.fromTo("#ct-btnen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.35);
-      tl.fromTo("#ct-sheen", { x: -140, rotation: 20 }, { x: 640, rotation: 20, duration: 0.6, ease: "power2.inOut" }, 3.7);
+      tl.fromTo("#ct-btn", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.55, ease: "back.out(2.2)" }, 3.5);
+      tl.fromTo("#ct-btnen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.8);
+      tl.fromTo("#ct-sheen", { x: -140, rotation: 20 }, { x: 640, rotation: 20, duration: 0.6, ease: "power2.inOut" }, 4.1);
 
-      tl.fromTo("#ct-far", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 3.95);
-      tl.fromTo("#ct-fen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.2);
+      tl.fromTo("#ct-far", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 4.5);
+      tl.fromTo("#ct-fen", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.75);
 
       window.__timelines["cta"] = tl;
     })();

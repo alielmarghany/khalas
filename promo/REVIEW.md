@@ -1,48 +1,37 @@
 # Khalas promo, vertical: review notes
 
-1080×1920 · 30 fps · 45 s · silent · rendered to `../renders/khalas-promo-vertical.mp4`
+1080×1920 · 30 fps · 45 s · English voiceover, music and sound effects · rendered to `../renders/khalas-promo-vertical.mp4`
 
-## Build
+## Current version
 
-The film is built from the brief's storyboard as written, so no alternative storylines were made. Each scene is its own file in `compositions/`:
+**Language.** Everything on screen is English-first:
+- English lines are big, in Bricolage Grotesque 800.
+- Each has a small Egyptian Arabic line underneath, in IBM Plex Sans Arabic.
+- The customer chats, spreadsheet, order card and board labels stay in Egyptian Arabic, so the story still reads as Egyptian sellers.
 
-| Time | File | Ground |
-| --- | --- | --- |
-| 0–4 s | hook.html | ink + blue glow |
-| 4–10 s | problem.html | ink + blue glow (red accents) |
-| 10–13 s | turn.html | cobalt (white flash in) |
-| 13–20 s | chat2order.html | paper |
-| 20–27 s | nightbot.html | ink (night) |
-| 27–34 s | board.html | paper |
-| 34–38 s | solution.html | cobalt |
-| 38–45 s | cta.html | cobalt |
+**Voice.** ElevenLabs "Liam" (a free built-in voice), model `eleven_v3`, one file per line in `assets/voice/vo01–vo09.mp3`:
+- The text animations are re-timed to land on the spoken words.
+- `vo02` has its long pause before "Mistake" trimmed to 0.3 s.
+- No Egyptian voices: ElevenLabs' free plan doesn't allow them through the API.
 
-## Creative calls
+**Music.** `assets/bgm/khalas-bed.mp3`:
+- Cut from HeyGen music-library track 7ffd6fe7, starting 4.5 s in.
+- Plays at volume 0.3 under the voice.
 
-- **Logo.** There's no `logo.png`, so the mark is a white SVG chat bubble with a yellow tick that draws itself.
-- **Wordmark.** "khalas" is cut out of the supplied brand image as a transparent PNG (`assets/brand/khalas-wordmark-white.png`).
-- **Scene wipes.** Each wipe is a full-frame panel in the next scene's ground colour, moving right to left to match Arabic reading order:
-  - The hook→problem wipe is red.
-  - Problem→turn is a white flash.
-- **Fonts.** Bricolage Grotesque, IBM Plex Sans Arabic and Instrument Serif Italic are bundled locally from @fontsource. GSAP is also bundled locally, so a render needs no network.
-- **Example data.** Every name, order number, phone number (`٠١٠٠٠٠٠…`) and price is made up.
-- **Layout.** All copy stays inside the TikTok/Reels/Shorts safe area (y 288–1248, x 120–780 lower down). That leaves the lower third of every frame empty on purpose.
+**Sound effects.** 37 cues from the bundled HyperFrames library. Each one's peak is placed one frame after the thing on screen it belongs to.
 
-## Checked
+**Layout.** Centred on x = 540. Some text on the right now runs under TikTok's action buttons; that's the trade-off the person chose.
 
-- `hyperframes check`: 0 errors.
-- Contact sheets at 13 moments. Fixed after looking:
-  - "99+" was rendering as "+99" (bidi).
-  - English lines with periods were flipping in the right-to-left layout.
-  - Headings overlapped the YouTube Shorts top bar.
+## Measured
 
-## Warnings kept on purpose
+- `check`: 0 errors.
+- Delivery file: −14.8 LUFS, true peak −0.7 dBTP, no clipping.
+- The mix was normalised with ffmpeg `loudnorm` after rendering, because the raw render was −18 LUFS.
+- The sound was measured, not listened to.
 
-- `film_silent`: there's no music source here (no HeyGen sign-in, no music provided). Add an `<audio id="music">` to `index.html` to give it a bed.
-- `line_unread` on the 99+ badge and the ٤٠٠ counter steps: those are counters, and only the final number has to be read.
-- `container_overflow` / `escaped_container`: the bubble flood and ring bursts spill past their boxes by design.
+## Remaining warnings and notes
 
-## Weakest shot and next steps
-
-- The order board (27–34 s) has tall, mostly empty columns once the cards spread out. Shortening them and enlarging the cards would read better.
-- With more time: a music bed with pops on the bubbles and the Done pill, plus a riser into the logo at 10 s.
+- `outside_safe_zone` (TikTok right edge): a result of centring the layout.
+- `line_unread` on the 99+ and 400 counters: only the final number needs to be read.
+- The Arabic accent lines hold briefly in a few places. They are secondary text.
+- The render tool doesn't normalise loudness itself. Re-renders need the same `loudnorm` pass, or higher clip volumes.

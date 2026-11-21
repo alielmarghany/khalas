@@ -1,5 +1,6 @@
 <template>
   <style>
+    @font-face { font-family: "Bricolage Grotesque"; font-weight: 800; src: url("assets/fonts/bricolage-grotesque-latin-800-normal.woff2") format("woff2"); }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-500-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 700; src: url("assets/fonts/ibm-plex-sans-arabic-arabic-700-normal.woff2") format("woff2"); unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200F; }
     @font-face { font-family: "IBM Plex Sans Arabic"; font-weight: 500; src: url("assets/fonts/ibm-plex-sans-arabic-latin-500-normal.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F; }
@@ -13,14 +14,14 @@
       overflow: hidden;
       background: radial-gradient(circle at 50% 42%, rgba(35, 64, 255, 0.26), rgba(35, 64, 255, 0) 60%), #0b0f1a;
     }
-    #pb-words { position: absolute; left: 210px; width: 660px; top: 420px; text-align: center; direction: rtl; }
+    #pb-words { position: absolute; left: 210px; width: 660px; top: 430px; text-align: center; direction: ltr; }
     #pb-words .w {
-      font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 150px; line-height: 1.12; color: #fff;
+      font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 140px; line-height: 1.05; letter-spacing: -0.03em; color: #fff;
     }
     #pb-words .w span { display: inline-block; }
     #pb-words .red { color: #ff3b3b; }
-    #pb-words .en { direction: ltr;
-      margin-top: 18px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 48px; color: rgba(255, 255, 255, 0.62);
+    #pb-words .en { direction: rtl;
+      margin-top: 18px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 42px; color: rgba(255, 255, 255, 0.62);
     }
 
     #pb-sheetwrap { position: absolute; left: 210px; top: 400px; width: 660px; }
@@ -51,18 +52,18 @@
     #pb-where .dot { position: absolute; left: -14px; top: -14px; width: 40px; height: 40px; border-radius: 20px; background: #ff3b3b; }
 
     #pb-lost { position: absolute; left: 210px; width: 660px; top: 560px; text-align: center; z-index: 4; }
-    #pb-lost .ar { direction: rtl; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 700; font-size: 104px; line-height: 1.2; color: #fff; }
+    #pb-lost .ar { direction: ltr; font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; letter-spacing: -0.02em; font-size: 92px; line-height: 1.2; color: #fff; }
     #pb-lost .ar div { display: block; }
     #pb-lost .red { color: #ff3b3b; }
-    #pb-lost .en { direction: ltr; margin-top: 16px; font-family: "Instrument Serif", serif; font-style: italic; font-size: 48px; color: rgba(255, 255, 255, 0.62); }
+    #pb-lost .en { direction: rtl; margin-top: 16px; font-family: "IBM Plex Sans Arabic", sans-serif; font-weight: 500; font-size: 41px; color: rgba(255, 255, 255, 0.62); }
     #pb-wipe { position: absolute; inset: 0; background: #ff3b3b; z-index: 20; }
   </style>
   <div id="root" data-composition-id="problem" data-width="1080" data-height="1920">
     <div id="pb-words">
-      <div class="w"><span id="pb-w1">بتنسخ.</span></div>
-      <div class="w"><span id="pb-w2">بتلصق.</span></div>
-      <div class="w"><span id="pb-w3" class="red">وبتغلط.</span></div>
-      <div class="en" id="pb-wen">Copy. Paste. Mistake.</div>
+      <div class="w"><span id="pb-w1">Copy.</span></div>
+      <div class="w"><span id="pb-w2">Paste.</span></div>
+      <div class="w"><span id="pb-w3" class="red">Mistake.</span></div>
+      <div class="en" id="pb-wen">بتنسخ. بتلصق. وبتغلط.</div>
     </div>
 
     <div id="pb-sheetwrap" data-layout-allow-overlap>
@@ -80,10 +81,10 @@
 
     <div id="pb-lost">
       <div class="ar">
-        <div id="pb-l1">أوردر <span class="red">ضاع.</span></div>
-        <div id="pb-l2">عميل <span class="red">ضاع.</span></div>
+        <div id="pb-l1">Lost <span class="red">order.</span></div>
+        <div id="pb-l2">Lost <span class="red">customer.</span></div>
       </div>
-      <div class="en" id="pb-len">Lost order. Lost customer.</div>
+      <div class="en" id="pb-len">أوردر ضاع. عميل ضاع.</div>
     </div>
 
     <div id="pb-wipe"></div>
@@ -98,28 +99,28 @@
       // three hard words
       ["#pb-w1", "#pb-w2", "#pb-w3"].forEach((id, i) => {
         tl.fromTo(id, { opacity: 0, scale: 1.4, filter: "blur(14px)" },
-          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, 0.3 + i * 0.35);
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.26, ease: "expo.out" }, [0.3, 1.24, 2.1][i]);
       });
-      tl.fromTo("#pb-w3", { x: 0 }, { x: 16, duration: 0.05, repeat: 5, yoyo: true, ease: "none" }, 1.0);
-      tl.fromTo("#pb-wen", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 1.1);
-      tl.to("#pb-words", { opacity: 0, filter: "blur(12px)", duration: 0.2, ease: "power2.in" }, 2.25);
+      tl.fromTo("#pb-w3", { x: 0 }, { x: 16, duration: 0.05, repeat: 5, yoyo: true, ease: "none" }, 2.12);
+      tl.fromTo("#pb-wen", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 2.3);
+      tl.to("#pb-words", { opacity: 0, filter: "blur(12px)", duration: 0.2, ease: "power2.in" }, 2.85);
 
       // the messy sheet
       tl.fromTo("#pb-sheetwrap", { opacity: 0, y: 120, rotation: -6 },
-        { opacity: 1, y: 0, rotation: -2.5, duration: 0.55, ease: "expo.out" }, 2.4);
-      tl.fromTo("#pb-sheet .pb-r", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.06 }, 2.45);
-      tl.fromTo(".pb-x", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, stagger: 0.12, ease: "back.out(2.5)" }, 2.9);
+        { opacity: 1, y: 0, rotation: -2.5, duration: 0.5, ease: "expo.out" }, 2.95);
+      tl.fromTo("#pb-sheet .pb-r", { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.05 }, 3.0);
+      tl.fromTo(".pb-x", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.3, stagger: 0.08, ease: "back.out(2.5)" }, 3.3);
 
       // the customer bubble shakes
-      tl.fromTo("#pb-where", { opacity: 0, scale: 0.5, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, 3.3);
-      tl.fromTo("#pb-where", { rotation: 0 }, { rotation: 4, duration: 0.06, repeat: 7, yoyo: true, ease: "none" }, 3.65);
-      tl.fromTo("#pb-where", { x: 0 }, { x: -12, duration: 0.05, repeat: 9, yoyo: true, ease: "none" }, 3.65);
+      tl.fromTo("#pb-where", { opacity: 0, scale: 0.5, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, 3.55);
+      tl.fromTo("#pb-where", { rotation: 0 }, { rotation: 4, duration: 0.06, repeat: 7, yoyo: true, ease: "none" }, 3.8);
+      tl.fromTo("#pb-where", { x: 0 }, { x: -12, duration: 0.05, repeat: 9, yoyo: true, ease: "none" }, 3.8);
 
       // sheet and bubble fall back, the verdict lands
-      tl.to(["#pb-sheetwrap", "#pb-where"], { opacity: 0.12, filter: "blur(8px)", duration: 0.3, ease: "power2.out" }, 4.2);
-      tl.fromTo("#pb-l1", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 4.25);
-      tl.fromTo("#pb-l2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 4.5);
-      tl.fromTo("#pb-len", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 4.6);
+      tl.to(["#pb-sheetwrap", "#pb-where"], { opacity: 0.12, filter: "blur(8px)", duration: 0.3, ease: "power2.out" }, 4.1);
+      tl.fromTo("#pb-l1", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 4.15);
+      tl.fromTo("#pb-l2", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.35, ease: "expo.out" }, 5.0);
+      tl.fromTo("#pb-len", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 4.45);
 
       window.__timelines["problem"] = tl;
     })();
