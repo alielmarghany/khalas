@@ -1,11 +1,11 @@
 # v3 (seller POV, 3D phone): voice clips + music ducked under voice + one SFX stem -> hf/assets/audio
 import json, subprocess
 O = '/home/user/khalas/reel/hf/assets/audio/'
-VOICE = 'v3/chris'   # male voice (Chris); 'v3' holds the earlier Laura takes
+VOICE = 'v3/en'   # English, male (Chris). v3/chris = Arabic male, v3 = Arabic female
 T = json.load(open(VOICE + '/timing.json'))
 V = [(f'{VOICE}/vo{i}.wav', T[f'vo{i}']['start']) for i in range(1, 6)]
 S = [('vibrate',0.0,.9),('pop',0.15,.3),('vibrate',1.15,.8),('pop',1.0,.3),('pop',1.9,.3),('vibrate',2.25,.8),('pop',2.6,.3),
-     ('whoosh',3.15,.8),('vibrate',3.2,.9),('notif',3.3,.7),('notif',3.86,.7),('notif',4.5,.7),('whoosh',4.9,.7),('vibrate',4.95,.8),
+     ('whoosh',3.15,.8),('vibrate',3.2,.9),('notif',3.29,.7),('notif',3.96,.7),('notif',4.63,.7),('whoosh',4.9,.7),('vibrate',4.95,.8),
      ('notif',4.95,.5),('notif',5.4,.5),('notif',5.8,.5),('pop',5.2,.3),('pop',5.5,.3),('pop',6.1,.3),('pop',6.4,.3),
      ('lightson',6.68,1.0),('whoosh',6.7,.6),('typing',6.95,.35),('pop',7.38,.55),('pop',7.98,.55),('ding',8.36,.8),
      ('whoosh',9.45,.5),('night',9.5,.15),('vibrate',9.85,.35),('notif',9.85,.3),('vibrate',10.45,.2),('notif',10.45,.15),

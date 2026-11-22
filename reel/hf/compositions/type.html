@@ -1,69 +1,64 @@
 <template>
   <style>
-@font-face{font-family:'Alexandria';font-weight:900;src:url('assets/fonts/Alexandria-900.ttf')}
-#root{position:absolute;inset:0;direction:rtl;pointer-events:none}
-/* headlines live in the upper-middle of the 9:16 safe band (x 120–888, y 288+) */
-.hl{position:absolute;left:120px;width:768px;top:330px;text-align:center;visibility:hidden}
-.ln{font:900 104px/1.18 'Alexandria';color:#fff;white-space:nowrap;text-shadow:0 4px 0 rgba(7,10,30,.55),0 10px 40px rgba(7,10,30,.65)}
+@font-face{font-family:'Bricolage Grotesque';font-weight:800;src:url('assets/fonts/BricolageGrotesque-800.ttf')}
+#root{position:absolute;inset:0;pointer-events:none}
+/* headlines centred on the frame, upper-middle */
+.hl{position:absolute;left:60px;width:960px;top:330px;text-align:center;visibility:hidden}
+.ln{font:800 128px/1.02 'Bricolage Grotesque';letter-spacing:-.035em;color:#fff;white-space:nowrap;text-shadow:0 4px 0 rgba(7,10,30,.5),0 10px 40px rgba(7,10,30,.65)}
 .w{display:inline-block}
 .w.a{color:#FFD21F}
-.ln.s{font-size:66px;margin-top:22px}
-.sub{margin-top:14px;font:600 32px 'Inter';direction:ltr;color:rgba(255,255,255,.9);text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.ln.s{font-size:64px;letter-spacing:-.02em;margin-top:22px}
 #h1{visibility:visible}
-#h5 .ln{font-size:96px}
-#h5 .ln.s{font-size:64px}
   </style>
   <div id="root" data-composition-id="type" data-width="1080" data-height="1920">
-    <div class="hl" id="h1"><div class="ln"><span class="w" id="h1-w0">الساعة</span> <span class="w a" id="h1-w1">٢</span></div><div class="ln"><span class="w" id="h1-w2">بالليل</span> <span class="w" id="h1-w3">😩</span></div><div class="sub" id="h1-en">POV: still answering customers</div></div>
-    <div class="hl" id="h2"><div class="ln"><span class="w" id="h2-w0">كل</span> <span class="w" id="h2-w1">يوم</span></div><div class="ln"><span class="w" id="h2-w2">نفس</span> <span class="w a" id="h2-w3">الأسئلة</span> <span class="w" id="h2-w4">🙃</span></div><div class="sub" id="h2-en">same questions, every day</div></div>
-    <div class="hl" id="h3a"><div class="ln"><span class="w" id="h3a-w0">خلّي</span> <span class="w a" id="h3a-w1">خلاص</span></div><div class="ln"><span class="w" id="h3a-w2">يرد</span> <span class="w" id="h3a-w3">عليهم</span></div></div>
-    <div class="hl" id="h3b"><div class="ln"><span class="w" id="h3b-w0">ويأكد</span> <span class="w" id="h3b-w1">الأوردر</span></div><div class="ln"><span class="w a" id="h3b-w2">لوحده</span> <span class="w" id="h3b-w3">✅</span></div></div>
-    <div class="hl" id="h4"><div class="ln"><span class="w" id="h4-w0">وانت</span> <span class="w a" id="h4-w1">نايم</span> <span class="w" id="h4-w2">😴</span></div><div class="sub" id="h4-en">orders confirm while you sleep</div></div>
-    <div class="hl" id="h5"><div class="ln"><span class="w" id="h5-w0">اكتب</span> <span class="w a" id="h5-w1">«خلاص»</span></div><div class="ln"><span class="w" id="h5-w2">في</span> <span class="w" id="h5-w3">الكومنت</span> <span class="w" id="h5-w4">👇</span></div><div class="ln s"><span class="w" id="h5-w5">وهبعتلك</span> <span class="w a" id="h5-w6">اللينك</span></div><div class="sub" id="h5-en">comment “khalas” for the link</div></div>
+    <div class="hl" id="h1"><div class="ln"><span class="w a" id="h1-w0">2 AM.</span></div><div class="ln"><span class="w" id="h1-w1">Still</span> <span class="w" id="h1-w2">replying?</span> <span class="w" id="h1-w3">😩</span></div></div>
+    <div class="hl" id="h2"><div class="ln"><span class="w" id="h2-w0">Same</span> <span class="w a" id="h2-w1">questions.</span></div><div class="ln"><span class="w" id="h2-w2">Every.</span> <span class="w" id="h2-w3">Day.</span> <span class="w" id="h2-w4">🙃</span></div></div>
+    <div class="hl" id="h3a"><div class="ln"><span class="w" id="h3a-w0">Let</span> <span class="w a" id="h3a-w1">khalas</span></div><div class="ln"><span class="w" id="h3a-w2">reply</span> <span class="w" id="h3a-w3">for</span> <span class="w" id="h3a-w4">you</span></div></div>
+    <div class="hl" id="h3b"><div class="ln"><span class="w" id="h3b-w0">and</span> <span class="w" id="h3b-w1">confirm</span></div><div class="ln"><span class="w a" id="h3b-w2">orders</span> <span class="w" id="h3b-w3">✅</span></div></div>
+    <div class="hl" id="h4"><div class="ln"><span class="w" id="h4-w0">While</span> <span class="w" id="h4-w1">you</span></div><div class="ln"><span class="w a" id="h4-w2">sleep</span> <span class="w" id="h4-w3">😴</span></div></div>
+    <div class="hl" id="h5"><div class="ln"><span class="w" id="h5-w0">Comment</span></div><div class="ln"><span class="w a" id="h5-w1">“khalas”</span> <span class="w" id="h5-w2">👇</span></div><div class="ln s"><span class="w" id="h5-w9">I’ll send you</span> <span class="w a" id="h5-w10">the link</span></div></div>
   </div>
   <script>
     (function(){
       const tl = gsap.timeline({ paused: true });
       tl.set("#h1", { visibility: "visible" }, 0.0);
       tl.fromTo("#h1", { scale: 1.06 }, { scale: 1, duration: 0.5, ease: "expo.out" }, 0.0);
-      tl.fromTo("#h1-en", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.15);
       tl.to("#h1", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 3.00);
       tl.set("#h1", { visibility: "hidden" }, 3.12);
-      tl.set("#h2", { visibility: "visible" }, 5.46);
-      tl.fromTo("#h2-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 5.52);
-      tl.fromTo("#h2-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 5.79);
-      tl.fromTo("#h2-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.00);
-      tl.fromTo("#h2-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.26);
-      tl.fromTo("#h2-w4", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.36);
-      tl.fromTo("#h2-en", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 5.71);
-      tl.to("#h2", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 6.54);
-      tl.set("#h2", { visibility: "hidden" }, 6.66);
+      tl.set("#h2", { visibility: "visible" }, 5.25);
+      tl.fromTo("#h2-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 5.29);
+      tl.fromTo("#h2-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 5.52);
+      tl.fromTo("#h2-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.14);
+      tl.fromTo("#h2-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.43);
+      tl.fromTo("#h2-w4", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.52);
+      tl.to("#h2", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 6.58);
+      tl.set("#h2", { visibility: "hidden" }, 6.70);
       tl.set("#h3a", { visibility: "visible" }, 6.8);
-      tl.fromTo("#h3a-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.82);
-      tl.fromTo("#h3a-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.08);
+      tl.fromTo("#h3a-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 6.85);
+      tl.fromTo("#h3a-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.05);
       tl.fromTo("#h3a-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.41);
-      tl.fromTo("#h3a-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.68);
-      tl.to("#h3a", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 8.08);
-      tl.set("#h3a", { visibility: "hidden" }, 8.20);
-      tl.set("#h3b", { visibility: "visible" }, 8.2);
-      tl.fromTo("#h3b-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 8.27);
-      tl.fromTo("#h3b-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 8.70);
-      tl.fromTo("#h3b-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.09);
-      tl.fromTo("#h3b-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.20);
-      tl.to("#h3b", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 9.38);
-      tl.set("#h3b", { visibility: "hidden" }, 9.42);
+      tl.fromTo("#h3a-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.50);
+      tl.fromTo("#h3a-w4", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 7.60);
+      tl.to("#h3a", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 7.98);
+      tl.set("#h3a", { visibility: "hidden" }, 8.10);
+      tl.set("#h3b", { visibility: "visible" }, 8.1);
+      tl.fromTo("#h3b-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 8.14);
+      tl.fromTo("#h3b-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 8.28);
+      tl.fromTo("#h3b-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 8.82);
+      tl.fromTo("#h3b-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.00);
+      tl.to("#h3b", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 9.33);
+      tl.set("#h3b", { visibility: "hidden" }, 9.45);
       tl.set("#h4", { visibility: "visible" }, 9.55);
       tl.fromTo("#h4-w0", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.55);
-      tl.fromTo("#h4-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.88);
-      tl.fromTo("#h4-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.98);
-      tl.fromTo("#h4-en", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 9.80);
-      tl.to("#h4", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 11.80);
-      tl.set("#h4", { visibility: "hidden" }, 11.92);
-      tl.set("#h5", { visibility: "visible" }, 12.13);
-      tl.fromTo("#h5 .ln", { opacity: 0, scale: 1.6, filter: "blur(12px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out", stagger: 0.1 }, 12.13);
-      tl.fromTo("#h5-en", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 12.43);
-      tl.fromTo("#h5-w5", { opacity: 0, filter: "blur(10px)", y: 14 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out", immediateRender: true }, 13.37);
-      tl.fromTo("#h5-w6", { opacity: 0, filter: "blur(10px)", y: 14 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 13.91);
+      tl.fromTo("#h4-w1", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 9.80);
+      tl.fromTo("#h4-w2", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 10.01);
+      tl.fromTo("#h4-w3", { opacity: 0, filter: "blur(10px)", y: 18 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 10.12);
+      tl.to("#h4", { opacity: 0, filter: "blur(10px)", duration: 0.12, ease: "power2.in" }, 11.83);
+      tl.set("#h4", { visibility: "hidden" }, 11.95);
+      tl.set("#h5", { visibility: "visible" }, 12.1);
+      tl.fromTo("#h5 .ln:not(.s)", { opacity: 0, scale: 1.6, filter: "blur(12px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "expo.out", stagger: 0.1 }, 12.1);
+      tl.fromTo("#h5-w9", { opacity: 0, filter: "blur(10px)", y: 14 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 13.26);
+      tl.fromTo("#h5-w10", { opacity: 0, filter: "blur(10px)", y: 14 }, { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.16, ease: "expo.out" }, 13.72);
       window.__timelines["type"] = tl;
     })();
   </script>
