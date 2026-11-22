@@ -1,0 +1,157 @@
+<template>
+  <style>
+/*base:start*/
+/* shared tokens — copied into each scene's <template> by build.py */
+@font-face{font-family:'Alexandria';font-weight:700;src:url('assets/fonts/Alexandria-700.ttf')}
+@font-face{font-family:'Alexandria';font-weight:800;src:url('assets/fonts/Alexandria-800.ttf')}
+@font-face{font-family:'Alexandria';font-weight:900;src:url('assets/fonts/Alexandria-900.ttf')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:400;src:url('assets/fonts/IBMPlexSansArabic-400.ttf')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:500;src:url('assets/fonts/IBMPlexSansArabic-500.ttf')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:700;src:url('assets/fonts/IBMPlexSansArabic-700.ttf')}
+@font-face{font-family:'Aref Ruqaa';font-weight:700;src:url('assets/fonts/ArefRuqaa-700.ttf')}
+@font-face{font-family:'Bricolage Grotesque';font-weight:800;src:url('assets/fonts/BricolageGrotesque-800.ttf')}
+#root{position:absolute;inset:0;overflow:hidden;direction:rtl;font-family:'IBM Plex Sans Arabic',sans-serif;
+  --blue:var(--brand-blue,#2B3BFF);--yel:var(--brand-yellow,#FFD21F);--ink:#0B0F2A;--red:#F2283A;--paper:#EFE7DD;--out:#D9FDD3}
+#root *{box-sizing:border-box;margin:0;padding:0}
+.abs{position:absolute}
+.en{font-family:'Inter',sans-serif;direction:ltr;unicode-bidi:isolate}
+/* chat world */
+.wall{position:absolute;inset:-200px;background-color:var(--paper);
+ background-image:url('assets/img/doodle.svg')}
+.wall.dark{background-color:#0B141A;background-image:url('assets/img/doodle-dark.svg')}
+.status{position:absolute;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 46px;direction:ltr;font:600 30px 'Inter';color:#fff;z-index:6}
+.status .ic{display:flex;gap:10px;align-items:center}
+.status .bat{width:50px;height:24px;border:3px solid currentColor;border-radius:7px;position:relative;opacity:.9}
+.status .bat::after{content:"";position:absolute;inset:3px 14px 3px 3px;background:currentColor;border-radius:2px}
+.head{position:absolute;top:0;left:0;right:0;height:218px;padding:64px 30px 0;display:flex;align-items:center;gap:20px;background:#0F5D52;color:#fff;z-index:5}
+.head .back{font:500 54px 'Inter';opacity:.9;transform:scaleX(-1)}
+.avs{display:flex;flex-direction:row-reverse}
+.avs i{width:84px;height:84px;border-radius:50%;border:4px solid #0F5D52;margin-left:-26px;display:grid;place-items:center;font:700 34px 'IBM Plex Sans Arabic';font-style:normal;color:#fff}
+.head .nm{font-weight:700;font-size:42px;line-height:1.15}
+.head .sub{font-size:27px;opacity:.78;white-space:nowrap}
+.b{position:relative;max-width:640px;padding:12px 22px 34px;border-radius:24px;font-size:35px;line-height:1.38;background:#fff;color:#111B21;align-self:flex-start;box-shadow:0 2px 0 rgba(11,20,26,.13)}
+.b.out{background:var(--out);align-self:flex-end}
+.b .who{display:block;font-size:27px;font-weight:700;margin-bottom:2px}
+.b .tm{position:absolute;bottom:6px;left:18px;font:500 21px 'Inter';color:#667781;direction:ltr}
+.b .tk{color:#53BDEB;margin-left:4px}
+.b.dk{background:#202C33;color:#E9EDEF}.b.dk.out{background:#005C4B}.b.dk .tm{color:#8696A0}
+.inputbar{position:absolute;left:0;right:0;bottom:0;height:170px;background:#F0F2F5;display:flex;align-items:center;gap:18px;padding:0 26px 30px;z-index:5}
+.inputbar .fld{flex:1;height:96px;border-radius:48px;background:#fff;color:#8696A0;font-size:36px;display:flex;align-items:center;padding:0 34px}
+.inputbar .mic{width:96px;height:96px;border-radius:50%;background:#00A884;display:grid;place-items:center}
+.inputbar.dk{background:#0B141A}.inputbar.dk .fld{background:#202C33}
+.chip{align-self:center;background:#FFF5C4;color:#54656F;font-size:27px;padding:6px 22px;border-radius:12px;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+/* type */
+.tape{display:inline-block;white-space:nowrap;font-family:'Alexandria';font-weight:900;line-height:1.12;padding:.04em .32em .16em;color:var(--ink);background:var(--yel);
+  clip-path:polygon(1.2% 0,99% 3%,100% 22%,98.6% 47%,100% 71%,99.2% 100%,.6% 97%,0 74%,1.4% 50%,0 24%)}
+.tape.w{background:#fff}.tape.r{background:var(--red);color:#fff}.tape.b{background:var(--blue);color:#fff}.tape.k{background:var(--ink);color:#fff}
+.stamp{display:inline-block;white-space:nowrap;font-family:'Alexandria';font-weight:900;color:var(--red);border:12px solid var(--red);border-radius:26px;padding:.02em .3em .12em;line-height:1.1;
+  -webkit-mask-image:url('assets/img/stamp-mask.svg');mask-image:url('assets/img/stamp-mask.svg')}
+.note{font-family:'Aref Ruqaa';font-weight:700;color:var(--red)}
+.sub-en{font:600 30px 'Inter';direction:ltr;letter-spacing:.005em}
+/*base:end*/
+#hk-cam{position:absolute;inset:0}
+#hk-feed{position:absolute;left:0;right:0;top:250px;display:flex;flex-direction:column;gap:12px;padding:0 34px}
+#hk-dim{position:absolute;inset:0;background:var(--ink);opacity:0;z-index:7}
+.badge{margin-right:auto;min-width:92px;height:92px;border-radius:46px;background:#25D366;color:#fff;font:800 48px/92px 'Inter';text-align:center;padding:0 22px;direction:ltr}
+.nt{position:absolute;left:24px;right:24px;top:22px;height:132px;border-radius:34px;background:rgba(245,245,247,.96);box-shadow:0 18px 40px rgba(0,0,0,.25);display:flex;align-items:center;gap:22px;padding:0 26px;z-index:9;color:#111}
+.nt .ap{width:78px;height:78px;border-radius:20px;background:#25D366;display:grid;place-items:center;flex-shrink:0}
+.nt b{display:block;font-size:31px}
+.nt span{font-size:29px;color:#333}
+.nt .en{margin-right:auto;font-size:24px;color:#888;align-self:flex-start;margin-top:22px}
+#hk-type{position:absolute;left:120px;width:768px;top:318px;text-align:center;z-index:10}
+#hk-l1{font-size:92px;transform-origin:50% 50%}
+#hk-l2{font-size:142px;margin-top:-6px;transform-origin:50% 50%}
+#hk-num{position:relative;display:inline-block}
+#hk-strike{position:absolute;left:-26px;top:22px;width:calc(100% + 52px);height:150px;overflow:visible}
+#hk-l3{position:absolute;left:0;right:0;top:118px;text-align:center}
+#hk-l3 .tape{font-size:138px}
+.hk-en{position:absolute;left:120px;width:768px;top:652px;text-align:center;color:#fff;z-index:10}
+.hk-en span{background:var(--ink);padding:6px 16px;border-radius:8px}
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920" data-layout-allow-overlap>
+    <div id="hk-cam">
+      <div class="wall"></div>
+      <div id="hk-feed" data-layout-ignore>
+        <div class="b"><span class="who" style="color:#C2185B">منى</span>السلام عليكم 👋<span class="tm">11:41 PM</span></div>
+        <div class="b"><span class="who" style="color:#1565C0">أحمد</span>بكام ده؟<span class="tm">11:41 PM</span></div>
+        <div class="b"><span class="who" style="color:#6A1B9A">سارة</span>لسه متاح؟ 👀<span class="tm">11:42 PM</span></div>
+        <div class="b out">حاضر ثواني 🙏<span class="tm">11:42 PM<span class="tk">✓✓</span></span></div>
+        <div class="b"><span class="who" style="color:#E65100">كريم</span>عايز ٣ قطع<span class="tm">11:42 PM</span></div>
+        <div class="b"><span class="who" style="color:#00897B">هبة</span>الشحن لإسكندرية بكام؟<span class="tm">11:43 PM</span></div>
+        <div class="b"><span class="who" style="color:#C2185B">منى</span>🎤 ▬▬▬▬▬▬▬ 0:12<span class="tm">11:43 PM</span></div>
+        <div class="b"><span class="who" style="color:#AD1457">يوسف</span>فيه ألوان تانية؟<span class="tm">11:43 PM</span></div>
+        <div class="b"><span class="who" style="color:#1565C0">أحمد</span>العنوان: ١٤ ش عباس العقاد<span class="tm">11:44 PM</span></div>
+        <div class="b"><span class="who" style="color:#6A1B9A">سارة</span>عايزة ٢ مقاس L<span class="tm">11:44 PM</span></div>
+        <div class="b"><span class="who" style="color:#2E7D32">مصطفى</span>رد بقى 😤<span class="tm">11:45 PM</span></div>
+        <div class="b out">أيوه متاح<span class="tm">11:45 PM<span class="tk">✓✓</span></span></div>
+        <div class="b"><span class="who" style="color:#4527A0">نورا</span>📷 صورة<span class="tm">11:45 PM</span></div>
+        <div class="b"><span class="who" style="color:#E65100">كريم</span>الدفع كاش ينفع؟<span class="tm">11:46 PM</span></div>
+        <div class="b"><span class="who" style="color:#00897B">هبة</span>فين الأوردر بتاعي؟؟<span class="tm">11:46 PM</span></div>
+        <div class="b"><span class="who" style="color:#C2185B">منى</span>ابعتلي اللوكيشن 📍<span class="tm">11:46 PM</span></div>
+        <div class="b"><span class="who" style="color:#AD1457">يوسف</span>ينفع أبدّل؟<span class="tm">11:47 PM</span></div>
+        <div class="b"><span class="who" style="color:#1565C0">أحمد</span>؟؟؟<span class="tm">11:47 PM</span></div>
+        <div class="b"><span class="who" style="color:#2E7D32">مصطفى</span>هو الخصم لسه شغال؟<span class="tm">11:47 PM</span></div>
+        <div class="b"><span class="who" style="color:#6A1B9A">سارة</span>حجزتلي؟<span class="tm">11:48 PM</span></div>
+        <div class="b"><span class="who" style="color:#4527A0">نورا</span>عايزة الأسود 🖤<span class="tm">11:48 PM</span></div>
+        <div class="b"><span class="who" style="color:#00897B">هبة</span>ألو؟<span class="tm">11:48 PM</span></div>
+        <div class="b"><span class="who" style="color:#E65100">كريم</span>امتى هيوصل؟<span class="tm">11:48 PM</span></div>
+        <div class="b"><span class="who" style="color:#C2185B">منى</span>تمام هاخد واحد 👍<span class="tm">11:49 PM</span></div>
+        <div class="b"><span class="who" style="color:#AD1457">يوسف</span>بكام الشحن؟<span class="tm">11:49 PM</span></div>
+        <div class="b"><span class="who" style="color:#1565C0">أحمد</span>لو سمحت رد 🙏<span class="tm">11:49 PM</span></div>
+      </div>
+      <div class="inputbar" data-layout-ignore><div class="fld">اكتب رسالة</div><div class="mic"><svg width="40" height="40" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div></div>
+      <div class="head" data-layout-ignore>
+        <span class="back">‹</span>
+        <div class="avs"><i style="background:#C2185B">م</i><i style="background:#1565C0">أ</i><i style="background:#6A1B9A">س</i></div>
+        <div><div class="nm">زباين الصفحة 🛍️</div><div class="sub">منى، أحمد، سارة و ٤٢ تانيين</div></div>
+        <div class="badge" id="hk-badge">1</div>
+      </div>
+      <div class="status"><span>11:49</span><span class="ic">▂▄▆ 5G <span class="bat"></span></span></div>
+      <div class="nt" id="hk-n1" data-layout-ignore><div class="ap"><svg width="44" height="44" viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z" fill="#fff"/></svg></div><div><b>منى</b><span>عايزة الطقم الأزرق 💙</span></div><span class="en">now</span></div>
+      <div class="nt" id="hk-n2" data-layout-ignore><div class="ap"><svg width="44" height="44" viewBox="0 0 24 24"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z" fill="#fff"/></svg></div><div><b>زباين الصفحة</b><span>+٣٧ رسالة جديدة</span></div><span class="en">now</span></div>
+    </div>
+    <div id="hk-dim"></div>
+
+    <div id="hk-type">
+      <div id="hk-l1"><span class="tape w">عندك</span></div>
+      <div id="hk-l2"><span class="tape"><span id="hk-num">٣٧<svg id="hk-strike" viewBox="0 0 200 150" preserveAspectRatio="none"><path id="hk-strike-p" d="M8 92 C 50 70, 120 60, 192 52 M14 112 C 70 92, 130 84, 188 74" fill="none" stroke="#F2283A" stroke-width="16" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" opacity="0"/></svg></span> أوردر؟</span></div>
+      <div id="hk-l3"><span class="tape r">لأ… ٢٢ 😬</span></div>
+    </div>
+    <div class="hk-en sub-en" id="hk-en1"><span>37 orders on WhatsApp?</span></div>
+    <div class="hk-en sub-en" id="hk-en2"><span>Nope. Only 22 made it.</span></div>
+  </div>
+  <script>
+    (function(){
+      const tl = gsap.timeline({ paused: true });
+      // the flood: feed scrolls the whole scene, notifications drop in
+      tl.fromTo("#hk-feed", { y: 0 }, { y: -1520, duration: 2.62, ease: "power1.in" }, 0);
+      const badge = { v: 1 };
+      tl.fromTo(badge, { v: 1 }, { v: 37, duration: 1.3, ease: "power2.in",
+        onUpdate: () => { document.querySelector("#hk-badge").textContent = Math.round(badge.v); } }, 0);
+      tl.fromTo("#hk-badge", { scale: 1 }, { scale: 1.18, duration: 0.08, yoyo: true, repeat: 7, ease: "power1.inOut" }, 0.1);
+      tl.fromTo("#hk-n1", { y: -190 }, { y: 0, duration: 0.42, ease: "expo.out" }, 0.12);
+      tl.fromTo("#hk-n2", { y: -190 }, { y: 0, duration: 0.42, ease: "expo.out" }, 0.62);
+      tl.to("#hk-n1", { y: 26, scale: 0.94, opacity: 0.55, duration: 0.3, ease: "power2.out" }, 0.62);
+
+      // headline is on screen at frame 0, already landing
+      tl.fromTo("#hk-l1", { scale: 1.16, rotation: -5 }, { scale: 1, rotation: -3, duration: 0.45, ease: "expo.out" }, 0);
+      tl.fromTo("#hk-l2", { scale: 1.22, rotation: 5 }, { scale: 1, rotation: 2, duration: 0.5, ease: "expo.out" }, 0.04);
+      tl.fromTo("#hk-en1", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.25);
+
+      // the truth: strike the 37, knock the line out, slap the 22
+      tl.set("#hk-strike-p", { opacity: 1 }, 1.34);
+      tl.to("#hk-strike-p", { strokeDashoffset: 0, duration: 0.13, ease: "power2.in" }, 1.34);
+      tl.to("#hk-l2", { rotation: -9, y: 70, opacity: 0, duration: 0.16, ease: "power3.in" }, 1.47);
+      tl.to("#hk-l1", { y: -30, opacity: 0, duration: 0.14, ease: "power3.in" }, 1.47);
+      tl.to("#hk-en1", { opacity: 0, duration: 0.08 }, 1.47);
+      tl.fromTo("#hk-l3", { scale: 1.5, rotation: 7, opacity: 0 }, { scale: 1, rotation: -2, opacity: 1, duration: 0.42, ease: "back.out(2.2)" }, 1.5);
+      tl.fromTo("#hk-en2", { opacity: 0 }, { opacity: 1, duration: 0.15 }, 1.66);
+      tl.to("#hk-dim", { opacity: 0.5, duration: 0.12, ease: "power2.out" }, 1.48);
+      tl.to("#hk-cam", { keyframes: { x: [0, -26, 22, -14, 9, -4, 0], y: [0, 14, -18, 10, -6, 2, 0] }, duration: 0.34, ease: "none" }, 1.48);
+      // whip out on the cut
+      tl.to("#hk-cam", { y: -340, duration: 0.14, ease: "power3.in" }, 2.48);
+      tl.to("#hk-type, .hk-en", { y: -340, duration: 0.14, ease: "power3.in" }, 2.48);
+      window.__timelines["hook"] = tl;
+    })();
+  </script>
+</template>
