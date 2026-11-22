@@ -1,0 +1,511 @@
+<template>
+  <style>
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:400;src:url('assets/fonts/IBMPlexSansArabic-400.ttf')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:500;src:url('assets/fonts/IBMPlexSansArabic-500.ttf')}
+@font-face{font-family:'IBM Plex Sans Arabic';font-weight:700;src:url('assets/fonts/IBMPlexSansArabic-700.ttf')}
+@font-face{font-family:'Alexandria';font-weight:700;src:url('assets/fonts/Alexandria-700.ttf')}
+@font-face{font-family:'Alexandria';font-weight:900;src:url('assets/fonts/Alexandria-900.ttf')}
+@font-face{font-family:'Bricolage Grotesque';font-weight:800;src:url('assets/fonts/BricolageGrotesque-800.ttf')}
+#root{position:absolute;inset:0;background:#0E1338;overflow:hidden}
+#st-canvas{position:absolute;left:0;top:0;width:1080px;height:1920px}
+  </style>
+  <div id="root" data-composition-id="stage" data-width="1080" data-height="1920">
+    <canvas id="st-canvas" width="1080" height="1920" data-layout-ignore></canvas>
+  </div>
+  <script>
+    // Promise the runtime waits on before the first seek; the module below resolves it.
+    window.__hf = window.__hf || {};
+    window.__hf.buildReady = window.__hf.buildReady || {};
+    window.__hf.buildReady["stage"] = new Promise(r => { window.__stageReady = r; });
+    window.__timelines["stage"] = gsap.timeline({ paused: true }).set({}, {}, 15);
+  </script>
+  <script type="module">
+import * as THREE from "./assets/lib/three.module.min.js";
+
+/* ================================================================
+   khalas · 3D phone stage. Everything is a pure function of t.
+   ================================================================ */
+const BLUE = "#2B3BFF", YEL = "#FFD21F", INK = "#0B0F2A";
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lin = (t, a, b) => clamp((t - a) / (b - a));
+const mix = (a, b, p) => a + (b - a) * p;
+const e3o = p => 1 - Math.pow(1 - p, 3);
+const e4o = p => 1 - Math.pow(1 - p, 4);
+const e3i = p => p * p * p;
+const e2io = p => (p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+const eExp = p => (p >= 1 ? 1 : 1 - Math.pow(2, -10 * p));
+const back = (p, s = 1.7) => 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2);
+const ar = n => String(n).replace(/[0-9]/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
+
+/* ---------- renderer ---------- */
+const canvas = document.getElementById("st-canvas");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true, alpha: false });
+renderer.setPixelRatio(1);
+renderer.setSize(1080, 1920, false);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.NeutralToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(28, 1080 / 1920, 0.05, 100);
+
+/* ---------- environment for reflections: dark room with soft strips ---------- */
+function buildEnv() {
+  const env = new THREE.Scene();
+  const room = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 12), new THREE.MeshBasicMaterial({ color: 0x0b0d18, side: THREE.BackSide }));
+  env.add(room);
+  const strip = (w, h, x, y, z, ry, c, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c).multiplyScalar(k), side: THREE.DoubleSide }));
+    m.position.set(x, y, z); m.rotation.y = ry; env.add(m);
+  };
+  strip(1.2, 7, -5.5, 0, 0, Math.PI / 2, 0xffffff, 3.2);
+  strip(1.0, 7, 5.5, 0, 1, -Math.PI / 2, 0x9fb0ff, 2.2);
+  strip(7, 1.0, 0, 5.5, 0, 0, 0xffffff, 1.6);
+  const top = env.children[env.children.length - 1]; top.rotation.x = Math.PI / 2;
+  strip(4, 4, 0, 0, 5.8, Math.PI, 0xffffff, 0.6);
+  const pm = new THREE.PMREMGenerator(renderer);
+  return pm.fromScene(env, 0.02).texture;
+}
+const ENV = buildEnv();
+scene.environment = ENV;
+scene.environmentIntensity = 0.55;
+
+/* ---------- the table surface ---------- */
+function noiseTex() {
+  const c = document.createElement("canvas"); c.width = c.height = 256;
+  const g = c.getContext("2d"); const im = g.createImageData(256, 256);
+  let s = 1234567;
+  const rnd = () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  for (let i = 0; i < im.data.length; i += 4) { const v = 110 + rnd() * 60; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  g.putImageData(im, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(40, 40);
+  return t;
+}
+const floorMat = new THREE.MeshStandardMaterial({ color: 0x10163f, roughness: 0.92, metalness: 0, bumpMap: noiseTex(), bumpScale: 0.6 });
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), floorMat);
+floor.receiveShadow = true;
+scene.add(floor);
+
+/* ---------- lights ---------- */
+const hemi = new THREE.HemisphereLight(0xffffff, 0x1a1f40, 0.6);
+scene.add(hemi);
+const key = new THREE.DirectionalLight(0xfff4e6, 2.0);
+key.position.set(-2.6, 3.4, 6);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.camera.left = -3; key.shadow.camera.right = 3; key.shadow.camera.top = 3; key.shadow.camera.bottom = -3;
+key.shadow.camera.near = 1; key.shadow.camera.far = 20;
+key.shadow.radius = 6; key.shadow.bias = -0.0004;
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x8fa2ff, 1.2);
+rim.position.set(3, -2, 3);
+scene.add(rim);
+const lamp = new THREE.SpotLight(0xffc98a, 0, 12, 0.55, 1, 2);
+lamp.position.set(1.4, 2.2, 4.2); lamp.target.position.set(0, 0, 0); scene.add(lamp); scene.add(lamp.target);
+const glow = new THREE.PointLight(0xbfe0ff, 0, 3.2, 1.6);   // light the screen spills onto the table
+scene.add(glow);
+
+/* ---------- the phone ---------- */
+const PW = 0.76, PH = 1.6, PR = 0.115, DEPTH = 0.052, BEV = 0.013;
+function rrShape(w, h, r) {
+  const s = new THREE.Shape(), x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+  return s;
+}
+const phone = new THREE.Group();
+const bodyGeo = new THREE.ExtrudeGeometry(rrShape(PW - 2 * BEV, PH - 2 * BEV, PR - BEV), { depth: DEPTH, bevelEnabled: true, bevelThickness: BEV, bevelSize: BEV, bevelSegments: 6, curveSegments: 24 });
+bodyGeo.translate(0, 0, -DEPTH / 2);
+const glassMat = new THREE.MeshPhysicalMaterial({ color: 0x07080c, roughness: 0.12, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05 });
+const frameMat = new THREE.MeshPhysicalMaterial({ color: 0x3a3d48, roughness: 0.32, metalness: 1.0, clearcoat: 0.3 });
+const body = new THREE.Mesh(bodyGeo, [glassMat, frameMat]);
+body.castShadow = true;
+phone.add(body);
+const FRONT = DEPTH / 2 + BEV + 0.0008;
+// buttons
+const btnMat = frameMat;
+const addBtn = (x, y, h) => { const b = new THREE.Mesh(new THREE.BoxGeometry(0.012, h, 0.026), btnMat); b.position.set(x, y, 0); b.castShadow = true; phone.add(b); };
+addBtn(PW / 2 + 0.004, 0.36, 0.2);
+addBtn(-PW / 2 - 0.004, 0.42, 0.11);
+addBtn(-PW / 2 - 0.004, 0.24, 0.17);
+// screen
+const SW = 1080, SH = 2340;
+const scr = document.createElement("canvas"); scr.width = SW; scr.height = SH;
+const g = scr.getContext("2d");
+const scrTex = new THREE.CanvasTexture(scr);
+scrTex.colorSpace = THREE.SRGBColorSpace;
+scrTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+const SIW = PW - 0.05, SIH = PH - 0.05;
+const scrGeo = new THREE.ShapeGeometry(rrShape(SIW, SIH, PR - 0.03), 24);
+{ const p = scrGeo.attributes.position, uv = scrGeo.attributes.uv;
+  for (let i = 0; i < p.count; i++) uv.setXY(i, (p.getX(i) + SIW / 2) / SIW, (p.getY(i) + SIH / 2) / SIH); }
+const scrMat = new THREE.MeshBasicMaterial({ map: scrTex, toneMapped: false });
+const screen = new THREE.Mesh(scrGeo, scrMat);
+screen.position.z = FRONT;
+phone.add(screen);
+// glass sheen on top of the screen: pure reflection, added
+const sheen = new THREE.Mesh(new THREE.ShapeGeometry(rrShape(PW - 0.02, PH - 0.02, PR - 0.01), 24),
+  new THREE.MeshBasicMaterial({ color: 0x000000, envMap: ENV, combine: THREE.AddOperation, reflectivity: 0.22, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+sheen.position.z = FRONT + 0.0015;
+phone.add(sheen);
+// back: camera bump
+const bump = new THREE.Mesh(new THREE.ExtrudeGeometry(rrShape(0.3, 0.3, 0.07), { depth: 0.012, bevelEnabled: true, bevelThickness: 0.006, bevelSize: 0.006, bevelSegments: 3 }), glassMat);
+bump.position.set(-0.17, 0.56, -DEPTH / 2 - BEV - 0.012); phone.add(bump);
+scene.add(phone);
+
+/* ================================================================
+   Screen UI, drawn in 2D onto the phone's display
+   ================================================================ */
+const F = (w, s, fam = "IBM Plex Sans Arabic") => `${w} ${s}px "${fam}"`;
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function wrap(text, font, maxW) {
+  g.font = font; const words = text.split(" "); const lines = []; let cur = "";
+  for (const w of words) { const t = cur ? cur + " " + w : w; if (g.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }
+  if (cur) lines.push(cur); return lines;
+}
+// doodle wallpaper tiles
+const tile = document.createElement("canvas"); tile.width = tile.height = 220;
+{ const c = tile.getContext("2d"); c.strokeStyle = "rgba(255,255,255,0.045)"; c.lineWidth = 4; c.lineCap = "round";
+  c.beginPath(); c.arc(40, 44, 16, 0, 7); c.stroke();
+  c.beginPath(); c.moveTo(120, 30); c.lineTo(146, 56); c.moveTo(146, 30); c.lineTo(120, 56); c.stroke();
+  c.strokeRect(30, 140, 38, 28);
+  c.beginPath(); c.moveTo(136, 160); c.quadraticCurveTo(156, 126, 176, 160); c.stroke();
+  c.beginPath(); c.moveTo(90, 96); c.lineTo(102, 108); c.lineTo(122, 86); c.stroke(); }
+const tilePat = g.createPattern(tile, "repeat");
+
+function statusBar(time, light) {
+  g.fillStyle = light ? "#fff" : "#E9EDEF";
+  g.direction = "ltr"; g.textAlign = "left"; g.font = F(700, 44, "Alexandria");
+  g.fillText(time, 110, 92);
+  // island
+  g.fillStyle = "#000"; rr(SW / 2 - 150, 34, 300, 84, 42); g.fill();
+  // signal + battery
+  g.fillStyle = light ? "#fff" : "#E9EDEF";
+  for (let i = 0; i < 4; i++) { rr(840 + i * 18, 86 - (i + 1) * 10, 12, (i + 1) * 10, 3); g.fill(); }
+  g.strokeStyle = g.fillStyle; g.lineWidth = 4; rr(930, 58, 62, 32, 9); g.stroke(); rr(936, 64, 40, 20, 4); g.fill();
+}
+
+/* ---- chat model ---- */
+const NAMES = [["منى", "#F48FB1"], ["أحمد", "#64B5F6"], ["سارة", "#CE93D8"], ["كريم", "#FFB74D"], ["هبة", "#4DB6AC"], ["يوسف", "#F06292"], ["نورا", "#9575CD"], ["مصطفى", "#81C784"]];
+const ASKS = ["بكام ده؟", "لسه متاح؟", "العنوان فين؟ 📍", "عايزة ٢ مقاس L", "الشحن بكام؟", "فيه ألوان تانية؟", "🎤 ▬▬▬▬▬ 0:14", "رد بقى 😤", "ينفع أدفع كاش؟", "فين الأوردر بتاعي؟؟", "📷 صورة", "امتى هيوصل؟", "؟؟؟", "حجزتلي؟", "الطقم الأزرق خلص؟", "ابعت اللوكيشن", "بكام الشحن لإسكندرية؟", "ممكن خصم؟ 🙏", "عايز ٣ قطع", "ألو؟"];
+const FLOOD = [];
+{ let t = -1; for (let i = 0; i < 46; i++) {
+    if (i < 6) t = -1; else if (t < 3.2) t += 0.3; else t += 0.105;
+    const [n, c] = NAMES[(i * 3) % NAMES.length];
+    FLOOD.push({ t: i < 6 ? -1 : t, name: n, color: c, text: ASKS[(i * 7) % ASKS.length], time: "2:0" + (i % 10) + " AM" });
+} }
+const BANNERS = [[3.3, "منى", "بكام؟"], [3.86, "أحمد", "متاح؟"], [4.5, "سارة", "العنوان فين؟ 📍"], [4.95, "كريم", "بكام الشحن؟"], [5.4, "هبة", "؟؟؟"], [5.8, "يوسف", "رد بقى 😤"]];
+
+function bubbleSize(m, font, maxW) {
+  const lines = wrap(m.text, font, maxW);
+  g.font = font; let w = 0; for (const l of lines) w = Math.max(w, g.measureText(l).width);
+  const nameH = m.name ? 50 : 0;
+  if (m.name) { g.font = F(700, 38); w = Math.max(w, g.measureText(m.name).width); }
+  if (m.label) { g.font = F(700, 36); w = Math.max(w, g.measureText(m.label).width); }
+  return { lines, w: Math.max(w, 230) + 64, h: nameH + (m.label ? 50 : 0) + lines.length * 74 + 66 };
+}
+function drawBubble(m, x, y, sz, out, dark, font, sc = 1, alpha = 1) {
+  g.save(); g.globalAlpha = alpha;
+  const ox = out ? x : x + sz.w, oy = y + sz.h;
+  g.translate(ox, oy); g.scale(sc, sc); g.translate(-ox, -oy);
+  g.fillStyle = out ? (dark ? "#005C4B" : "#D9FDD3") : (dark ? "#202C33" : "#fff");
+  rr(x, y, sz.w, sz.h, 30); g.fill();
+  g.direction = "rtl"; g.textAlign = "right";
+  let ty = y + 58;
+  if (m.name) { g.font = F(700, 38); g.fillStyle = m.color; g.fillText(m.name, x + sz.w - 32, ty); ty += 52; }
+  if (m.label) { g.font = F(700, 36); g.fillStyle = YEL; g.fillText(m.label, x + sz.w - 32, ty); ty += 52; }
+  g.font = font; g.fillStyle = dark ? "#E9EDEF" : "#111B21";
+  for (const l of sz.lines) { g.fillText(l, x + sz.w - 32, ty); ty += 74; }
+  g.direction = "ltr"; g.textAlign = "left"; g.font = F(500, 30); g.fillStyle = dark ? "#8696A0" : "#667781";
+  g.fillText(m.time + (out ? "  ✓✓" : ""), x + 28, y + sz.h - 22);
+  g.restore();
+}
+
+function chatChrome(title, sub, badge, avColor, avText) {
+  g.fillStyle = "#0B141A"; g.fillRect(0, 0, SW, SH);
+  g.fillStyle = tilePat; g.fillRect(0, 0, SW, SH);
+  g.fillStyle = "#1F2C34"; g.fillRect(0, 0, SW, 330);
+  g.fillStyle = "#E9EDEF"; g.font = F(500, 70, "Alexandria"); g.direction = "ltr"; g.textAlign = "left"; g.fillText("‹", 900, 262); // back (rtl)
+  g.fillStyle = avColor; g.beginPath(); g.arc(800, 238, 62, 0, 7); g.fill();
+  g.fillStyle = "#fff"; g.font = F(700, 56); g.textAlign = "center"; g.fillText(avText, 800, 258);
+  g.direction = "rtl"; g.textAlign = "right"; g.fillStyle = "#E9EDEF"; g.font = F(700, 54); g.fillText(title, 710, 232);
+  g.font = F(400, 38); g.fillStyle = "#8696A0"; g.fillText(sub, 710, 290);
+  if (badge) {
+    g.direction = "ltr"; g.textAlign = "center"; g.font = F(700, 48, "Alexandria");
+    const w = Math.max(110, g.measureText(badge).width + 60);
+    g.fillStyle = "#25D366"; rr(70, 190, w, 96, 48); g.fill(); g.fillStyle = "#06221B"; g.fillText(badge, 70 + w / 2, 256);
+  }
+  // input bar
+  g.fillStyle = "#0B141A"; g.fillRect(0, SH - 230, SW, 230);
+  g.fillStyle = "#202C33"; rr(150, SH - 200, 870, 120, 60); g.fill();
+  g.fillStyle = "#8696A0"; g.font = F(400, 44); g.direction = "rtl"; g.textAlign = "right"; g.fillText("اكتب رسالة", 960, SH - 124);
+  g.fillStyle = "#00A884"; g.beginPath(); g.arc(80, SH - 140, 62, 0, 7); g.fill();
+}
+
+function drawFlood(t) {
+  const shown = FLOOD.filter(m => m.t <= t);
+  const unread = Math.min(99, shown.length + 31);
+  chatChrome("زباين الصفحة 🛍️", "منى، أحمد، سارة و ٤٢ تانيين", ar(unread), "#AD1457", "ز");
+  statusBar("2:07", false);
+  const font = F(500, 52);
+  let y = SH - 250;
+  g.save(); g.beginPath(); g.rect(0, 330, SW, SH - 560); g.clip();
+  for (let i = shown.length - 1; i >= 0 && y > 330; i--) {
+    const m = shown[i]; const sz = bubbleSize(m, font, 700);
+    const p = m.t < 0 ? 1 : lin(t, m.t, m.t + 0.16);
+    y -= sz.h + 22;
+    drawBubble(m, SW - 44 - sz.w, y + (1 - e3o(p)) * 40, sz, false, true, font, mix(0.8, 1, back(p)), mix(0, 1, p));
+  }
+  g.restore();
+  // drop-down banners
+  for (let k = BANNERS.length - 1; k >= 0; k--) {
+    const [bt, nm, tx] = BANNERS[k]; if (t < bt) continue;
+    const nx = BANNERS.find(b => b[0] > bt && b[0] <= t);
+    const gone = nx ? e3o(lin(t, nx[0], nx[0] + 0.2)) : 0;
+    if (gone >= 1) continue;
+    const p = e4o(lin(t, bt, bt + 0.28));
+    const yy = mix(-260, 150, p) - gone * 120, sc = 1, al = 1 - gone;
+    g.save(); g.globalAlpha = al; g.translate(SW / 2, yy); g.scale(sc, sc); g.translate(-SW / 2, -yy);
+    g.fillStyle = "rgba(242,242,247,0.97)"; rr(40, yy, SW - 80, 200, 54); g.fill();
+    g.fillStyle = "#25D366"; rr(SW - 190, yy + 40, 120, 120, 30); g.fill();
+    g.fillStyle = "#fff"; g.beginPath(); g.arc(SW - 130, yy + 98, 34, 0, 7); g.fill();
+    g.direction = "rtl"; g.textAlign = "right"; g.fillStyle = "#111"; g.font = F(700, 46); g.fillText(nm, SW - 220, yy + 88);
+    g.font = F(500, 46); g.fillStyle = "#333"; g.fillText(tx, SW - 220, yy + 150);
+    g.direction = "ltr"; g.textAlign = "left"; g.font = F(500, 34); g.fillStyle = "#888"; g.fillText("now", 90, yy + 76);
+    g.restore();
+  }
+}
+
+/* bot conversation */
+const BOT = [
+  { t: -1, side: "in", name: "منى", color: "#F48FB1", text: "السلام عليكم، الطقم الأزرق متاح مقاس L؟ بكام؟", time: "2:14 AM" },
+  { t: 6.95, side: "typing" },
+  { t: 7.38, side: "out", label: "🤖 رد خلاص التلقائي", text: "أيوه متاح ✅ ٤٥٠ ج + الشحن. أأكدلك الأوردر؟", time: "2:14 AM" },
+  { t: 7.98, side: "in", name: "منى", color: "#F48FB1", text: "أكيد 👍 على مدينة نصر", time: "2:15 AM" },
+  { t: 8.36, side: "order" }
+];
+function drawBot(t) {
+  chatChrome("منى أحمد", "online", null, "#C2185B", "م");
+  statusBar("2:15", false);
+  const font = F(500, 56);
+  // lay out from the top, chat-style, newest pushes older up
+  const items = [];
+  for (const m of BOT) {
+    if (m.t > t) continue;
+    if (m.side === "typing" && t >= 7.38) continue;
+    let h, w, sz;
+    if (m.side === "typing") { w = 230; h = 120; }
+    else if (m.side === "order") { w = 900; h = 560; }
+    else { sz = bubbleSize(m, font, 760); w = sz.w; h = sz.h; }
+    items.push({ m, w, h, sz });
+  }
+  let y = SH - 260; const pos = [];
+  for (let i = items.length - 1; i >= 0; i--) { y -= items[i].h + 30; pos[i] = y; }
+  g.save(); g.beginPath(); g.rect(0, 330, SW, SH - 560); g.clip();
+  items.forEach((it, i) => {
+    const m = it.m; const p = m.t < 0 ? 1 : lin(t, m.t, m.t + 0.2);
+    const out = m.side !== "in";
+    const x = out ? 44 : SW - 44 - it.w, yy = pos[i] + (1 - e3o(p)) * 50;
+    if (m.side === "typing") {
+      g.save(); g.globalAlpha = p; g.fillStyle = "#005C4B"; rr(x, yy, it.w, it.h, 30); g.fill();
+      for (let k = 0; k < 3; k++) { const a = 0.35 + 0.65 * Math.abs(Math.sin((t - m.t) * 9 - k * 0.9)); g.fillStyle = `rgba(233,237,239,${a})`; g.beginPath(); g.arc(x + 70 + k * 46, yy + 60, 14, 0, 7); g.fill(); }
+      g.restore();
+    } else if (m.side === "order") {
+      const sc = mix(0.85, 1, back(p));
+      g.save(); g.globalAlpha = p; g.translate(x, yy + it.h); g.scale(sc, sc); g.translate(-x, -(yy + it.h));
+      g.fillStyle = "#fff"; rr(x, yy, it.w, it.h, 36); g.fill();
+      g.fillStyle = BLUE; rr(x, yy, it.w, 118, [36, 36, 0, 0]); g.fill();
+      g.direction = "rtl"; g.textAlign = "right"; g.fillStyle = "#fff"; g.font = F(900, 50, "Alexandria");
+      g.fillText("✅ الأوردر اتأكد #1051", x + it.w - 40, yy + 78);
+      const rows = [["الاسم", "منى أحمد"], ["المنتج", "طقم أزرق · L"], ["العنوان", "مدينة نصر"], ["الإجمالي", "٤٥٠ ج"]];
+      rows.forEach(([k, v], r) => {
+        const ry = yy + 200 + r * 96;
+        const hp = e2io(lin(t, 8.6 + r * 0.07, 8.85 + r * 0.07));
+        if (r === 3) { g.fillStyle = YEL; rr(x + 30, ry - 62, (it.w - 60) * hp, 84, 12); g.fill(); }
+        g.textAlign = "right"; g.font = F(500, 46); g.fillStyle = "#5B628A"; g.fillText(k, x + it.w - 40, ry);
+        g.textAlign = "left"; g.direction = "rtl"; g.font = F(700, 48); g.fillStyle = INK;
+        g.fillText(v, x + 44, ry);
+        g.direction = "rtl";
+        if (r < 3) { g.fillStyle = "#E3E6F3"; g.fillRect(x + 40, ry + 32, it.w - 80, 3); }
+      });
+      g.restore();
+    } else {
+      drawBubble(m, x, yy, it.sz, out, true, font, mix(0.85, 1, back(p)), p);
+    }
+  });
+  g.restore();
+}
+
+/* lock screen: confirmations stack up while you sleep */
+const LOCKN = [[9.85, "#1052", "هبة · ٦٠٠ ج"], [10.45, "#1053", "كريم · ٣٠٠ ج"], [11.05, "#1054", "نورا · ٩٠٠ ج"]];
+function markPath(x, y, s, fill, tick) {
+  g.save(); g.translate(x, y); g.scale(s / 64, s / 64);
+  g.fillStyle = fill; rr(4, 4, 56, 46, 14); g.fill();
+  g.beginPath(); g.moveTo(12, 46); g.lineTo(10, 62); g.lineTo(28, 50); g.closePath(); g.fill();
+  g.strokeStyle = tick; g.lineWidth = 7; g.lineCap = "round"; g.lineJoin = "round";
+  g.beginPath(); g.moveTo(19, 28); g.lineTo(29, 38); g.lineTo(46, 18); g.stroke();
+  g.restore();
+}
+function drawLock(t) {
+  const gr = g.createLinearGradient(0, 0, 0, SH);
+  gr.addColorStop(0, "#141833"); gr.addColorStop(1, "#05060C");
+  g.fillStyle = gr; g.fillRect(0, 0, SW, SH);
+  // moon
+  g.fillStyle = "#F4E9C8"; g.beginPath(); g.arc(250, 470, 90, 0, 7); g.fill();
+  g.fillStyle = "#121630"; g.beginPath(); g.arc(290, 440, 82, 0, 7); g.fill();
+  statusBar("", true);
+  g.direction = "rtl"; g.textAlign = "center"; g.fillStyle = "#DADCE6"; g.font = F(500, 50); g.fillText("الجمعة ٢٢ نوفمبر", SW / 2, 640);
+  g.direction = "ltr"; g.fillStyle = "#fff"; g.font = F(700, 290, "Alexandria"); g.fillText("3:12", SW / 2, 920);
+  for (let k = LOCKN.length - 1; k >= 0; k--) {
+    const [nt, id, tx] = LOCKN[k]; if (t < nt) continue;
+    const newer = LOCKN.filter(n => n[0] <= t && n[0] > nt).length;
+    const p = e4o(lin(t, nt, nt + 0.3));
+    const yy = 1040 + newer * 250 + (1 - p) * -120;
+    g.save(); g.globalAlpha = p;
+    g.fillStyle = "rgba(236,238,245,0.95)"; rr(50, yy, SW - 100, 220, 50); g.fill();
+    g.fillStyle = BLUE; rr(SW - 200, yy + 46, 128, 128, 32); g.fill();
+    markPath(SW - 186, yy + 60, 100, "#fff", BLUE);
+    g.direction = "rtl"; g.textAlign = "right"; g.fillStyle = "#111"; g.font = F(700, 48);
+    g.fillText("أوردر اتأكد ✅ " + id, SW - 230, yy + 100);
+    g.font = F(500, 44); g.fillStyle = "#444"; g.fillText(tx, SW - 230, yy + 165);
+    g.direction = "ltr"; g.textAlign = "left"; g.font = F(500, 34); g.fillStyle = "#777"; g.fillText("khalas · now", 100, yy + 80);
+    g.restore();
+  }
+}
+
+/* brand screen for the CTA: logo + live founders counter */
+function drawBrand(t) {
+  g.fillStyle = BLUE; g.fillRect(0, 0, SW, SH);
+  g.strokeStyle = "rgba(255,255,255,0.10)"; g.lineWidth = 3;
+  for (let x = 0; x < SW; x += 90) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, SH); g.stroke(); }
+  for (let y = 0; y < SH; y += 90) { g.beginPath(); g.moveTo(0, y); g.lineTo(SW, y); g.stroke(); }
+  statusBar("3:13", true);
+  const lp = e4o(lin(t, 12.1, 12.5));
+  markPath(SW / 2 - 150 * mix(0.6, 1, lp), 230, 300 * mix(0.6, 1, lp), "#fff", BLUE);
+  g.direction = "ltr"; g.textAlign = "center"; g.fillStyle = "#fff"; g.font = F(800, 170, "Bricolage Grotesque");
+  g.fillText("khalas", SW / 2, 700);
+  // counter ticks down to 400, then pulses on the beat
+  const n = Math.round(mix(437, 400, e3o(lin(t, 12.25, 13.0))));
+  const beat = 60 / 128, ph = ((t - 12) / beat) % 1, pulse = t > 13 ? 1 + 0.06 * Math.pow(1 - ph, 3) : 1;
+  g.save(); g.translate(SW / 2, 1240); g.scale(pulse, pulse);
+  g.fillStyle = YEL; rr(-380, -190, 760, 300, 60); g.fill();
+  g.fillStyle = INK; g.font = F(900, 190, "Alexandria"); g.direction = "rtl"; g.fillText(ar(n), 0, 40);
+  g.restore();
+  g.direction = "rtl"; g.textAlign = "center"; g.fillStyle = "#fff"; g.font = F(700, 64);
+  g.fillText("مكان للمؤسسين بس", SW / 2, 1470);
+  // live dot
+  const blink = 0.35 + 0.65 * Math.pow(1 - ((t - 12) / beat) % 1, 2);
+  g.fillStyle = `rgba(255,80,90,${blink})`; g.beginPath(); g.arc(SW / 2 - 300, 1590, 18, 0, 7); g.fill();
+  g.fillStyle = "rgba(255,255,255,0.85)"; g.font = F(500, 46); g.fillText("بيتحجزوا دلوقتي", SW / 2 + 30, 1606);
+}
+
+function drawScreen(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.globalAlpha = 1;
+  if (t < 6.7) drawFlood(t);
+  else if (t < 9.5) drawBot(t);
+  else if (t < 12) drawLock(t);
+  else drawBrand(t);
+  // screen dims a touch on the night table, wakes on each notification
+  if (t >= 9.5 && t < 12) {
+    let wake = 0; for (const [nt] of LOCKN) wake = Math.max(wake, 1 - lin(t, nt, nt + 0.9));
+    g.fillStyle = `rgba(0,0,0,${0.35 * (1 - wake)})`; g.fillRect(0, 0, SW, SH);
+  }
+  scrTex.needsUpdate = true;
+}
+
+/* ================================================================
+   Camera, phone and light choreography
+   ================================================================ */
+const C_NIGHT = new THREE.Color("#1C2460"), C_BLUE = new THREE.Color(BLUE), C_DEEP = new THREE.Color("#121842");
+const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+const lerpV = (a, b, p) => a.clone().lerp(b, p);
+function buzz(t, windows, amp) {
+  let k = 0; for (const [a, b] of windows) if (t >= a && t < b) k = 1;
+  return k * amp;
+}
+function pose(t) {
+  let pp, pr, cp, ct, fc, keyI, glowI, hemiI;
+  if (t < 3.2) {                                   // S1 · 2 AM, flat on the table, buzzing; slow push-in
+    const p = e2io(lin(t, 0, 3.2));
+    pp = v3(0, -0.12, 0.066); pr = v3(0, 0, mix(-0.2, -0.08, p));
+    cp = v3(mix(0.3, 0.1, p), mix(-1.35, -1.0, p), mix(5.2, 4.35, p)); ct = v3(0, 0.3, 0);
+    fc = C_NIGHT; keyI = 0.75; glowI = 2.6; hemiI = 0.35;
+    const b = buzz(t, [[0, 0.55], [1.15, 1.6], [2.25, 2.75]], 1);
+    pp.x += b * 0.007 * Math.sin(t * 190); pr.z += b * 0.012 * Math.sin(t * 160);
+  } else if (t < 4.95) {                           // S2a · cut low: phone stands up at you, flood + banners
+    const p = e2io(lin(t, 3.2, 4.95));
+    pp = v3(0, 0.1, 0.62); pr = v3(0.72, mix(0.34, 0.24, p), 0.06);
+    cp = v3(mix(-1.1, -0.7, p), -2.7, 2.9); ct = v3(0.02, 0.32, 0.5);
+    fc = C_NIGHT; keyI = 0.9; glowI = 2.2; hemiI = 0.4;
+    const b = 1; pp.x += b * 0.008 * Math.sin(t * 200); pr.z += b * 0.014 * Math.sin(t * 170);
+  } else if (t < 6.7) {                            // S2b · cut close on the banners
+    const p = e2io(lin(t, 4.95, 6.7));
+    pp = v3(0, 0.05, 0.6); pr = v3(-0.22, mix(-0.32, -0.22, p), -0.05);
+    cp = v3(mix(1.0, 0.75, p), 1.25, mix(2.9, 2.6, p)); ct = v3(0.0, 0.48, 0.45);
+    fc = C_NIGHT; keyI = 0.9; glowI = 2.2; hemiI = 0.4;
+    pp.x += 0.008 * Math.sin(t * 200); pr.z += 0.014 * Math.sin(t * 170);
+  } else if (t < 9.5) {                            // S3 · lights on: phone squares up, camera dives to the screen
+    const a = e4o(lin(t, 6.7, 7.25)), d = e2io(lin(t, 6.7, 9.5));
+    pp = lerpV(v3(0, 0.05, 0.6), v3(0, 0.02, 0.85), a);
+    pr = v3(mix(-0.22, 0.0, a), mix(-0.22, mix(0.07, -0.05, d), a), mix(-0.05, 0, a));
+    cp = v3(mix(0.5, 0.0, a), mix(-0.6, -0.1, a), mix(5.4, 4.85, d)); ct = v3(0, mix(0.2, 0.45, a), 0.85);
+    const f = e2io(lin(t, 6.7, 6.95));
+    fc = C_NIGHT.clone().lerp(C_BLUE, f); keyI = mix(0.9, 2.1, f); glowI = mix(2.2, 0.6, f); hemiI = mix(0.4, 0.9, f);
+  } else if (t < 12) {                             // S4 · deep night, flat on the nightstand; ends in a dive
+    const p = lin(t, 9.5, 11.45), dive = e3i(lin(t, 11.45, 12));
+    pp = v3(0.0, 0.05, 0.066); pr = v3(0, 0, mix(0.32, 0.2, p));
+    cp = lerpV(v3(mix(-0.45, -0.25, p), mix(-0.95, -0.75, p), mix(5.0, 4.5, p)), v3(0, 0.02, 1.05), dive);
+    ct = lerpV(v3(0, 0.12, 0), v3(0, 0.03, 0.06), dive);
+    fc = C_DEEP; keyI = 0.25; hemiI = 0.18;
+    let wake = 0; for (const [nt] of LOCKN) wake = Math.max(wake, 1 - lin(t, nt, nt + 0.9));
+    glowI = 1.4 + 2.6 * wake;
+    const b = buzz(t, LOCKN.map(([nt]) => [nt, nt + 0.35]), 1);
+    pp.x += b * 0.006 * Math.sin(t * 190); pr.z += b * 0.01 * Math.sin(t * 160);
+  } else {                                         // S5 · boom: brand blue, phone spins up and lands facing you
+    const a = eExp(lin(t, 12.0, 12.55)), d = lin(t, 12.55, 15);
+    pp = v3(0, mix(-1.0, -0.52, a), mix(0.3, 0.62, a));
+    pr = v3(mix(-0.5, 0.06, a), mix(2.6, mix(-0.16, -0.08, d), a), mix(0.3, 0.04, a));
+    cp = v3(0, -0.25, mix(5.6, 5.9, d)); ct = v3(0, 0.08, 0.3);
+    fc = C_BLUE; keyI = 2.2; glowI = 0.5; hemiI = 0.95;
+  }
+  const lampI = t < 6.7 ? 9 : t < 9.5 ? mix(9, 0, lin(t, 6.7, 6.95)) : t < 12 ? 6 : 0;
+  return { pp, pr, cp, ct, fc, keyI, glowI, hemiI, lampI };
+}
+
+const tmpN = new THREE.Vector3();
+function renderAt(t) {
+  t = Math.max(0, Math.min(14.999, t));
+  drawScreen(t);
+  const s = pose(t);
+  phone.position.copy(s.pp);
+  phone.rotation.set(s.pr.x, s.pr.y, s.pr.z);
+  camera.position.copy(s.cp);
+  camera.up.set(0, 1, 0);
+  camera.lookAt(s.ct);
+  floorMat.color.copy(s.fc);
+  key.intensity = s.keyI; hemi.intensity = s.hemiI; lamp.intensity = s.lampI;
+  // the screen's spill light sits just in front of the display
+  phone.updateMatrixWorld();
+  tmpN.set(0, 0, 0.35).applyMatrix4(phone.matrixWorld);
+  glow.position.copy(tmpN); glow.intensity = s.glowI;
+  renderer.render(scene, camera);
+}
+
+(async () => {
+  await Promise.all([
+    document.fonts.load('500 48px "IBM Plex Sans Arabic"'), document.fonts.load('700 48px "IBM Plex Sans Arabic"'),
+    document.fonts.load('400 48px "IBM Plex Sans Arabic"'), document.fonts.load('900 48px "Alexandria"'),
+    document.fonts.load('700 48px "Alexandria"'), document.fonts.load('800 48px "Bricolage Grotesque"'),
+  ]);
+  window.addEventListener("hf-seek", e => renderAt(e.detail.time));
+  window.__stageRender = renderAt;
+  renderAt(0);
+  window.__stageReady && window.__stageReady();
+})();
+  </script>
+</template>

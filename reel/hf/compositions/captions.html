@@ -2,43 +2,40 @@
   <style>
 @font-face{font-family:'Alexandria';font-weight:800;src:url('assets/fonts/Alexandria-800.ttf')}
 #root{position:absolute;inset:0;direction:rtl;pointer-events:none}
-/* bottom of the shared 9:16 safe band (bottom edge at y 1248), inside x 120–780 */
-.cg{position:absolute;left:120px;width:660px;top:1146px;text-align:center;font:800 54px/1.45 'Alexandria';color:#fff;
-  -webkit-text-stroke:13px #0B0F2A;paint-order:stroke fill;opacity:0;visibility:hidden;white-space:nowrap}
+/* bottom edge of the shared 9:16 safe band is y 1248; x 120–780 */
+.cg{position:absolute;left:120px;width:660px;top:1160px;text-align:center;opacity:0;visibility:hidden;white-space:nowrap}
+.cg .in{display:inline-block;font:800 54px/1.4 'Alexandria';color:#fff;padding:6px 26px 12px;border-radius:22px;background:rgba(7,10,30,.8);backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
 .cg .w{display:inline-block;margin:0 6px}
   </style>
   <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
-    <div class="cg" id="cg1"><span class="w" id="cg1-w0">واتساب</span> <span class="w" id="cg1-w1">قالك</span></div>
-    <div class="cg" id="cg2"><span class="w" id="cg2-w0">٣٧</span> <span class="w" id="cg2-w1">أوردر؟</span></div>
-    <div class="cg" id="cg3"><span class="w" id="cg3-w0">لأ،</span> <span class="w" id="cg3-w1">٢٢!</span></div>
-    <div class="cg" id="cg4"><span class="w" id="cg4-w0">الباقي</span> <span class="w" id="cg4-w1">ضاع</span> <span class="w" id="cg4-w2">في</span> <span class="w" id="cg4-w3">الشات</span></div>
-    <div class="cg" id="cg5"><span class="w" id="cg5-w0">خلاص</span> <span class="w" id="cg5-w1">بيحوّل</span> <span class="w" id="cg5-w2">الشات</span></div>
-    <div class="cg" id="cg6"><span class="w" id="cg6-w0">لأوردر</span> <span class="w" id="cg6-w1">مترتب</span></div>
-    <div class="cg" id="cg7"><span class="w" id="cg7-w0">وهبعتلك</span> <span class="w" id="cg7-w1">اللينك</span></div>
+    <div class="cg" id="c1"><span class="in"><span class="w" id="c1-w0">الساعة</span> <span class="w" id="c1-w1">اتنين</span> <span class="w" id="c1-w2">بالليل</span></span></div>
+    <div class="cg" id="c2"><span class="in"><span class="w" id="c2-w0">ولسه</span> <span class="w" id="c2-w1">بترد</span></span></div>
+    <div class="cg" id="c3"><span class="in"><span class="w" id="c3-w0">على</span> <span class="w" id="c3-w1">الزباين</span></span></div>
+    <div class="cg" id="c4"><span class="in"><span class="w" id="c4-w0">بكام؟</span> <span class="w" id="c4-w1">متاح؟</span></span></div>
+    <div class="cg" id="c5"><span class="in"><span class="w" id="c5-w0">العنوان</span> <span class="w" id="c5-w1">فين؟</span></span></div>
+    <div class="cg" id="c9"><span class="in"><span class="w" id="c9-w0">الأوردرات</span> <span class="w" id="c9-w1">بتتأكد</span></span></div>
   </div>
   <script>
     (function(){
       const tl = gsap.timeline({ paused: true });
       const YEL = "#FFD21F", WHITE = "#ffffff";
-      // one group at a time: pops in, the spoken word turns yellow, hard kill at the end
       function group(sel, start, end, times) {
         tl.set(sel, { visibility: "visible" }, start);
-        tl.fromTo(sel, { opacity: 0, scale: 0.86, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.12, ease: "expo.out" }, start);
+        tl.fromTo(sel, { opacity: 0, scale: 0.88, filter: "blur(6px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.12, ease: "expo.out" }, start);
         times.forEach((t, i) => {
           const w = sel + "-w" + i;
-          tl.fromTo(w, { color: WHITE, scale: 1 }, { color: YEL, scale: 1.12, duration: 0.08, ease: "power2.out" }, t);
+          tl.fromTo(w, { color: WHITE, scale: 1 }, { color: YEL, scale: 1.1, duration: 0.08, ease: "power2.out" }, t);
           if (i < times.length - 1) tl.to(w, { color: WHITE, scale: 1, duration: 0.08 }, times[i + 1]);
         });
         tl.to(sel, { opacity: 0, duration: 0.1, ease: "power2.in" }, end - 0.1);
         tl.set(sel, { opacity: 0, visibility: "hidden" }, end);
       }
-      group("#cg1", 0.1, 0.98, [0.1, 0.29]);
-      group("#cg2", 0.98, 1.46, [0.98, 1.12]);
-      group("#cg3", 1.5, 2.62, [1.5, 1.99]);
-      group("#cg4", 2.82, 4.62, [2.87, 3.24, 3.47, 3.6]);
-      group("#cg5", 5.1, 6.46, [5.15, 5.62, 6.04]);
-      group("#cg6", 6.46, 7.62, [6.52, 6.94]);
-      group("#cg7", 13.8, 15.0, [13.86, 14.23]);
+      group("#c1", 0.07, 1.62, [0.07, 0.55, 0.76]);
+      group("#c2", 1.66, 2.45, [1.68, 2.1]);
+      group("#c3", 2.45, 3.18, [2.48, 2.64]);
+      group("#c4", 3.28, 4.45, [3.3, 3.86]);
+      group("#c5", 4.48, 5.4, [4.5, 4.92]);
+      group("#c9", 10.66, 11.95, [10.7, 11.29]);
       window.__timelines["captions"] = tl;
     })();
   </script>

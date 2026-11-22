@@ -1,20 +1,19 @@
-# Review: khalas 15s reel (v2, HyperFrames)
+# Review: khalas 15s reel (v3, seller POV, 3D phone)
 
 ## Creative calls
-- Two worlds. The problem lives in a messy, full-screen WhatsApp-style chat (beige wallpaper, real bubbles, timestamps). The fix lives in khalas electric blue (#2B3BFF) with yellow and white. No floating cards on an empty background.
-- Type: Alexandria 900 (an Arabic face by an Egyptian designer) set on torn tape strips, slightly rotated, landing with a slap. Red rubber stamps and red marker circles carry the "lost" beats. TikTok-style stroked captions highlight each word as it's spoken.
-- Transitions, each with a cause: hook → loss is a vertical whip. The loss shots are hard cuts on stamps. Loss → order is a match cut in the same chat. Inside the order scene, blue floods out of the order card. The card then files itself into a list. Order → night is a hard cut. Night chat → lock screen is a blur swap. The lock screen → CTA moves through the khalas app icon, which grows to fill the frame with blue.
-- Kept from v1: the voice, the beat and the sound effects, all on the same timings.
+- Story (the seller-POV option picked): it's 2 AM and you're still answering customers. The same questions come all day. khalas replies and confirms orders for you. Orders confirm while you sleep. Then the CTA.
+- Look: one continuous Three.js scene (`compositions/stage.html`). A real 3D phone (metal frame, glass, reflections, soft shadow) sits on a textured table. A warm desk lamp lights it at night. The table turns electric blue at "lights on" and stays blue for the CTA. The phone's screen is drawn live: chat flood, notification banners, the bot reply, an order card, the 3:12 AM lock screen, and a khalas screen with the founders counter.
+- Camera: a push-in on a phone buzzing at 2 AM → a hard cut to a low angle → a hard cut close on the banners → lights on, with the phone squaring up to camera → a top-down night shot that dives into the screen → a boom, and the phone spins up into the CTA.
+- Text: Alexandria 900 in white, one yellow word per line, words blurring in on the voice. In the bot beat and the CTA, the spoken line itself is the headline, so no caption covers the screen. Elsewhere the captions sit on dark glass pills.
+- Voice: ElevenLabs v4, stock voice "Laura", with an Egyptian-accent tag. The person chose a female voice from samples.
 
 ## Measured
-- `hyperframes check`: 0 errors. The warnings left are kept on purpose: background chat bubbles and notifications scroll past faster than their read time and sit in the platform UI zones as texture, and timestamps are under the 28px floor, as they are in the real app.
-- Every headline and caption sits in the shared 9:16 safe zone (y 288–1248). The caption band's bottom edge is at 1248.
-- Audio: −12.1 LUFS integrated, no silence. A speech-to-text pass on the final mix returns every line.
-- Motion blur is off. The filter tier ghosted the slap entrances, so the moves render crisp.
+- `hyperframes check`: 0 errors. The warnings left are a long stage file, and two short English sublines held under their read time.
+- Audio: −14.1 LUFS, −1.0 dBFS peak, no silence. A speech-to-text pass on the final file returns every line.
 
 ## Not checked
 - Nobody listened to the sound. It was measured and transcribed only.
 
 ## Weakest shot / next
-- The night chat (9.0–10.6s) has empty dark space under the last message. A "✅ order confirmed" system line or a bigger chat would fill it.
-- A native Egyptian voice (paid ElevenLabs plan) would lift the whole piece more than any visual change.
+- The 3.2–4.9s low angle shows mostly chat with no headline. A quick "بكام؟ متاح؟" burst on screen would add punch.
+- A native Egyptian voice (paid ElevenLabs plan, e.g. Mawardy or Asmaa) is still the biggest possible upgrade.
