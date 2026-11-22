@@ -135,9 +135,48 @@
   },
   "revisions": {},
   "checks": {
-    "latest": null,
+    "latest": {
+      "revision": null,
+      "id": "17461d20-7f86-421b-a4d1-9ff89ef5eec2"
+    },
     "revisions": {},
-    "unversioned": []
+    "unversioned": [
+      {
+        "id": "17461d20-7f86-421b-a4d1-9ff89ef5eec2",
+        "scope": "project",
+        "report": "/home/user/khalas/reel/hf-ar/.hyperframes/artifacts/checks/17461d20-7f86-421b-a4d1-9ff89ef5eec2.json",
+        "metadata": {
+          "ok": true,
+          "browserSkipped": false,
+          "options": {
+            "samples": 9,
+            "atTransitions": false,
+            "maxIssues": 80,
+            "collapseStatic": true,
+            "tolerance": 2,
+            "timeout": 45000,
+            "cache": true,
+            "contrast": true,
+            "craft": true,
+            "strict": false,
+            "snapshots": false,
+            "safeZones": [
+              "tiktok",
+              "reels",
+              "shorts"
+            ],
+            "browserGpuMode": "auto",
+            "includeUnmounted": false
+          }
+        },
+        "createdAt": 1795375273909,
+        "contentHash": "7390541f4fd32adc04a675db82b24d016b318ac6b249f246e9065e9bdc9e0b89",
+        "revision": null,
+        "inputFingerprint": "fbff6e74192bc28a2da6d65b346ee7db7ecb7a7d3b6f5477d10771ad05e50d47",
+        "inputScope": "local-project-files",
+        "attribution": "unversioned"
+      }
+    ]
   },
   "snapshots": {
     "latest": {
@@ -347,5 +386,16 @@
         "attribution": "unversioned"
       }
     ]
-  }
+  },
+  "renders": {
+    "latest": {
+      "id": "5b13192c-ca67-4f4e-ba29-71e2a40214e7",
+      "completedAt": 1795375852816,
+      "output": "/home/user/khalas/reel/khalas-reel-15s-ar.mp4",
+      "status": "completed",
+      "revision": null
+    },
+    "retainedRevisions": []
+  },
+  "pendingArtifactCleanup": []
 }
