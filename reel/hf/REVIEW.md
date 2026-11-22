@@ -5,7 +5,7 @@
 - Look: one continuous Three.js scene (`compositions/stage.html`). A real 3D phone (metal frame, glass, reflections, soft shadow) sits on a textured table. A warm desk lamp lights it at night. The table turns electric blue at "lights on" and stays blue for the CTA. The phone's screen is drawn live: chat flood, notification banners, the bot reply, an order card, the 3:12 AM lock screen, and a khalas screen with the founders counter.
 - Camera: a push-in on a phone buzzing at 2 AM → a hard cut to a low angle → a hard cut close on the banners → lights on, with the phone squaring up to camera → a top-down night shot that dives into the screen → a boom, and the phone spins up into the CTA.
 - Text: Alexandria 900 in white, one yellow word per line, words blurring in on the voice. In the bot beat and the CTA, the spoken line itself is the headline, so no caption covers the screen. Elsewhere the captions sit on dark glass pills.
-- Voice: ElevenLabs v4, stock voice "Laura", with an Egyptian-accent tag. The person chose a female voice from samples.
+- Voice: ElevenLabs v4, stock voice "Chris" (male), with an Egyptian-accent tag. The person asked for a male voice from samples 2–5; earlier Laura takes are in `src/audio/v3/`.
 
 ## Measured
 - `hyperframes check`: 0 errors. The warnings left are a long stage file, and two short English sublines held under their read time.

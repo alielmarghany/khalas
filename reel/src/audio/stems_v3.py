@@ -1,8 +1,9 @@
 # v3 (seller POV, 3D phone): voice clips + music ducked under voice + one SFX stem -> hf/assets/audio
 import json, subprocess
 O = '/home/user/khalas/reel/hf/assets/audio/'
-T = json.load(open('v3/timing.json'))
-V = [(f'v3/vo{i}.wav', T[f'vo{i}']['start']) for i in range(1, 6)]
+VOICE = 'v3/chris'   # male voice (Chris); 'v3' holds the earlier Laura takes
+T = json.load(open(VOICE + '/timing.json'))
+V = [(f'{VOICE}/vo{i}.wav', T[f'vo{i}']['start']) for i in range(1, 6)]
 S = [('vibrate',0.0,.9),('pop',0.15,.3),('vibrate',1.15,.8),('pop',1.0,.3),('pop',1.9,.3),('vibrate',2.25,.8),('pop',2.6,.3),
      ('whoosh',3.15,.8),('vibrate',3.2,.9),('notif',3.3,.7),('notif',3.86,.7),('notif',4.5,.7),('whoosh',4.9,.7),('vibrate',4.95,.8),
      ('notif',4.95,.5),('notif',5.4,.5),('notif',5.8,.5),('pop',5.2,.3),('pop',5.5,.3),('pop',6.1,.3),('pop',6.4,.3),
@@ -20,5 +21,5 @@ f.append(''.join(sl) + f'amix=inputs={len(sl)}:normalize=0,atrim=0:15[sfx]')
 f.append('[0:a]aformat=sample_rates=48000:channel_layouts=stereo,volume=0.5[mus];[mus][vsc]sidechaincompress=threshold=0.03:ratio=8:attack=5:release=200,atrim=0:15,afade=t=out:st=14.8:d=0.2[musd]')
 subprocess.run(['ffmpeg', '-v', 'error', '-y'] + ins + ['-filter_complex', ';'.join(f), '-map', '[musd]', '-ar', '48000', O + 'music.wav', '-map', '[sfx]', '-ar', '48000', O + 'sfx.wav'], check=True)
 for i in range(1, 6):
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', f'v3/vo{i}.wav', '-af', 'volume=2.2', '-ar', '48000', '-ac', '2', O + f'vo{i}.wav'], check=True)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', f'{VOICE}/vo{i}.wav', '-af', 'volume=2.2', '-ar', '48000', '-ac', '2', O + f'vo{i}.wav'], check=True)
 print('ok')

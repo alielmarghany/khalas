@@ -12,6 +12,6 @@
 ## Audio: `src/audio/`
 - `music.py` synthesizes the beat (128 BPM, maqsoum darbuka, hijaz riff).
 - `stems_v3.py` writes the timed voice clips (`v3/`), the music ducked under the voice, and the SFX stem into `hf/assets/audio/`.
-- Voice: ElevenLabs v4, stock voice "Laura", with an Egyptian-accent tag. SFX: ElevenLabs sound generation. `voice-samples.mp3` holds the 8-voice comparison.
+- Voice: ElevenLabs v4, stock voice "Chris" (male), with an Egyptian-accent tag; takes in `src/audio/v3/chris/`. SFX: ElevenLabs sound generation. `voice-samples.mp3` holds the 8-voice comparison.
 
 Fonts (SIL OFL): Alexandria, IBM Plex Sans Arabic, Aref Ruqaa, Bricolage Grotesque, Inter.
