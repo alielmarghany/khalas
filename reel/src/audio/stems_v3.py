@@ -1,7 +1,7 @@
 # v3 (seller POV, 3D phone): voice clips + music ducked under voice + one SFX stem -> hf/assets/audio
-import json, subprocess
-O = '/home/user/khalas/reel/hf/assets/audio/'
-VOICE = 'v3/en'   # English, male (Chris). v3/chris = Arabic male, v3 = Arabic female
+import json, os, subprocess
+O = os.environ.get('OUT', '/home/user/khalas/reel/hf/assets/audio/')
+VOICE = os.environ.get('VOICE', 'v3/en')   # v3/en = English (Chris), v3/chris = Arabic (Chris), v3 = Arabic (Laura)
 T = json.load(open(VOICE + '/timing.json'))
 V = [(f'{VOICE}/vo{i}.wav', T[f'vo{i}']['start']) for i in range(1, 6)]
 S = [('vibrate',0.0,.9),('pop',0.15,.3),('vibrate',1.15,.8),('pop',1.0,.3),('pop',1.9,.3),('vibrate',2.25,.8),('pop',2.6,.3),

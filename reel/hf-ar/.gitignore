@@ -1,0 +1,5 @@
+.hyperframes/artifacts/
+.hyperframes/cache/
+.hyperframes/preview/
+.hyperframes/video-state-lock
+renders/

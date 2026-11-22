@@ -16,4 +16,4 @@
 
 Fonts (SIL OFL): Alexandria, IBM Plex Sans Arabic, Aref Ruqaa, Bricolage Grotesque, Inter.
 
-`khalas-reel-15s-ar.mp4` is the earlier Egyptian Arabic cut of the same 3D film.
+`khalas-reel-15s-ar.mp4`: the Arabic cut, with the same centered 3D film, Arabic headlines, captions and phone screens, and the Arabic male voice (Chris). Its HyperFrames project is `hf-ar/`; its audio is built with `VOICE=v3/chris OUT=…/hf-ar/assets/audio/ python3 src/audio/stems_v3.py`.
