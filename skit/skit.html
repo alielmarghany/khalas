@@ -1,0 +1,249 @@
+<!doctype html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="node_modules/@fontsource/cairo/500.css">
+<link rel="stylesheet" href="node_modules/@fontsource/cairo/700.css">
+<style>
+  :root {
+    --bg: #0B141A; --header: #1F2C34; --out: #005C4B; --in: #202C33;
+    --meta: rgba(255,255,255,0.6); --green: #00A884; --tick-blue: #53BDEB;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
+  body { font-family: "Cairo", "Noto Color Emoji", sans-serif; color: #fff; font-weight: 500; }
+  .emoji { font-family: "Noto Color Emoji"; font-weight: 400; }
+
+  #app { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: linear-gradient(var(--header) 0 330px, var(--bg) 330px); overflow: hidden; }
+  #inner { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+  /* wallpaper */
+  #wall { position: absolute; inset: 0; opacity: 0.06;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'><circle cx='40' cy='40' r='14'/><path d='M120 30 l18 18 M138 30 l-18 18'/><rect x='190' y='22' width='34' height='26' rx='6'/><path d='M30 140 q20 -24 40 0 t40 0'/><path d='M170 120 l16 28 l-32 0 z'/><circle cx='220' cy='190' r='6'/><path d='M60 210 h40 M80 190 v40'/><path d='M140 200 q14 -18 28 0 q-14 26 -28 0z'/><circle cx='120' cy='110' r='4'/><path d='M230 100 c10 -10 24 0 14 12'/></svg>");
+    background-size: 260px 260px; }
+
+  /* header */
+  #header { position: absolute; top: 0; left: 0; right: 0; height: 330px; background: var(--header); z-index: 5; }
+  #statusbar { position: absolute; top: 132px; left: 52px; right: 52px; height: 44px; display: flex; justify-content: space-between; align-items: center; font-size: 30px; font-weight: 700; color: rgba(255,255,255,0.85); direction: ltr; }
+  #hrow { position: absolute; top: 214px; left: 0; right: 0; height: 110px; display: flex; align-items: center; padding: 0 28px; gap: 18px; }
+  .back { width: 46px; height: 46px; flex: none; }
+  .avatar { width: 88px; height: 88px; border-radius: 50%; background: #6B7C85; flex: none; }
+  .who { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  .name { font-size: 40px; font-weight: 700; line-height: 54px; }
+  .status { font-size: 29px; line-height: 40px; color: var(--meta); height: 40px; position: relative; }
+  .status > span { position: absolute; right: 0; top: 0; white-space: nowrap; }
+  #typing { color: var(--green); }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--green); margin-right: 5px; vertical-align: middle; position: relative; }
+  .icons { display: flex; gap: 46px; align-items: center; flex: none; padding-left: 10px; }
+  .icons svg { width: 46px; height: 46px; }
+
+  /* chat */
+  #viewport { position: absolute; top: 330px; left: 0; right: 0; height: 1240px; overflow: hidden; }
+  #content { position: absolute; top: 0; left: 0; right: 0; padding: 28px 40px 20px; display: flex; flex-direction: column; }
+  .chip { align-self: center; background: #182229; color: rgba(255,255,255,0.7); font-size: 27px; padding: 6px 26px; border-radius: 16px; margin-bottom: 22px; }
+  .notice { align-self: center; background: #182229; color: #FFD279; font-size: 25px; line-height: 38px; text-align: center; padding: 14px 30px; border-radius: 18px; max-width: 860px; margin-bottom: 30px; }
+
+  .msg { display: flex; margin-top: 16px; will-change: transform, opacity; }
+  .msg.first { margin-top: 26px; }
+  .msg.out { justify-content: flex-start; } /* RTL: right side */
+  .msg.in  { justify-content: flex-end; }   /* RTL: left side */
+  .bubble { position: relative; max-width: 780px; padding: 14px 30px 12px; border-radius: 28px; font-size: 40px; line-height: 60px; color: #fff; display: flex; align-items: flex-end; gap: 22px; }
+  .out .bubble { background: var(--out); }
+  .in  .bubble { background: var(--in); }
+  .out.first .bubble { border-top-right-radius: 6px; }
+  .in.first  .bubble { border-top-left-radius: 6px; }
+  .out.first .bubble::before { content: ""; position: absolute; top: 0; right: -20px; width: 26px; height: 26px; background: var(--out); clip-path: polygon(0 0, 100% 0, 0 100%); }
+  .in.first .bubble::before { content: ""; position: absolute; top: 0; left: -20px; width: 26px; height: 26px; background: var(--in); clip-path: polygon(0 0, 100% 0, 100% 100%); }
+  .meta { font-size: 25px; line-height: 30px; color: var(--meta); display: flex; align-items: center; gap: 8px; white-space: nowrap; margin-bottom: -2px; flex: none; }
+  .ticks { width: 46px; height: 31px; }
+
+  /* composer (lives in bottom inset, not key text) */
+  #composer { position: absolute; top: 1584px; left: 22px; right: 22px; height: 112px; display: flex; gap: 16px; align-items: center; }
+  #composer .field { flex: 1; height: 104px; border-radius: 52px; background: #1F2C34; display: flex; align-items: center; padding: 0 36px; gap: 26px; color: rgba(255,255,255,0.45); font-size: 34px; }
+  #composer .mic { width: 104px; height: 104px; border-radius: 50%; background: var(--green); display: flex; align-items: center; justify-content: center; flex: none; }
+  #homebar { position: absolute; top: 1868px; left: 390px; width: 300px; height: 10px; border-radius: 5px; background: rgba(255,255,255,0.5); }
+
+  /* overlays */
+  #dim { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 8; }
+  #title { position: absolute; left: 0; right: 0; top: 700px; z-index: 9; text-align: center; }
+  #title .card { display: inline-block; background: rgba(11,20,26,0.85); border: 3px solid rgba(255,255,255,0.12); border-radius: 44px; padding: 40px 70px 52px; }
+  #title .pov { font-size: 120px; line-height: 140px; font-weight: 700; color: #FFD400; }
+  #title .line { font-size: 92px; line-height: 130px; font-weight: 700; }
+  #pill { position: absolute; left: 0; right: 0; top: 900px; z-index: 9; text-align: center; opacity: 0; }
+  #pill span { display: inline-block; background: rgba(32,44,51,0.96); border: 2px solid rgba(255,255,255,0.14); color: #fff; font-size: 64px; font-weight: 700; line-height: 90px; padding: 22px 70px 28px; border-radius: 80px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+  #end { position: absolute; inset: 0; background: #0B0F1A; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 220px 60px 340px; }
+  #end .big { font-size: 90px; font-weight: 700; line-height: 140px; color: #fff; }
+  #end .cta { margin-top: 40px; font-size: 56px; font-weight: 700; line-height: 90px; color: #FFD400; }
+</style>
+</head>
+<body>
+<div id="app"><div id="inner">
+  <div id="wall"></div>
+
+  <div id="header">
+    <div id="statusbar"><span id="clock">٢:١٤</span><span style="display:flex;gap:14px;align-items:center"><svg width="40" height="28" viewBox="0 0 20 14"><rect x="0" y="10" width="3" height="4" fill="#ddd"/><rect x="5" y="7" width="3" height="7" fill="#ddd"/><rect x="10" y="4" width="3" height="10" fill="#ddd"/><rect x="15" y="0" width="3" height="14" fill="#ddd"/></svg><svg width="62" height="30" viewBox="0 0 31 15"><rect x="1" y="1" width="26" height="13" rx="3" fill="none" stroke="#ddd" stroke-width="1.5"/><rect x="3.5" y="3.5" width="17" height="8" rx="1.5" fill="#ddd"/><rect x="28" y="5" width="2" height="5" rx="1" fill="#ddd"/></svg></span></div>
+    <div id="hrow">
+      <svg class="back" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="avatar"></div>
+      <div class="who">
+        <div class="name">عميل جديد</div>
+        <div class="status">
+          <span id="st-online">متصل الآن</span>
+          <span id="st-seen1">آخر ظهور اليوم الساعة ٢:١٥ م</span>
+          <span id="st-seen2">آخر ظهور اليوم الساعة ٥:٢١ م</span>
+          <span id="typing">بيكتب<i class="dot"></i><i class="dot"></i><i class="dot"></i></span>
+        </div>
+      </div>
+      <div class="icons">
+        <svg viewBox="0 0 24 24"><rect x="2" y="6" width="13" height="12" rx="3" fill="none" stroke="#fff" stroke-width="2"/><path d="M15 10.5l6-3.5v10l-6-3.5z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z" fill="none" stroke="#fff" stroke-width="1.8"/></svg>
+        <svg viewBox="0 0 24 24" style="width:30px"><circle cx="12" cy="5" r="2" fill="#fff"/><circle cx="12" cy="12" r="2" fill="#fff"/><circle cx="12" cy="19" r="2" fill="#fff"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div id="viewport"><div id="content">
+    <div class="chip">اليوم</div>
+    <div class="notice">🔒 الرسائل والمكالمات مشفرة تمامًا بين الطرفين. محدش برا المحادثة دي يقدر يقرأها.</div>
+  </div></div>
+
+  <div id="composer">
+    <div class="field">
+      <svg viewBox="0 0 24 24" width="44" height="44"><circle cx="12" cy="12" r="9" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8"/><circle cx="9" cy="10" r="1.2" fill="rgba(255,255,255,0.5)"/><circle cx="15" cy="10" r="1.2" fill="rgba(255,255,255,0.5)"/><path d="M8 14.5q4 3.5 8 0" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span style="flex:1">رسالة</span>
+      <svg viewBox="0 0 24 24" width="44" height="44"><path d="M16 7l-7.5 7.5a2.1 2.1 0 003 3L19 10a4 4 0 00-5.7-5.7L5.8 11.8a6 6 0 008.5 8.5L20 14.6" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div class="mic"><svg viewBox="0 0 24 24" width="50" height="50"><rect x="9" y="3" width="6" height="11" rx="3" fill="#0B141A"/><path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21" stroke="#0B141A" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+  </div>
+  <div id="homebar"></div>
+
+  <div id="dim"></div>
+  <div id="title"><div class="card">
+    <div class="pov"><span dir="ltr">POV:</span></div>
+    <div class="line">بتبيع على واتساب</div>
+  </div></div>
+  <div id="pill"><span>بعد ٣ ساعات…</span></div>
+</div></div>
+
+<div id="end">
+  <div class="big">كل يوم نفس القصة <span class="emoji">😭</span></div>
+  <div class="cta">ابعتها لبايع تعرفه</div>
+</div>
+
+<script>
+const TICK = (blue) => `<svg class="ticks" viewBox="0 0 18 12"><path d="M1 6.5l3 3L10 2.5M7 8.5l1 1L15 2.5" fill="none" stroke="${blue ? '#53BDEB' : 'rgba(255,255,255,0.6)'}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+// side: 'in' (customer) | 'out' (seller); t = arrival time; read = time ticks turn blue
+const MSGS = [
+  { side: 'in',  t: 2.0, text: 'بكام؟', time: '٢:١٤ م' },
+  { side: 'out', t: 3.0, text: '٣٥٠ جنيه <span class="emoji">👌</span>', time: '٢:١٤ م', read: 4.2 },
+  { side: 'in',  t: 4.2, text: 'تمام <span class="emoji">👍</span>', time: '٢:١٥ م' },
+  { side: 'in',  t: 7.5, text: 'لسه متاح؟', time: '٥:٢٠ م' },
+  { side: 'out', t: 8.5, text: 'أيوه متاح <span class="emoji">🙂</span>', time: '٥:٢٠ م', read: 9.5 },
+  { side: 'in',  t: 11.0, text: 'هفكر وأرجعلك', time: '٥:٢١ م' },
+];
+
+const content = document.getElementById('content');
+MSGS.forEach((m, i) => {
+  const prev = MSGS[i - 1];
+  const el = document.createElement('div');
+  el.className = 'msg ' + m.side + (!prev || prev.side !== m.side ? ' first' : '');
+  el.innerHTML = `<div class="bubble"><span class="txt">${m.text}</span><span class="meta"><span>${m.time}</span>${m.side === 'out' ? '<span class="tk"></span>' : ''}</span></div>`;
+  content.appendChild(el);
+  m.el = el;
+  m.tk = el.querySelector('.tk');
+});
+
+const VIEW_H = 1240, PAD_B = 24;
+let layout = null;
+function measure() {
+  const top0 = content.getBoundingClientRect().top;
+  const base = [...content.children].filter(c => !c.classList.contains('msg')).pop();
+  layout = {
+    baseBottom: base.getBoundingClientRect().bottom - top0,
+    bottoms: MSGS.map(m => m.el.offsetTop + m.el.offsetHeight),
+  };
+}
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const easeOut = p => 1 - Math.pow(1 - clamp(p), 3);
+const easeInOut = p => { p = clamp(p); return p < 0.5 ? 4*p*p*p : 1 - Math.pow(-2*p + 2, 3) / 2; };
+const $ = id => document.getElementById(id);
+const show = (id, on) => { $(id).style.opacity = on ? 1 : 0; };
+
+window.render = function (t) {
+  if (!layout) measure();
+  const APPEAR = 0.25;
+
+  // bubbles
+  let contentBottom = layout.baseBottom, prevBottom = layout.baseBottom;
+  MSGS.forEach((m, i) => {
+    const p = (t - m.t) / APPEAR;
+    const e = easeOut(p);
+    m.el.style.opacity = p <= 0 ? 0 : e;
+    m.el.style.transform = `translateY(${(1 - e) * 30}px)`;
+    if (p > 0) {
+      contentBottom = prevBottom + (layout.bottoms[i] - prevBottom) * easeOut((t - m.t) / 0.22);
+      prevBottom = layout.bottoms[i];
+    }
+    if (m.tk) m.tk.innerHTML = TICK(t >= m.read);
+  });
+  // anchored to the bottom like WhatsApp (stack-from-end); scrolls up as bubbles arrive
+  const scroll = contentBottom + PAD_B - VIEW_H;
+  content.style.transform = `translateY(${-scroll}px)`;
+
+  $('clock').textContent = t < 6.75 ? '٢:١٥' : '٥:٢٠';
+  // header status
+  let st = 'online';
+  if (t >= 5.6 && t < 7.3) st = 'seen1';
+  if (t >= 9.5 && t < 11.0) st = 'typing';
+  if (t >= 11.7) st = 'seen2';
+  show('st-online', st === 'online'); show('st-seen1', st === 'seen1');
+  show('st-seen2', st === 'seen2'); show('typing', st === 'typing');
+  document.querySelectorAll('#typing .dot').forEach((d, i) => {
+    const ph = Math.sin(2 * Math.PI * (t * 1.6) - i * 0.9);
+    const k = Math.max(0, ph);
+    d.style.opacity = 0.3 + 0.7 * k;
+    d.style.transform = `translateY(${-6 * k}px)`;
+  });
+
+  // vibration shake on customer arrivals
+  let dx = 0, dy = 0;
+  MSGS.filter(m => m.side === 'in').forEach(m => {
+    const p = (t - m.t) / 0.2;
+    if (p >= 0 && p < 1) {
+      const amp = 3 * (1 - p);
+      dx += amp * Math.sin(2 * Math.PI * 45 * (t - m.t));
+      dy += amp * 0.5 * Math.sin(2 * Math.PI * 37 * (t - m.t) + 1);
+    }
+  });
+  $('inner').style.transform = `translate(${dx}px, ${dy}px)`;
+
+  // title card 0-2s
+  const titleOp = 1 - clamp((t - 1.75) / 0.25);
+  $('title').style.opacity = titleOp;
+  $('title').style.transform = `scale(${0.96 + 0.04 * easeOut(t / 0.3)})`;
+
+  // pill 6.0-7.5
+  const pillOp = clamp((t - 6.0) / 0.3) * (1 - clamp((t - 7.2) / 0.3));
+  $('pill').style.opacity = pillOp;
+  $('pill').style.transform = `translateY(${(1 - easeOut((t - 6.0) / 0.3)) * 20}px)`;
+
+  $('dim').style.opacity = Math.max(0.45 * titleOp, 0.4 * pillOp);
+
+  // end card 12-15
+  const end = $('end');
+  end.style.display = t >= 12.0 ? 'flex' : 'none';
+  if (t >= 12.0) {
+    const a = easeOut((t - 12.0) / 0.35);
+    end.querySelector('.big').style.transform = `scale(${0.88 + 0.12 * a})`;
+    end.querySelector('.big').style.opacity = clamp((t - 12.0) / 0.2);
+    const b = easeOut((t - 12.5) / 0.35);
+    end.querySelector('.cta').style.opacity = b;
+    end.querySelector('.cta').style.transform = `translateY(${(1 - b) * 30}px)`;
+  }
+};
+</script>
+</body>
+</html>
