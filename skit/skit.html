@@ -65,16 +65,18 @@
 
   /* overlays */
   #dim { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 8; }
-  #title { position: absolute; left: 0; right: 0; top: 700px; z-index: 9; text-align: center; }
-  #title .card { display: inline-block; background: rgba(11,20,26,0.85); border: 3px solid rgba(255,255,255,0.12); border-radius: 44px; padding: 40px 70px 52px; }
-  #title .pov { font-size: 120px; line-height: 140px; font-weight: 700; color: #FFD400; }
-  #title .line { font-size: 92px; line-height: 130px; font-weight: 700; }
+  #pov { position: absolute; left: 0; right: 0; top: 372px; z-index: 9; text-align: center; }
+  #pov span.p { display: inline-block; background: rgba(31,44,52,0.94); border: 2px solid rgba(255,255,255,0.14); border-radius: 50px; padding: 8px 40px 12px; font-size: 40px; line-height: 60px; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.45); }
+  #pov .k { color: #FFD400; }
   #pill { position: absolute; left: 0; right: 0; top: 900px; z-index: 9; text-align: center; opacity: 0; }
   #pill span { display: inline-block; background: rgba(32,44,51,0.96); border: 2px solid rgba(255,255,255,0.14); color: #fff; font-size: 64px; font-weight: 700; line-height: 90px; padding: 22px 70px 28px; border-radius: 80px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
 
-  #end { position: absolute; inset: 0; background: #0B0F1A; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 220px 60px 340px; }
-  #end .big { font-size: 90px; font-weight: 700; line-height: 140px; color: #fff; }
-  #end .cta { margin-top: 40px; font-size: 56px; font-weight: 700; line-height: 90px; color: #FFD400; }
+  #endshade { position: absolute; inset: 0; background: rgba(11,15,26,0.55); z-index: 20; opacity: 0; }
+  #end { position: absolute; inset: 0; z-index: 21; isolation: isolate; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 220px 60px 340px; opacity: 0; }
+  #end::before { content: ""; position: absolute; left: 50%; top: 50%; width: 1300px; height: 720px; transform: translate(-50%, -62%); background: radial-gradient(closest-side, rgba(11,15,26,0.85), rgba(11,15,26,0.6) 55%, rgba(11,15,26,0)); z-index: -1; }
+  #end .big { font-size: 90px; font-weight: 700; line-height: 140px; color: #fff; text-shadow: 0 6px 30px rgba(0,0,0,0.6); }
+  #end .cta { margin-top: 30px; font-size: 56px; font-weight: 500; line-height: 90px; color: #FFD400; text-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+  #loop { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 100; opacity: 0; display: none; }
 </style>
 </head>
 <body>
@@ -119,30 +121,30 @@
   <div id="homebar"></div>
 
   <div id="dim"></div>
-  <div id="title"><div class="card">
-    <div class="pov"><span dir="ltr">POV:</span></div>
-    <div class="line">بتبيع على واتساب</div>
-  </div></div>
+  <div id="pov"><span class="p"><span class="k" dir="ltr">POV:</span> بتبيع على واتساب</span></div>
   <div id="pill"><span>بعد ٣ ساعات…</span></div>
 </div></div>
 
+<div id="endshade"></div>
 <div id="end">
   <div class="big">كل يوم نفس القصة <span class="emoji">😭</span></div>
   <div class="cta">ابعتها لبايع تعرفه</div>
 </div>
+<img id="loop" alt="">
 
 <script>
 const TICK = (blue) => `<svg class="ticks" viewBox="0 0 18 12"><path d="M1 6.5l3 3L10 2.5M7 8.5l1 1L15 2.5" fill="none" stroke="${blue ? '#53BDEB' : 'rgba(255,255,255,0.6)'}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
 // side: 'in' (customer) | 'out' (seller); t = arrival time; read = time ticks turn blue
 const MSGS = [
-  { side: 'in',  t: 2.0, text: 'بكام؟', time: '٢:١٤ م' },
-  { side: 'out', t: 3.0, text: '٣٥٠ جنيه <span class="emoji">👌</span>', time: '٢:١٤ م', read: 4.2 },
-  { side: 'in',  t: 4.2, text: 'تمام <span class="emoji">👍</span>', time: '٢:١٥ م' },
-  { side: 'in',  t: 7.5, text: 'لسه متاح؟', time: '٥:٢٠ م' },
-  { side: 'out', t: 8.5, text: 'أيوه متاح <span class="emoji">🙂</span>', time: '٥:٢٠ م', read: 9.5 },
-  { side: 'in',  t: 11.0, text: 'هفكر وأرجعلك', time: '٥:٢١ م' },
+  { side: 'in',  t: -1,  text: 'بكام؟', time: '٢:١٤ م' },              // already on screen at frame 0
+  { side: 'out', t: 1.0, text: '٣٥٠ جنيه <span class="emoji">👌</span>', time: '٢:١٤ م', read: 1.4 },
+  { side: 'in',  t: 1.5, text: 'تمام <span class="emoji">👍</span>', time: '٢:١٥ م' },
+  { side: 'in',  t: 3.0, text: 'لسه متاح؟', time: '٥:٢٠ م' },
+  { side: 'out', t: 3.8, text: 'أيوه متاح <span class="emoji">🙂</span>', time: '٥:٢٠ م', read: 4.6 },
+  { side: 'in',  t: 6.0, text: 'معلش كنت بسأل بس <span class="emoji">🙏</span>', time: '٥:٢١ م' },
 ];
+const DURATION = 10.0, LOOP_FADE = 0.3;
 
 const content = document.getElementById('content');
 MSGS.forEach((m, i) => {
@@ -193,12 +195,12 @@ window.render = function (t) {
   const scroll = contentBottom + PAD_B - VIEW_H;
   content.style.transform = `translateY(${-scroll}px)`;
 
-  $('clock').textContent = t < 6.75 ? '٢:١٥' : '٥:٢٠';
+  $('clock').textContent = t < 2.5 ? '٢:١٤' : '٥:٢٠';
   // header status
   let st = 'online';
-  if (t >= 5.6 && t < 7.3) st = 'seen1';
-  if (t >= 9.5 && t < 11.0) st = 'typing';
-  if (t >= 11.7) st = 'seen2';
+  if (t >= 2.0 && t < 2.9) st = 'seen1';
+  if (t >= 4.6 && t < 6.0) st = 'typing';
+  if (t >= 6.7 && t < 9.7) st = 'seen2';
   show('st-online', st === 'online'); show('st-seen1', st === 'seen1');
   show('st-seen2', st === 'seen2'); show('typing', st === 'typing');
   document.querySelectorAll('#typing .dot').forEach((d, i) => {
@@ -220,30 +222,34 @@ window.render = function (t) {
   });
   $('inner').style.transform = `translate(${dx}px, ${dy}px)`;
 
-  // title card 0-2s
-  const titleOp = 1 - clamp((t - 1.75) / 0.25);
-  $('title').style.opacity = titleOp;
-  $('title').style.transform = `scale(${0.96 + 0.04 * easeOut(t / 0.3)})`;
+  // POV pill: on screen from frame 0, gone by 1.0s
+  $('pov').style.opacity = 1 - clamp((t - 0.75) / 0.25);
 
-  // pill 6.0-7.5
-  const pillOp = clamp((t - 6.0) / 0.3) * (1 - clamp((t - 7.2) / 0.3));
+  // "after 3 hours" pill 2.0-3.0
+  const pillOp = clamp((t - 2.0) / 0.2) * (1 - clamp((t - 2.8) / 0.2));
   $('pill').style.opacity = pillOp;
-  $('pill').style.transform = `translateY(${(1 - easeOut((t - 6.0) / 0.3)) * 20}px)`;
+  $('pill').style.transform = `translateY(${(1 - easeOut((t - 2.0) / 0.25)) * 20}px)`;
+  $('dim').style.opacity = 0.4 * pillOp;
 
-  $('dim').style.opacity = Math.max(0.45 * titleOp, 0.4 * pillOp);
+  // end text over darkened chat, 7.0-10.0; fades out in the last LOOP_FADE seconds
+  const loopP = clamp((t - (DURATION - LOOP_FADE)) / (LOOP_FADE - 1 / 30));
+  const endIn = clamp((t - 7.0) / 0.3) * (1 - loopP);
+  $('endshade').style.opacity = endIn;
+  $('end').style.opacity = 1 - loopP;
+  const big = $('end').querySelector('.big'), cta = $('end').querySelector('.cta');
+  const a = easeOut((t - 7.0) / 0.35);
+  big.style.opacity = clamp((t - 7.0) / 0.2);
+  big.style.transform = `scale(${0.88 + 0.12 * a})`;
+  const b = easeOut((t - 7.45) / 0.35);
+  cta.style.opacity = b;
+  cta.style.transform = `translateY(${(1 - b) * 30}px)`;
 
-  // end card 12-15
-  const end = $('end');
-  end.style.display = t >= 12.0 ? 'flex' : 'none';
-  if (t >= 12.0) {
-    const a = easeOut((t - 12.0) / 0.35);
-    end.querySelector('.big').style.transform = `scale(${0.88 + 0.12 * a})`;
-    end.querySelector('.big').style.opacity = clamp((t - 12.0) / 0.2);
-    const b = easeOut((t - 12.5) / 0.35);
-    end.querySelector('.cta').style.opacity = b;
-    end.querySelector('.cta').style.transform = `translateY(${(1 - b) * 30}px)`;
-  }
+  // loop seam: crossfade the whole screen back to a snapshot of frame 0 so the last frame == first frame
+  const loop = $('loop');
+  loop.style.display = loop.src && loopP > 0 ? 'block' : 'none';
+  loop.style.opacity = easeInOut(loopP);
 };
+window.setLoopImage = src => new Promise(r => { const i = $('loop'); i.onload = r; i.src = src; });
 </script>
 </body>
 </html>
