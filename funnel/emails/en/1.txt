@@ -1,0 +1,21 @@
+Subject: {first_name}, how many orders get lost in your WhatsApp?
+
+Hi {first_name},
+
+I'm Ali Elmarghany. I run a social media marketing agency that works with online brands in Egypt.
+
+If {company} takes orders on WhatsApp, you've probably seen this: ads bring in loads of messages, orders get typed out by hand, the address or size is missing, and a lot of them fall through.
+
+So we built khalas: AI that reads your WhatsApp chats (Arabic, Franco, emoji), builds a complete order, asks the customer for anything missing, and replies in your tone even while you sleep.
+
+We're opening to the first 400 founding sellers. Reserving takes 3 steps:
+1. Pick your plan
+2. Add your brand name and WhatsApp number
+3. Reserve your spot for 99 EGP
+
+Reserve here: {link}
+
+Any questions, just reply. I read every email myself.
+
+Ali Elmarghany
+khalas · Elmarghany Enterprises

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>khalas | Reserve your spot</title>
+<meta name="description" content="Reserve your khalas founding seller spot in 3 easy steps.">
+<meta name="theme-color" content="#0A0E1F">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cobalt:#2340FF;--cobalt-2:#4A62FF;--ink:#0A0E1F;--paper:#F5F6FA;--mist:#DDE2F5;--tick:#FFC933;--muted:#4A5175;--muted-on-dark:#AEB6D9;--line-dark:rgba(255,255,255,.12);
+  --display:'Bricolage Grotesque','IBM Plex Sans Arabic',system-ui,sans-serif;--ar:'IBM Plex Sans Arabic','IBM Plex Sans',system-ui,sans-serif;--en:'IBM Plex Sans','IBM Plex Sans Arabic',system-ui,sans-serif;--body:var(--ar);--lh:1.8;color-scheme:light}
+html[lang="en"]{--body:var(--en);--lh:1.6}
+*,*::before,*::after{box-sizing:border-box}*{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);line-height:var(--lh);font-size:17px;min-height:100vh}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--tick);outline-offset:3px;border-radius:6px}
+.top{background:var(--ink);color:#fff;padding:26px 16px 120px;position:relative;overflow:hidden}
+.top::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 80% at 85% 0%,rgba(35,64,255,.5),transparent 70%)}
+.bar{max-width:720px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;position:relative}
+.wm{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.03em;text-decoration:none;color:#fff;direction:ltr}
+.lang{border:1px solid var(--line-dark);background:rgba(255,255,255,.06);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;cursor:pointer;color:#fff}
+.hero{max-width:720px;margin:34px auto 0;position:relative}
+.hero h1{font-size:clamp(30px,6vw,46px);line-height:1.25;font-weight:700}
+html[lang="en"] .hero h1{font-family:var(--display);font-weight:800;letter-spacing:-.025em;line-height:1.1}
+.hero p{color:var(--muted-on-dark);margin-top:10px;max-width:52ch}
+.card{max-width:720px;margin:-86px auto 40px;background:#fff;border:1px solid var(--mist);border-radius:24px;padding:26px;position:relative;box-shadow:0 30px 60px -30px rgba(10,14,31,.35)}
+@media (max-width:560px){.card{margin-inline:16px;padding:20px}}
+.stepper{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:26px;list-style:none;padding:0}
+.stepper li{font-size:13px;font-weight:600;color:#8A91B4;display:flex;flex-direction:column;gap:8px}
+.stepper li::before{content:"";height:5px;border-radius:5px;background:var(--mist);transition:background .3s}
+.stepper li.on{color:var(--cobalt)}.stepper li.on::before{background:var(--cobalt)}
+.stepper li.done::before{background:var(--ink)}
+.step{display:none}.step.on{display:block;animation:in .3s ease both}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.step h2{font-size:23px;line-height:1.4;margin-bottom:4px}
+.step .hint{color:var(--muted);font-size:15px;margin-bottom:20px}
+.chips{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:22px}
+@media (max-width:560px){.chips{grid-template-columns:repeat(2,1fr)}}
+.chip{border:1.5px solid var(--mist);background:var(--paper);border-radius:14px;padding:12px 8px;font-weight:600;font-size:15px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s}
+.chip[aria-pressed="true"]{border-color:var(--cobalt);background:#EEF0FF;color:var(--cobalt)}
+.plans{display:grid;gap:10px}
+.plan{display:flex;align-items:center;gap:14px;border:1.5px solid var(--mist);border-radius:16px;padding:14px 16px;cursor:pointer;transition:border-color .2s,background .2s}
+.plan:has(input:checked){border-color:var(--cobalt);background:#F4F5FF}
+.plan input{accent-color:var(--cobalt);width:20px;height:20px;flex-shrink:0}
+.plan .nm{font-family:var(--display);font-weight:800;font-size:19px;direction:ltr}
+.plan .meta{color:var(--muted);font-size:14px;line-height:1.5}
+.plan .pr{margin-inline-start:auto;text-align:end;white-space:nowrap}
+.plan .pr b{font-family:var(--display);font-weight:800;font-size:22px}
+.plan .pr small{display:block;color:var(--muted);font-size:12.5px}
+.rec{display:none;font-size:11.5px;font-weight:700;background:var(--tick);color:var(--ink);border-radius:999px;padding:2px 9px;margin-inline-start:6px;vertical-align:2px}
+.plan.recommended .rec{display:inline-block}
+.f{display:grid;gap:6px;margin-bottom:14px}
+.f label{font-weight:600;font-size:15px}
+.f input{border:1.5px solid var(--mist);border-radius:12px;padding:12px 14px;background:var(--paper);width:100%}
+.f input:focus{border-color:var(--cobalt);outline:none;background:#fff}
+.f input[dir="ltr"]{text-align:left}
+.err{color:#C4273B;font-size:14px;min-height:1.2em}
+.sum{background:var(--paper);border:1px solid var(--mist);border-radius:16px;padding:16px;margin-bottom:18px}
+.sum div{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed var(--mist);font-size:15px}
+.sum div:last-child{border:0;font-weight:700}
+.sum span{color:var(--muted)}
+.pay{display:grid;gap:10px;margin-bottom:18px}
+.perks{list-style:none;padding:0;display:grid;gap:8px;margin-bottom:20px}
+.perks li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px}
+.perks svg{flex-shrink:0;margin-top:4px;color:var(--cobalt)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;border-radius:999px;padding:14px 26px;font-weight:600;font-size:16px;text-decoration:none;cursor:pointer;transition:transform .2s,background .2s}
+.btn-primary{background:var(--cobalt);color:#fff;box-shadow:0 10px 30px -10px rgba(35,64,255,.7);flex:1}
+.btn-primary:hover{background:var(--cobalt-2);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1.5px solid var(--mist)}
+.btn-ghost:hover{background:var(--paper)}
+.btn-wa{background:#1FA855;color:#fff;flex:1}
+.trust{display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:center;color:var(--muted);font-size:13.5px;margin-top:20px}
+.done-ico{width:64px;height:64px;border-radius:50%;background:var(--ink);color:var(--tick);display:grid;place-items:center;margin-bottom:16px}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tick" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="bar">
+    <a class="wm" href="./">khalas</a>
+    <button class="lang" id="lang" type="button">EN</button>
+  </div>
+  <div class="hero">
+    <h1 data-i18n="h1">احجز مكانك في خلّص في 3 خطوات.</h1>
+    <p data-i18n="lead">دقيقتين بس. اختار باقتك، اكتب بيانات البراند، واحجز مكان المؤسسين بـ 99 جنيه.</p>
+  </div>
+</header>
+
+<main class="card">
+  <ol class="stepper" aria-label="Steps">
+    <li class="on" data-s="1" data-i18n="st1">1 · اختار باقتك</li>
+    <li data-s="2" data-i18n="st2">2 · بياناتك</li>
+    <li data-s="3" data-i18n="st3">3 · احجز</li>
+  </ol>
+
+  <!-- STEP 1 -->
+  <section class="step on" id="s1">
+    <h2 data-i18n="s1.h">كام أوردر بييجيلك في الشهر؟</h2>
+    <p class="hint" data-i18n="s1.p">هنرشحلك الباقة المناسبة. تقدر تغيّرها في أي وقت.</p>
+    <div class="chips" role="group">
+      <button class="chip" type="button" data-vol="starter" aria-pressed="false" data-i18n="v1">أقل من 150</button>
+      <button class="chip" type="button" data-vol="growth" aria-pressed="false" data-i18n="v2">150 – 400</button>
+      <button class="chip" type="button" data-vol="scale" aria-pressed="false" data-i18n="v3">400 – 1,000</button>
+      <button class="chip" type="button" data-vol="enterprise" aria-pressed="false" data-i18n="v4">أكتر من 1,000</button>
+    </div>
+    <div class="plans">
+      <label class="plan" data-plan="starter"><input type="radio" name="plan" value="starter"><div><div class="nm">Starter<span class="rec" data-i18n="rec">مناسبة ليك</span></div><div class="meta" data-i18n="p1">150 أوردر في الشهر · حوالي 4 جنيه للأوردر</div></div><div class="pr"><b>599</b><small data-i18n="egpmo">جنيه / شهر</small></div></label>
+      <label class="plan" data-plan="growth"><input type="radio" name="plan" value="growth" checked><div><div class="nm">Growth<span class="rec" data-i18n="rec">مناسبة ليك</span></div><div class="meta" data-i18n="p2">400 أوردر في الشهر · حوالي 2.5 جنيه للأوردر</div></div><div class="pr"><b>999</b><small data-i18n="egpmo">جنيه / شهر</small></div></label>
+      <label class="plan" data-plan="scale"><input type="radio" name="plan" value="scale"><div><div class="nm">Scale<span class="rec" data-i18n="rec">مناسبة ليك</span></div><div class="meta" data-i18n="p3">1,000 أوردر في الشهر · أقل من 2 جنيه للأوردر</div></div><div class="pr"><b>1,799</b><small data-i18n="egpmo">جنيه / شهر</small></div></label>
+      <label class="plan" data-plan="enterprise"><input type="radio" name="plan" value="enterprise"><div><div class="nm">Enterprise<span class="rec" data-i18n="rec">مناسبة ليك</span></div><div class="meta" data-i18n="p4">أكتر من 1,000 أوردر · لأكتر من براند</div></div><div class="pr"><b style="font-size:16px" data-i18n="custom">حسب احتياجك</b></div></label>
+    </div>
+    <div class="actions"><button class="btn btn-primary" type="button" data-next="2" data-i18n="next">التالي</button></div>
+    <div class="trust"><span data-i18n="t1">✓ من غير عقود</span><span data-i18n="t2">✓ غيّر باقتك في أي وقت</span><span data-i18n="t3">✓ كل المميزات في كل باقة</span></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="step" id="s2">
+    <h2 data-i18n="s2.h">عرّفنا بالبراند</h2>
+    <p class="hint" data-i18n="s2.p">3 حاجات بس علشان نجهّزلك حسابك.</p>
+    <div class="f"><label for="name" data-i18n="f.name">اسمك</label><input id="name" autocomplete="name" required></div>
+    <div class="f"><label for="store" data-i18n="f.store">اسم البراند / الصفحة</label><input id="store" autocomplete="organization" required></div>
+    <div class="f"><label for="phone" data-i18n="f.phone">رقم الواتساب</label><input id="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="01xxxxxxxxx" required></div>
+    <p class="err" id="err" role="alert"></p>
+    <div class="actions"><button class="btn btn-ghost" type="button" data-next="1" data-i18n="back">رجوع</button><button class="btn btn-primary" type="button" data-next="3" data-i18n="next">التالي</button></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="step" id="s3">
+    <h2 data-i18n="s3.h">احجز مكانك كسيلر مؤسس</h2>
+    <p class="hint" data-i18n="s3.p">400 مكان بس للمؤسسين.</p>
+    <div class="sum" id="sum"></div>
+    <ul class="perks">
+      <li><svg width="18" height="18"><use href="#tick"/></svg><span data-i18n="k1">من أول الناس اللي هتستخدم خلّص لما يفتح</span></li>
+      <li><svg width="18" height="18"><use href="#tick"/></svg><span data-i18n="k2">هنكلمك على واتساب علشان نجهّزلك الحساب</span></li>
+      <li><svg width="18" height="18"><use href="#tick"/></svg><span data-i18n="k3">الباقات شهرية ومن غير عقود، وتقدر تغيّرها في أي وقت</span></li>
+    </ul>
+    <div class="pay">
+      <a class="btn btn-primary" id="payBtn" href="#" target="_blank" rel="noopener" data-i18n="pay">احجز بـ 99 جنيه</a>
+      <a class="btn btn-wa hide" id="waBtn" href="#" target="_blank" rel="noopener" data-i18n="wa">أكّد على واتساب</a>
+    </div>
+    <div class="actions"><button class="btn btn-ghost" type="button" data-next="2" data-i18n="back">رجوع</button></div>
+  </section>
+
+  <!-- DONE -->
+  <section class="step" id="s4">
+    <div class="done-ico"><svg width="30" height="30"><use href="#tick"/></svg></div>
+    <h2 data-i18n="d.h">خلاص، مكانك محجوز تقريبًا.</h2>
+    <p class="hint" data-i18n="d.p">كمّل الدفع في التاب اللي اتفتحت. هنكلمك على واتساب أول ما نأكد الحجز.</p>
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+  /* ================= CONFIG ================= */
+  // Where the 99 EGP reservation happens. Default: the existing waitlist Google Form.
+  var FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdJXZqwfJOg6l4epLtpjJDd_RZk_UFiGGery0Fzs_PRsQZPmA/viewform";
+  // Optional: Google Form "pre-filled link" entry IDs, so step 2 answers carry into the form
+  // (Form editor → ⋮ → Get pre-filled link → copy each entry.NNNN). Empty = not prefilled.
+  var FORM_PREFILL = { name:"", store:"", phone:"", plan:"", ref:"" };
+  // Optional: a direct payment link (Paymob / Fawry / InstaPay link). If set, it replaces the form.
+  var PAY_URL = "";
+  // Optional: WhatsApp number (digits only, e.g. 2010xxxxxxxx) for a "confirm on WhatsApp" button.
+  var CONTACT_WHATSAPP = "";
+
+  var $=function(s){return document.querySelector(s)}, $$=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+  var q=new URLSearchParams(location.search);
+  var ref=(q.get("ref")||"").slice(0,64);
+  var state={plan:q.get("plan")||"growth"};
+
+  var EN={
+    h1:"Reserve your khalas spot in 3 steps.",lead:"Two minutes. Pick your plan, tell us about your brand, and reserve a founding spot for 99 EGP.",
+    st1:"1 · Your plan",st2:"2 · Your details",st3:"3 · Reserve",
+    "s1.h":"How many orders do you get a month?","s1.p":"We'll suggest the right plan. You can change it any time.",
+    v1:"Under 150",v2:"150 – 400",v3:"400 – 1,000",v4:"Over 1,000",rec:"Fits you",
+    p1:"150 orders a month · about 4 EGP per order",p2:"400 orders a month · about 2.5 EGP per order",p3:"1,000 orders a month · under 2 EGP per order",p4:"Over 1,000 orders · multiple brands",
+    egpmo:"EGP / month",custom:"Custom",next:"Next",back:"Back",
+    t1:"✓ No contracts",t2:"✓ Change plan any time",t3:"✓ Every feature on every plan",
+    "s2.h":"Tell us about your brand","s2.p":"Just 3 things so we can set up your account.",
+    "f.name":"Your name","f.store":"Brand / page name","f.phone":"WhatsApp number",
+    "s3.h":"Reserve your founding seller spot","s3.p":"Only 400 founding spots.",
+    k1:"Among the first to use khalas when it opens",k2:"We'll message you on WhatsApp to set up your account",k3:"Monthly plans, no contracts, change any time",
+    pay:"Reserve for 99 EGP",wa:"Confirm on WhatsApp",
+    "d.h":"Done, your spot is nearly yours.","d.p":"Finish the payment in the tab that just opened. We'll message you on WhatsApp once it's confirmed.",
+    e1:"Please fill in all three fields.",e2:"That WhatsApp number doesn't look right.",
+    sPlan:"Plan",sMonthly:"Monthly",sToday:"Today",sStore:"Brand"
+  };
+  var AR={e1:"من فضلك املا التلات خانات.",e2:"رقم الواتساب مش مظبوط.",sPlan:"الباقة",sMonthly:"شهريًا",sToday:"النهارده",sStore:"البراند"};
+  $$("[data-i18n]").forEach(function(el){AR[el.dataset.i18n]=AR[el.dataset.i18n]||el.textContent});
+  var PRICES={starter:"599",growth:"999",scale:"1,799",enterprise:""};
+  var lang="ar";
+  function t(k){return (lang==="en"?EN:AR)[k]||AR[k]||k}
+  function setLang(l){
+    lang=l;document.documentElement.lang=l;document.documentElement.dir=l==="ar"?"rtl":"ltr";
+    $$("[data-i18n]").forEach(function(el){el.textContent=t(el.dataset.i18n)});
+    $("#lang").textContent=l==="ar"?"EN":"عربي";
+    try{localStorage.setItem("khalas-lang",l)}catch(e){}
+    renderSummary();
+  }
+  $("#lang").onclick=function(){setLang(lang==="ar"?"en":"ar")};
+
+  // Plan picking
+  function pick(p){
+    if(!PRICES.hasOwnProperty(p)) p="growth";
+    state.plan=p;
+    var r=$('input[name=plan][value="'+p+'"]'); if(r) r.checked=true;
+  }
+  $$("input[name=plan]").forEach(function(r){r.onchange=function(){state.plan=r.value}});
+  $$(".chip").forEach(function(c){c.onclick=function(){
+    $$(".chip").forEach(function(x){x.setAttribute("aria-pressed","false")});c.setAttribute("aria-pressed","true");
+    $$(".plan").forEach(function(p){p.classList.toggle("recommended",p.dataset.plan===c.dataset.vol)});
+    pick(c.dataset.vol);
+  }});
+  pick(state.plan);
+
+  // Steps
+  function go(n){
+    if(n===3 && !validate()) return;
+    $$(".step").forEach(function(s){s.classList.toggle("on",s.id==="s"+n)});
+    $$(".stepper li").forEach(function(li){var s=+li.dataset.s;li.classList.toggle("on",s===n);li.classList.toggle("done",s<n)});
+    if(n===3) prepareCheckout();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  $$("[data-next]").forEach(function(b){b.onclick=function(){go(+b.dataset.next)}});
+
+  function val(id){return $("#"+id).value.trim()}
+  function validate(){
+    var e=$("#err");
+    if(!val("name")||!val("store")||!val("phone")){e.textContent=t("e1");return false}
+    var digits=val("phone").replace(/[^\d]/g,"");
+    if(digits.length<10||digits.length>15){e.textContent=t("e2");return false}
+    e.textContent="";return true;
+  }
+  function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
+  function renderSummary(){
+    var p=state.plan, nm=p.charAt(0).toUpperCase()+p.slice(1);
+    $("#sum").innerHTML=
+      "<div><span>"+esc(t("sStore"))+"</span><b>"+esc(val("store")||"—")+"</b></div>"+
+      "<div><span>"+esc(t("sPlan"))+"</span><b dir='ltr'>"+esc(nm)+"</b></div>"+
+      "<div><span>"+esc(t("sMonthly"))+"</span><b>"+(PRICES[p]?esc(PRICES[p]+" "+t("egpmo")):esc(t("custom")))+"</b></div>"+
+      "<div><span>"+esc(t("sToday"))+"</span><b>99 "+(lang==="ar"?"جنيه":"EGP")+"</b></div>";
+  }
+  function prepareCheckout(){
+    renderSummary();
+    var data={name:val("name"),store:val("store"),phone:val("phone"),plan:state.plan,ref:ref};
+    var url=PAY_URL;
+    if(!url){
+      var u=new URL(FORM_URL), any=false;
+      Object.keys(FORM_PREFILL).forEach(function(k){if(FORM_PREFILL[k]&&data[k]){u.searchParams.set(FORM_PREFILL[k],data[k]);any=true}});
+      if(any) u.searchParams.set("usp","pp_url");
+      url=u.toString();
+    }
+    $("#payBtn").href=url;
+    if(CONTACT_WHATSAPP){
+      var msg=(lang==="ar"?"أهلاً، عايز أحجز مكاني في خلّص.":"Hi, I'd like to reserve my khalas spot.")+
+        "\n"+data.name+" · "+data.store+"\nPlan: "+data.plan+"\nWhatsApp: "+data.phone+(ref?"\nRef: "+ref:"");
+      $("#waBtn").href="https://wa.me/"+CONTACT_WHATSAPP.replace(/\D/g,"")+"?text="+encodeURIComponent(msg);
+      $("#waBtn").classList.remove("hide");
+    }
+  }
+  $("#payBtn").addEventListener("click",function(){setTimeout(function(){go(4)},300)});
+
+  var saved=null;try{saved=localStorage.getItem("khalas-lang")}catch(e){}
+  setLang(q.get("lang")||saved||"ar");
+})();
+</script>
+</body>
+</html>

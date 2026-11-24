@@ -1,0 +1,5 @@
+# Contact data and send history stay on your computer, never in the public repo.
+leads.csv
+suppress.csv
+state/
+outbox/

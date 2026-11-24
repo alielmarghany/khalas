@@ -1,0 +1,20 @@
+Subject: Here's what khalas actually does (a real chat)
+
+Hi {first_name},
+
+I wrote to you a few days ago about khalas. Here's exactly what it does.
+
+A customer sends three messages in a row:
+"I want 2 black, size L"
+"Address is Maadi 🙏"
+"How much is shipping?"
+
+khalas replies with the shipping price, asks for her phone number and full address, then hands you a ready order card: product, quantity, colour, size, address and total. You follow it all from the dashboard.
+
+No copy-pasting, and no order lost because someone forgot to reply.
+
+Plans start at 599 EGP a month for 150 orders, with no contracts.
+
+Reserve a founding spot in two minutes: {link}
+
+Ali
